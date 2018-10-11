@@ -1,5 +1,9 @@
 A collection of VScripts for CS:GO.
 
+## Installation
+
+Download this repo, extract it to `steamapps\common\Counter-Strike Global Offensive\csgo\scripts\vscripts`. It should then be useable in your maps.
+
 ## Notes on Squirrel
 
 Developing VScripts is cumbersome, mostly due to the poor documentation. Here are a few notes on things I've learned as I've worked on this collection:
@@ -26,7 +30,6 @@ class Test {
         PrintTest();
         CallCallback(PrintTest);
     }
-
     function PrintTest() {
         printl("this.test: "+this.test); // will succeed
         printl("test: "+test); // will error if called as callback
