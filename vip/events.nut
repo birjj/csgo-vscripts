@@ -19,7 +19,6 @@
 ::PLAYER_USE <- "player_use";
 ::PLAYER_DEATH <- "player_death";
 ::ROUND_FREEZE_END <- "round_freeze_end";
-::BUYMENU_OPEN <- "buymenu_open";
 
 DoIncludeScript("vip/debug.nut",null);
 
