@@ -19,6 +19,7 @@
 ::PLAYER_USE <- "player_use";
 ::PLAYER_DEATH <- "player_death";
 ::ROUND_FREEZE_END <- "round_freeze_end";
+::PLAYER_SPAWN <- "player_spawn";
 
 DoIncludeScript("vip/debug.nut",null);
 
@@ -42,11 +43,11 @@ if (!("_eventsScope" in getroottable())) {
             }
         }
     };
-    ::TriggerEvent <- function(name) {
+    ::TriggerEvent <- function(name, data=null) {
         // printl("[Events] Triggering event for " + name);
         local listener = Entities.FindByName(null, name+"_listener");
-        local event_data = null;
-        if (listener != null) {
+        local event_data = data;
+        if (event_data == null && listener != null) {
             if (listener.ValidateScriptScope()) {
                 event_data = listener.GetScriptScope().event_data;
             }

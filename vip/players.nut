@@ -144,6 +144,9 @@ if (!("Players" in getroottable())) {
             if ("generating_userid" in scope) {
                 scope.userid <- data.userid;
                 delete scope.generating_userid;
+                if (::Players.eventProxy_boundPlayer.GetHealth() > 0) {
+                    ::TriggerEvent("player_spawn", { userid = scope.userid });
+                }
                 ::Players.eventProxy_boundPlayer = null;
             }
         }

@@ -54,7 +54,6 @@ class GameModeVIP {
         }
 
         // check if one of the teams have been wiped off
-        printl("[VIP] Thinking "+isLive);
         if (isLive) {
             local cts = Players.GetPlayers(function(ply){
                 return ply.GetTeam() == TEAM_CT && ply.GetHealth() > 0;
@@ -62,7 +61,7 @@ class GameModeVIP {
             local ts = Players.GetPlayers(function(ply){
                 return ply.GetTeam() == TEAM_T && ply.GetHealth() > 0;
             });
-            printl("[VIP] We have "+cts.len()+" CTs, "+ts.len()+" Ts alive ("+shouldEndOnTeamWipe+")");
+            // printl("[VIP] We have "+cts.len()+" CTs, "+ts.len()+" Ts alive ("+shouldEndOnTeamWipe+")");
 
             local ended = false;
             if (shouldEndOnTeamWipe && cts.len() == 0) {
@@ -204,6 +203,7 @@ class GameModeVIP {
     // called when the VIP is RIP
     function OnVIPDeath(data) {
         printl("[VIP] VIP dieded :(");
+        ResetVIP();
 
         if (isLive) {
             EntFireByHandle(eGameRoundEnd, "EndRound_TerroristsWin", "5", 0.0, null, null);
@@ -216,12 +216,27 @@ class GameModeVIP {
     // called when the VIP is rescued - must be called by the map
     function OnVIPRescued() {
         printl("[VIP] VIP rescued!");
+        ResetVIP();
 
         if (isLive) {
             EntFireByHandle(eGameRoundEnd, "EndRound_CounterTerroristsWin", "5", 0.0, null, null);
             isLive = false;
 
             ::GiveMoneyCT(1337, "Reward for helping the VIP escape");
+        }
+    }
+
+    // called when a player spawns
+    // used to pick a new VIP during warmup or freezetime
+    function OnPlayerSpawn(data) {
+        printl("[VIP] Player spawned " + ::Players.FindByUserid(data.userid));
+        local player = ::Players.FindByUserid(data.userid);
+        if (player.GetTeam() == TEAM_CT) {
+            // if we don't have a VIP, and we aren't live (warmup or freezetime), pick this new guy as VIP
+            if (!isLive && vip == null) {
+                printl("[VIP] Setting respawned player to VIP during warmup/freezetime");
+                SetVIP(player);
+            }
         }
     }
 }
@@ -239,6 +254,12 @@ if (!("gamemode_vip" in getroottable())) {
         local player = ::Players.FindByUserid(data.userid);
         if (player != null && player == ::gamemode_vip.vip) {
             ::gamemode_vip.OnVIPDeath(data);
+        }
+    });
+    ::AddEventListener("player_spawn", function(data) {
+        local player = ::Players.FindByUserid(data.userid);
+        if (player != null) {
+            ::gamemode_vip.OnPlayerSpawn(data);
         }
     });
     ::AddEventListener("round_freeze_end", function(data) {
