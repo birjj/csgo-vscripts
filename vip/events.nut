@@ -20,6 +20,7 @@
 ::PLAYER_DEATH <- "player_death";
 ::ROUND_FREEZE_END <- "round_freeze_end";
 ::PLAYER_SPAWN <- "player_spawn";
+::PLAYER_HURT <- "player_hurt";
 
 DoIncludeScript("vip/debug.nut",null);
 

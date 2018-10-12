@@ -33,6 +33,7 @@ function Think() {
     "molotov",
     "smokegrenade"
 ];
+::VIP_MAXHEALTH <- 200;
 
 class GameModeVIP {
     vip = null;
@@ -226,6 +227,27 @@ class GameModeVIP {
         }
     }
 
+    // called when the VIP is hurt
+    // used to display updates to the CTs
+    function OnVIPHurt(data) {
+        local health = data.health;
+        printl("[VIP] VIP hurt! "+health);
+
+        local color = null;
+        if (health <= 0.05 * ::VIP_MAXHEALTH) { color = "dark_red"; }
+        if (color == null && health <= 0.1 * ::VIP_MAXHEALTH) { color = "red"; }
+        if (color == null && health <= 0.25 * ::VIP_MAXHEALTH) { color = "light_red"; }
+        if (color == null && health <= 0.5 * ::VIP_MAXHEALTH) { color = "orange"; }
+        if (color == null && health <= 0.75 * ::VIP_MAXHEALTH) { color = "yellow"; }
+        if (color == null) { color = "lime_green"; }
+
+        local msg = "VIP has " + ::COLORS[color] + health + " HP" + ::COLORS.white + " left.";
+        if (health == 0) {
+            msg = "VIP is " + ::COLORS.dark_red + "DEAD!";
+        }
+        ::ChatMessageCT(" " + ::COLORS.blue + "[VIP] " + msg);
+    }
+
     // called when a player spawns
     // used to pick a new VIP during warmup or freezetime
     function OnPlayerSpawn(data) {
@@ -260,6 +282,12 @@ if (!("gamemode_vip" in getroottable())) {
         local player = ::Players.FindByUserid(data.userid);
         if (player != null) {
             ::gamemode_vip.OnPlayerSpawn(data);
+        }
+    });
+    ::AddEventListener("player_hurt", function(data) {
+        local player = ::Players.FindByUserid(data.userid);
+        if (player != null && player == ::gamemode_vip.vip) {
+            ::gamemode_vip.OnVIPHurt(data);
         }
     });
     ::AddEventListener("round_freeze_end", function(data) {
