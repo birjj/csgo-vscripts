@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "7958"
-	"mapversion" "59"
+	"mapversion" "68"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -14,18 +14,18 @@ viewsettings
 	"bSnapToGrid" "1"
 	"bShowGrid" "1"
 	"bShowLogicalGrid" "0"
-	"nGridSpacing" "32"
+	"nGridSpacing" "8"
 	"bShow3DGrid" "0"
 }
 world
 {
 	"id" "1"
-	"mapversion" "59"
+	"mapversion" "68"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
 	"maxpropscreenwidth" "-1"
-	"skyname" "sky_dust"
+	"skyname" "office"
 	solid
 	{
 		"id" "1180"
@@ -641,7 +641,7 @@ world
 		{
 			"id" "687"
 			"plane" "(-896 192 -64) (-512 192 -64) (-512 -192 -64)"
-			"material" "DEV/DEV_MEASUREGENERIC01B"
+			"material" "DEV/DEV_MEASUREGENERIC01"
 			"uaxis" "[1 0 0 0] 0.25"
 			"vaxis" "[0 -1 0 0] 0.25"
 			"rotation" "0"
@@ -2564,13 +2564,150 @@ world
 }
 entity
 {
+	"id" "1334"
+	"classname" "logic_eventlistener"
+	"EventName" "player_spawn"
+	"FetchEventData" "1"
+	"IsEnabled" "1"
+	"targetname" "player_spawn_listener"
+	"TeamNum" "-1"
+	connections
+	{
+		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_SPAWN)0-1"
+	}
+	"origin" "-488 -8 200"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 0]"
+	}
+}
+entity
+{
+	"id" "1374"
+	"classname" "trigger_softbarrier"
+	"filtername" "vip_filter_onlyts"
+	"origin" "-344 0 16"
+	"pushdir" "0 1 0"
+	"spawnflags" "4097"
+	"StartDisabled" "0"
+	solid
+	{
+		"id" "1371"
+		side
+		{
+			"id" "729"
+			"plane" "(-360 48 48) (-328 48 48) (-328 -48 48)"
+			"material" "TOOLS/TOOLSTRIGGER"
+			"uaxis" "[1 0 0 -32] 0.25"
+			"vaxis" "[0 -1 0 0] 0.25"
+			"rotation" "0"
+			"lightmapscale" "16"
+			"smoothing_groups" "0"
+		}
+		side
+		{
+			"id" "728"
+			"plane" "(-360 -48 -16) (-328 -48 -16) (-328 48 -16)"
+			"material" "TOOLS/TOOLSTRIGGER"
+			"uaxis" "[1 0 0 -32] 0.25"
+			"vaxis" "[0 -1 0 0] 0.25"
+			"rotation" "0"
+			"lightmapscale" "16"
+			"smoothing_groups" "0"
+		}
+		side
+		{
+			"id" "727"
+			"plane" "(-360 48 48) (-360 -48 48) (-360 -48 -16)"
+			"material" "TOOLS/TOOLSTRIGGER"
+			"uaxis" "[0 1 0 0] 0.25"
+			"vaxis" "[0 0 -1 0] 0.25"
+			"rotation" "0"
+			"lightmapscale" "16"
+			"smoothing_groups" "0"
+		}
+		side
+		{
+			"id" "726"
+			"plane" "(-328 48 -16) (-328 -48 -16) (-328 -48 48)"
+			"material" "TOOLS/TOOLSTRIGGER"
+			"uaxis" "[0 1 0 0] 0.25"
+			"vaxis" "[0 0 -1 0] 0.25"
+			"rotation" "0"
+			"lightmapscale" "16"
+			"smoothing_groups" "0"
+		}
+		side
+		{
+			"id" "725"
+			"plane" "(-328 48 48) (-360 48 48) (-360 48 -16)"
+			"material" "TOOLS/TOOLSTRIGGER"
+			"uaxis" "[1 0 0 -32] 0.25"
+			"vaxis" "[0 0 -1 0] 0.25"
+			"rotation" "0"
+			"lightmapscale" "16"
+			"smoothing_groups" "0"
+		}
+		side
+		{
+			"id" "724"
+			"plane" "(-328 -48 -16) (-360 -48 -16) (-360 -48 48)"
+			"material" "TOOLS/TOOLSTRIGGER"
+			"uaxis" "[1 0 0 -32] 0.25"
+			"vaxis" "[0 0 -1 0] 0.25"
+			"rotation" "0"
+			"lightmapscale" "16"
+			"smoothing_groups" "0"
+		}
+		editor
+		{
+			"color" "220 30 220"
+			"visgroupshown" "1"
+			"visgroupautoshown" "1"
+		}
+	}
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 500]"
+	}
+}
+entity
+{
+	"id" "1426"
+	"classname" "logic_eventlistener"
+	"EventName" "player_hurt"
+	"FetchEventData" "1"
+	"IsEnabled" "1"
+	"targetname" "player_hurt_listener"
+	"TeamNum" "-1"
+	connections
+	{
+		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_HURT)0-1"
+	}
+	"origin" "-488 8 200"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 0]"
+	}
+}
+entity
+{
 	"id" "1035"
 	"classname" "trigger_once"
 	"filtername" "vip_filter_onlyvip"
 	"origin" "-614.44 -97.29 15.99"
 	"spawnflags" "4097"
 	"StartDisabled" "0"
-	"targetname" "assassination_trigger_rescue_area"
+	"targetname" "vip_rescue"
 	connections
 	{
 		"OnTrigger" "vip_scriptRunScriptCode::gamemode_vip.OnVIPRescued()0-1"
@@ -2666,10 +2803,10 @@ entity
 	"classname" "trigger_push"
 	"alternateticksfix" "0"
 	"filtername" "vip_filter_onlyts"
-	"origin" "-416 0 16"
-	"pushdir" "0 90 0"
+	"origin" "-512 0 16"
+	"pushdir" "0 0 0"
 	"spawnflags" "1"
-	"speed" "100"
+	"speed" "400"
 	"StartDisabled" "0"
 	solid
 	{
@@ -2677,10 +2814,10 @@ entity
 		side
 		{
 			"id" "621"
-			"plane" "(-432 47.9879 48) (-400 48 48) (-400 -48 48)"
+			"plane" "(-360 -48 48) (-664 -48 48) (-664 47.9854 48)"
 			"material" "TOOLS/TOOLSTRIGGER"
-			"uaxis" "[-0.866025 0.5 0 0] 0.25"
-			"vaxis" "[0.5 0.866025 0 0] 0.25"
+			"uaxis" "[-0.866025 0.5 0 55.4256] 0.25"
+			"vaxis" "[0.5 0.866025 0 -32] 0.25"
 			"rotation" "0"
 			"lightmapscale" "16"
 			"smoothing_groups" "0"
@@ -2688,10 +2825,10 @@ entity
 		side
 		{
 			"id" "620"
-			"plane" "(-400 48 -16) (-432 47.9848 -16) (-432 -48 -16)"
+			"plane" "(-360 48 -16) (-664 47.9846 -16) (-664 -48 -16)"
 			"material" "TOOLS/TOOLSTRIGGER"
-			"uaxis" "[0.866025 -0.5 0 0] 0.25"
-			"vaxis" "[0.5 0.866025 0 0] 0.25"
+			"uaxis" "[0.866025 -0.5 0 -55.4256] 0.25"
+			"vaxis" "[0.5 0.866025 0 -32] 0.25"
 			"rotation" "0"
 			"lightmapscale" "16"
 			"smoothing_groups" "0"
@@ -2699,9 +2836,9 @@ entity
 		side
 		{
 			"id" "619"
-			"plane" "(-400 -48 -16) (-432 -48 -16) (-432 -48 48)"
+			"plane" "(-360 -48 -16) (-664 -48 -16) (-664 -48 48)"
 			"material" "TOOLS/TOOLSTRIGGER"
-			"uaxis" "[0.189004 0.981976 0 0] 0.25"
+			"uaxis" "[0.877362 0.479828 0 -12.0963] 0.25"
 			"vaxis" "[0 0 -1 0] 0.25"
 			"rotation" "0"
 			"lightmapscale" "16"
@@ -2710,9 +2847,9 @@ entity
 		side
 		{
 			"id" "618"
-			"plane" "(-432 47.9846 -16) (-400 48 -16) (-400 48 48)"
+			"plane" "(-664 47.9846 -16) (-360 48 -16) (-360 48 48)"
 			"material" "TOOLS/TOOLSTRIGGER"
-			"uaxis" "[-0.189004 -0.981976 0 0] 0.25"
+			"uaxis" "[-0.877362 -0.479828 0 12.0963] 0.25"
 			"vaxis" "[0 0 -1 0] 0.25"
 			"rotation" "0"
 			"lightmapscale" "16"
@@ -2721,9 +2858,9 @@ entity
 		side
 		{
 			"id" "617"
-			"plane" "(-400 48 -16) (-400 -47.9883 -16) (-400 -48 48)"
+			"plane" "(-360 48 -16) (-360 -48 -16) (-360 -48 48)"
 			"material" "TOOLS/TOOLSTRIGGER"
-			"uaxis" "[-0.500045 0.865999 0 0] 0.25"
+			"uaxis" "[-0.983786 0.179343 0 32.0029] 0.25"
 			"vaxis" "[0 0 -1 0] 0.25"
 			"rotation" "0"
 			"lightmapscale" "16"
@@ -2732,7 +2869,7 @@ entity
 		side
 		{
 			"id" "616"
-			"plane" "(-432 -48 -16) (-432 47.9846 -16) (-432 47.9883 48)"
+			"plane" "(-664 -48 -16) (-664 47.9846 -16) (-664 47.9844 48)"
 			"material" "TOOLS/TOOLSTRIGGER"
 			"uaxis" "[0 -1 0 0] 0.25"
 			"vaxis" "[0 0 -1 0] 0.25"
