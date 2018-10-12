@@ -233,19 +233,23 @@ class GameModeVIP {
         local health = data.health;
         printl("[VIP] VIP hurt! "+health);
 
+        // colors go hsl(0, 100%, 30%), hsl(0, 100%, 45%), hsl(25,100%,50%), hsl(55,100%,47%), hsl(70, 100%, 47%, 1), hsl(100, 100%, 45%, 1)
+        //           dark red         , red              , orange          , yellow          , yellow-green         , green
         local color = null;
-        if (health <= 0.05 * ::VIP_MAXHEALTH) { color = "dark_red"; }
-        if (color == null && health <= 0.1 * ::VIP_MAXHEALTH) { color = "red"; }
-        if (color == null && health <= 0.25 * ::VIP_MAXHEALTH) { color = "light_red"; }
-        if (color == null && health <= 0.5 * ::VIP_MAXHEALTH) { color = "orange"; }
-        if (color == null && health <= 0.75 * ::VIP_MAXHEALTH) { color = "yellow"; }
-        if (color == null) { color = "lime_green"; }
+        if (health <= 0.05 * ::VIP_MAXHEALTH) { color = "#990000"; }
+        if (color == null && health <= 0.1 * ::VIP_MAXHEALTH) { color = "#E60000"; }
+        if (color == null && health <= 0.25 * ::VIP_MAXHEALTH) { color = "#FF6A00"; }
+        if (color == null && health <= 0.5 * ::VIP_MAXHEALTH) { color = "#F0DC00"; }
+        if (color == null && health <= 0.75 * ::VIP_MAXHEALTH) { color = "#C8F000"; }
+        if (color == null) { color = "#4CE600"; }
 
-        local msg = "VIP has " + ::COLORS[color] + health + " HP" + ::COLORS.white + " left.";
+        local msg = "VIP has <font color='"+color+"'>"+ health + " HP" + "</font> left.";
         if (health == 0) {
-            msg = "VIP is " + ::COLORS.dark_red + "DEAD!";
+            msg = "VIP is <font color='"+color+"'>DEAD</font>!";
         }
-        ::ChatMessageCT(" " + ::COLORS.blue + "[VIP] " + msg);
+        ::ShowMessageSome(msg, function(ply){
+            return ply.GetTeam() == TEAM_CT;
+        });
     }
 
     // called when a player spawns
