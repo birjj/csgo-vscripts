@@ -138,7 +138,7 @@ class GameModeVIP {
 
         local ent = null;
         while ((ent = Entities.FindByName(ent, ::VIP_TARGETNAME)) != null) {
-            EntFireByHandle(ent, "targetname", "default", 0.0, null, null);
+            EntFireByHandle(ent, "AddOutput", "targetname default", 0.0, null, null);
         }
     }
 
