@@ -18,6 +18,8 @@
 ::ITEM_EQUIP <- "item_equip";
 ::PLAYER_USE <- "player_use";
 ::PLAYER_DEATH <- "player_death";
+::PLAYER_DISCONNECT <- "player_disconnect";
+::ROUND_START <- "round_start";
 ::ROUND_FREEZE_END <- "round_freeze_end";
 ::PLAYER_SPAWN <- "player_spawn";
 ::PLAYER_HURT <- "player_hurt";

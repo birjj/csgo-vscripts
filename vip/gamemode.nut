@@ -46,14 +46,22 @@ class GameModeVIP {
 
     eGameRoundEnd = null;
     eServerCommand = null;
+	
+	timeLimit = null;
+	resetClock = false;
+	
+	//Saving VIP info in case he disconnects
+	lastHealthVIP = null;
+	spawnPositionVIP = null;
 
     function Think() {
         // VIP entity could go invalid for a multitude of reasons (disconnect, etc.)
         if (vip != null && !vip.IsValid()) {
             printl("[VIP] === VIP INVALID!");
             ResetVIP();
+			SelectRandomVIP();
         }
-
+		
         // check if one of the teams have been wiped off
         if (isLive) {
             local cts = Players.GetPlayers(function(ply){
@@ -83,6 +91,13 @@ class GameModeVIP {
                 EntFireByHandle(eGameRoundEnd, "EndRound_Draw", "5", 0.0, null, null);
                 isLive = false;
             }
+			
+			if (RoundOverCheck() && isLive){
+				EntFireByHandle(eGameRoundEnd, "EndRound_TerroristsWin", "5", 0.0, null, null);
+				::GiveMoneyT(6969, "Reward for not letting VIP escape");
+				isLive = false;
+				ended = true;
+			}
         }
     }
 
@@ -92,10 +107,15 @@ class GameModeVIP {
         eGameRoundEnd = Entities.CreateByClassname("game_round_end");
         eServerCommand = Entities.CreateByClassname("point_servercommand");
         isLive = false;
+		resetClock = true;
 
         EntFireByHandle(eServerCommand, "Command", "mp_ignore_round_win_conditions 0", 0.0, null, null);
 
-        local cts = Players.GetCTs();
+        SelectRandomVIP();
+    }
+
+	function SelectRandomVIP(){
+		local cts = Players.GetCTs();
         if (cts.len() != 0) {
             printl("[VIP] Picking from "+cts.len()+" CTs.");
             local vipPly = null;
@@ -104,8 +124,54 @@ class GameModeVIP {
             }
             SetVIP(vipPly);
         }
+	}
+	
+	// Reselects VIP if VIP disconnect AND VIP has not taken any damage. New VIP should not gain any HP, just gets VIP status and is teleported to original VIP spawn.
+	/*
+		Under the following conditions:
+		- Original VIP 	must NOT have taken damage in the last 10 seconds.
+		- New VIP 		must NOT have taken damage in the last 10 seconds.
+		- Round must NOT have more than 30 seconds played.
+		- New VIP takes the lowest HP between his and Original VIP. Example: If Original VIP had 1 hp before disconnect, new VIP must have 1 hp too.
+		- New VIP is teleported back to Original VIP spawn position and all VIP restrictions are applied.
+	*/
+	
+	function ReselectRandomVIP(){
+	
+	
+	}
+	
+	function SetSubVIP(player){
+        printl("[VIP] Setting Sub VIP to "+player);
+        ResetVIP();
+        vip = player;
+		
+		// If Original VIP had less HP than new VIP - replace with Original VIP HP
+		
+		local healthSubVIP = vip.GetHealth();
+		if (healthSubVIP > lastHealthVIP){ 
+			vip.SetHealth(lastHealthVIP);
+		}
+		
+        ::ShowMessageSome("Substitute VIP has been selected, protect him!", function(ply) {
+            if (ply.GetTeam() == TEAM_CT) {
+                EntFireByHandle(ply, "color", "0 0 255", 0.0, null, null);
+                return true;
+            }
+            return false;
+        });
+        ::ShowMessageSome("The VIP claims to have fucked your mother. Kill him!", function(ply) {
+            if (ply.GetTeam() == TEAM_T) {
+                EntFireByHandle(ply, "color", "255 0 0", 0.0, null, null);
+                return true;
+            }
+            return false;
+        });
+        ::ShowMessage("You're the VIP. Don't fuck it up now", vip, "color='#F00'");
+        EntFireByHandle(vip, "color", "0 255 0", 0.0, null, null);
+        EntFireByHandle(vip, "AddOutput", "targetname " + ::VIP_TARGETNAME, 0.0, null, null);
     }
-
+	
     function OnFreezeEnd() {
         if (vip && vip.IsValid() && !ScriptIsWarmupPeriod()) {
             isLive = true;
@@ -128,6 +194,18 @@ class GameModeVIP {
             EntFireByHandle(eClientCommand, "Command", "slot3", 0.0, vip, null);
         }
     }
+	
+	function RoundOverCheck(){
+		
+		if (resetClock){
+			timeLimit = Time()+timeLimit;
+			resetClock = false;
+		}
+		local currentTime = Time();
+		if (currentTime<timeLimit){
+		return false;}
+		if(currentTime>=timeLimit){return true;}
+	}
 
     // removes the current VIP, resetting all state
     function ResetVIP() {
@@ -135,18 +213,37 @@ class GameModeVIP {
         vip = null;
         lastIllegalWeapon = null;
         lastIllegalTime = 0;
+		
+		lastHealthVIP = null;
+		spawnPositionVIP = null;
 
         local ent = null;
         while ((ent = Entities.FindByName(ent, ::VIP_TARGETNAME)) != null) {
             EntFireByHandle(ent, "AddOutput", "targetname default", 0.0, null, null);
         }
     }
+	
+	
+	function CheckDisconnectVIP(){
+		printl("Checking if VIP disconnected");
+		if (vip != null ){
+			printl("Someone disconnect but was not the VIP - Proceed.")
+		}
+		if (vip == null ){
+			printl("VIP DISCONNECTED!!!")
+			
+		}
+	}
+	
+	
 
     // sets a player to be VIP
     function SetVIP(player) {
         printl("[VIP] Setting VIP to "+player);
         ResetVIP();
         vip = player;
+		
+		vip.SetHealth(::VIP_MAXHEALTH);
         ::ShowMessageSome("Protect the VIP at all costs!", function(ply) {
             if (ply.GetTeam() == TEAM_CT) {
                 EntFireByHandle(ply, "color", "0 0 255", 0.0, null, null);
@@ -232,6 +329,8 @@ class GameModeVIP {
     function OnVIPHurt(data) {
         local health = data.health;
         printl("[VIP] VIP hurt! "+health);
+		
+		lastHealthVIP = data.health;
 
         // colors go hsl(0, 100%, 30%), hsl(0, 100%, 45%), hsl(25,100%,50%), hsl(55,100%,47%), hsl(70, 100%, 47%, 1), hsl(100, 100%, 45%, 1)
         //           dark red         , red              , orange          , yellow          , yellow-green         , green
@@ -294,6 +393,16 @@ if (!("gamemode_vip" in getroottable())) {
             ::gamemode_vip.OnVIPHurt(data);
         }
     });
+    ::AddEventListener("player_disconnect", function(data) {
+		::gamemode_vip.CheckDisconnectVIP();
+    });
+	
+	::AddEventListener("round_start", function(data) {
+		//timeLimit = data.timelimit;
+		::gamemode_vip.timeLimit = data.timelimit;
+        ::gamemode_vip.RoundOverCheck();
+    });
+	
     ::AddEventListener("round_freeze_end", function(data) {
         ::gamemode_vip.OnFreezeEnd();
     });
