@@ -59,7 +59,9 @@ class GameModeVIP {
         if (vip != null && !vip.IsValid()) {
             printl("[VIP] === VIP INVALID!");
             ResetVIP();
+
 			SelectRandomVIP();
+
         }
 		
         // check if one of the teams have been wiped off
@@ -137,7 +139,21 @@ class GameModeVIP {
 	*/
 	
 	function ReselectRandomVIP(){
-	
+		//Have 30 seconds of round passed? If not go on.
+		//local graceTime = Time() +...
+		
+		printl("RESELECTING VIP FOR DISCONNECTING - IF NO MORE THAN 30 SECONDS HAVE BEEN PLAYED")
+		
+		
+		local cts = Players.GetCTs();
+        if (cts.len() != 0) {
+            printl("[VIP] Picking from "+cts.len()+" CTs.");
+            local vipPly = null;
+            while (vipPly == null || !vipPly.IsValid()) {
+                vipPly = cts[RandomInt(0, cts.len() - 1)];
+            }
+            SetSubVIP(vipPly);
+        }
 	
 	}
 	
@@ -210,6 +226,7 @@ class GameModeVIP {
     // removes the current VIP, resetting all state
     function ResetVIP() {
         printl("[VIP] Resetting VIP");
+		
         vip = null;
         lastIllegalWeapon = null;
         lastIllegalTime = 0;
@@ -219,7 +236,9 @@ class GameModeVIP {
 
         local ent = null;
         while ((ent = Entities.FindByName(ent, ::VIP_TARGETNAME)) != null) {
+			ent.SetHealth(100);
             EntFireByHandle(ent, "AddOutput", "targetname default", 0.0, null, null);
+			
         }
     }
 	
@@ -259,10 +278,24 @@ class GameModeVIP {
             return false;
         });
         ::ShowMessage("You're the VIP. Don't fuck it up now", vip, "color='#F00'");
+		vip.SetModel("models/player/prisoner/prisoner_new.mdl"); 
+		
+		//models/player/vip/leet_vip.mdl
+		
+		
+		
         EntFireByHandle(vip, "color", "0 255 0", 0.0, null, null);
         EntFireByHandle(vip, "AddOutput", "targetname " + ::VIP_TARGETNAME, 0.0, null, null);
     }
-
+	
+	function Precache(){
+		PrecacheModel("models/player/prisoner/prisoner_new.mdl");
+		
+		//models/player/vip/leet_vip.mdl
+	}
+	
+	
+	
     // switches/drops away from illegal weapons
     function OnVIPWeapon(data) {
         printl("[VIP] Got VIP weapon switch");
