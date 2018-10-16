@@ -19,7 +19,7 @@ In addition to this you have a root table, which every script in any context has
 <dd>At the start of every round, every entity's script is executed. However, the root table still contains any data set from previous runs. Any code you want to run every round (e.g. creating entities, which are invalidated at the end of every round) is fine with this, but any code you want to keep across rounds (e.g. keeping track of state) should be placed behind a guard and store its state in the root table.</dd>
 <dt>Callbacks cannot access their containing closure</dt>
 <dd><p>Even though functions are first-order citizens in Squirrel, they do not have access to the closure in which they were defined. You have to work around this by using <code>.bindenv()</code>, or by using a class method (in which case <code>this</code> refers to the class instance).</p>
-<code><pre>function CallCallback(cb) { cb(); }
+<pre>function CallCallback(cb) { cb(); }
 class Test {
     test = null;
     constructor() {
@@ -31,7 +31,7 @@ class Test {
         printl("this.test: "+this.test); // will succeed
         printl("test: "+test); // will error if called as callback
     }
-}</pre></code></dd>
+}</pre></dd>
 <dt>Outputs are asynchronous</dt>
 <dd>Be careful when triggering outputs on entities (e.g. showing messages using an <code>env_hudhint</code>) - they will not execute until your Squirrel code is finished. You can wait until the next think cycle to work around this.</dd>
 <dt>Entities will not react to script-created keyvalues by themselves</dt>
