@@ -278,7 +278,7 @@ class GameModeVIP {
             return false;
         });
         ::ShowMessage("You're the VIP. Don't fuck it up now", vip, "color='#F00'");
-		vip.SetModel("models/player/prisoner/prisoner_new.mdl"); 
+		vip.SetModel("models/player/custom_player/legacy/ctm_heavy2.mdl"); 
 		
 		//models/player/vip/leet_vip.mdl
 		
@@ -289,7 +289,7 @@ class GameModeVIP {
     }
 	
 	function Precache(){
-		PrecacheModel("models/player/prisoner/prisoner_new.mdl");
+		PrecacheModel("models/player/custom_player/legacy/ctm_heavy2.mdl");
 		
 		//models/player/vip/leet_vip.mdl
 	}
