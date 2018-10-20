@@ -14,6 +14,11 @@ function Think() {
         ::gamemode_vip.Think();
     }
 }
+//Entities.PrecacheModel("models/player/custom_player/legacy/ctm_heavy2.mdl");
+function Precache(){
+    printl("=== PRECACHING ===");
+    self.PrecacheModel("models/player/custom_player/legacy/ctm_heavy2.mdl");
+}
 
 ::VIP_TARGETNAME <- "vip_vip";
 ::VIP_VERSION <- "v0.0.1";
@@ -286,15 +291,7 @@ class GameModeVIP {
 		
         EntFireByHandle(vip, "color", "0 255 0", 0.0, null, null);
         EntFireByHandle(vip, "AddOutput", "targetname " + ::VIP_TARGETNAME, 0.0, null, null);
-    }
-	
-	function Precache(){
-		PrecacheModel("models/player/custom_player/legacy/ctm_heavy2.mdl");
-		
-		//models/player/vip/leet_vip.mdl
-	}
-	
-	
+    }	
 	
     // switches/drops away from illegal weapons
     function OnVIPWeapon(data) {
