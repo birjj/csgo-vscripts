@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "7958"
-	"mapversion" "4"
+	"mapversion" "6"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "4"
+	"mapversion" "6"
 	"classname" "worldspawn"
 	"comment" "Decompiled by BSPSource v1.3.24 from test_vip"
 	"detailmaterial" "detail/detailsprites"
@@ -2529,62 +2529,6 @@ world
 }
 entity
 {
-	"id" "1724"
-	"classname" "prop_dynamic_glow"
-	"angles" "0 0 0"
-	"fademindist" "-1"
-	"fadescale" "1"
-	"glowcolor" "255 255 255"
-	"glowdist" "1024"
-	"glowenabled" "0"
-	"glowstyle" "0"
-	"MaxAnimTime" "10"
-	"MinAnimTime" "5"
-	"model" "models/player/prisoner/prisoner_new.mdl"
-	"renderamt" "255"
-	"rendercolor" "255 255 255"
-	"skin" "0"
-	"solid" "6"
-	"origin" "256 0 -32"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 1000]"
-	}
-}
-entity
-{
-	"id" "1735"
-	"classname" "prop_dynamic_glow"
-	"angles" "0 0 0"
-	"DefaultAnim" "ACT_CSGO_JUMP"
-	"fademindist" "-1"
-	"fadescale" "1"
-	"glowcolor" "255 255 255"
-	"glowdist" "1024"
-	"glowenabled" "0"
-	"glowstyle" "0"
-	"MaxAnimTime" "10"
-	"MinAnimTime" "5"
-	"model" "models/player/custom_player/legacy/ctm_heavy2.mdl"
-	"renderamt" "255"
-	"rendercolor" "255 255 255"
-	"skin" "0"
-	"solid" "6"
-	"targetname" "asdf"
-	"origin" "320 0 -32"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 1000]"
-	}
-}
-entity
-{
 	"id" "1661"
 	"classname" "trigger_hurt"
 	"damage" "100000"
@@ -2721,55 +2665,6 @@ entity
 		"visgroupshown" "1"
 		"visgroupautoshown" "1"
 		"logicalpos" "[0 0]"
-	}
-}
-entity
-{
-	"id" "1678"
-	"classname" "logic_auto"
-	"spawnflags" "1"
-	connections
-	{
-		"OnMapSpawn" "asdfSetGlowColor0 0 2550-1"
-		"OnMapSpawn" "asdfSetGlowStyle30-1"
-		"OnMapSpawn" "asdfSetGlowEnabled4-1"
-	}
-	"origin" "360.868 -9.15288 -23"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 500]"
-	}
-}
-entity
-{
-	"id" "1556"
-	"classname" "prop_dynamic_glow"
-	"angles" "0 0 0"
-	"DefaultAnim" "ACT_CSGO_JUMP"
-	"fademindist" "-1"
-	"fadescale" "1"
-	"glowcolor" "255 255 255"
-	"glowdist" "1024"
-	"glowenabled" "0"
-	"glowstyle" "0"
-	"MaxAnimTime" "10"
-	"MinAnimTime" "5"
-	"model" "models/player/vip/leet_vip.mdl"
-	"renderamt" "255"
-	"rendercolor" "255 255 255"
-	"skin" "0"
-	"solid" "6"
-	"targetname" "asdf"
-	"origin" "160 0 -32"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 1000]"
 	}
 }
 entity
@@ -3880,8 +3775,8 @@ cameras
 	"activecamera" "0"
 	camera
 	{
-		"position" "[-39.7415 -500.195 192.614]"
-		"look" "[-37.9905 -247.433 108.53]"
+		"position" "[300.529 -104.61 69.694]"
+		"look" "[420.149 81.0339 -79.2672]"
 	}
 	camera
 	{
