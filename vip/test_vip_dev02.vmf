@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "7958"
-	"mapversion" "6"
+	"mapversion" "8"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "6"
+	"mapversion" "8"
 	"classname" "worldspawn"
 	"comment" "Decompiled by BSPSource v1.3.24 from test_vip"
 	"detailmaterial" "detail/detailsprites"
@@ -3224,24 +3224,6 @@ entity
 }
 entity
 {
-	"id" "440"
-	"classname" "logic_auto"
-	"spawnflags" "1"
-	connections
-	{
-		"OnMapSpawn" "vip_scriptRunScriptCode::gamemode_vip.OnRoundStart()0-1"
-	}
-	"origin" "-536 8 200"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 9500]"
-	}
-}
-entity
-{
 	"id" "232"
 	"classname" "info_player_counterterrorist"
 	"angles" "0 0 0"
@@ -3775,8 +3757,8 @@ cameras
 	"activecamera" "0"
 	camera
 	{
-		"position" "[300.529 -104.61 69.694]"
-		"look" "[420.149 81.0339 -79.2672]"
+		"position" "[132.348 -227.86 22.3535]"
+		"look" "[-78.1785 -68.092 -11.0336]"
 	}
 	camera
 	{
