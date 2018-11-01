@@ -175,6 +175,14 @@ class GameModeVIP {
             return false;
         });
         ::ShowMessage("You're the VIP. Don't fuck it up now", vip, "color='#F00'");
+        
+        local ambient = Entities.FindByName(null, "vip_snd");
+        if (ambient) {
+            ambient.SetOrigin(player.EyePosition());
+            EntFireByHandle(ambient, "PlaySound", "", 0.0, player, player);
+        } else {
+            printl("[VIP] Couldn't find VIP sound");
+        }
     }
 
     // sets a player to be substitute VIP if the current VIP becomes invalid for some reason (e.g. disconnect)
