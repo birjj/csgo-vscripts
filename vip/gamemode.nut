@@ -3,12 +3,12 @@
  * ---
  * CTs must escort the VIP to the chopper - Ts must assassinate the VIP before that happens.
  */
-DoIncludeScript("vip/events.nut", null);
-DoIncludeScript("vip/debug.nut", null);
-DoIncludeScript("vip/players.nut", null);
-DoIncludeScript("vip/ui.nut", null);
-DoIncludeScript("vip/money.nut", null);
-DoIncludeScript("vip/chat.nut", null);
+DoIncludeScript("vip/lib/events.nut", null);
+DoIncludeScript("vip/lib/debug.nut", null);
+DoIncludeScript("vip/lib/players.nut", null);
+DoIncludeScript("vip/lib/ui.nut", null);
+DoIncludeScript("vip/lib/money.nut", null);
+DoIncludeScript("vip/lib/chat.nut", null);
 
 function Think() {
     local root = getroottable();

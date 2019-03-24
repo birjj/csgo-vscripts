@@ -12,3 +12,7 @@ flyguydev/
 gd_rialto/
 training/
 mapspawn.nut
+vip/vmfs/*.log
+vip/vmfs/*.bsp
+vip/vmfs/*.prt
+vip/vmfs/*.vmx
