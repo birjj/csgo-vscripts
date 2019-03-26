@@ -41,8 +41,10 @@ If you have an entity that reads its keyvalues on input (e.g. a <code>env_hudhin
 
 ## Known bugs
 - Cannot differentiate AI from human players;<br>
-Hard to fix in a way that's reliable;
-- When taking over VIP Bot, VIP vanishes but round doesn't end;<br>
-Potential fix: Save last known VIP position, when there's not VIP and VIP didn't die, set closest CT to last known position as VIP.
+_Hard to fix in a way that's reliable._
 
+- When taking over a VIP Bot, VIP vanishes but round doesn't end;<br>
+_Potential fix: Save last known VIP position, and when there's no VIP and VIP didn't die, set closest CT to last known position as VIP._
 
+- When VIP disconnects from the server, VIP vanishes but round doesn't end;<br>
+_Potential fix: Have a grace time within which a VIP can be replaced by another under certain conditions (has VIP taken damage, etc, so it can't be abused easily). If VIP disconnects way into the round, CT's should just lose the round._
