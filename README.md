@@ -38,3 +38,9 @@ class Test {
 <dd>If you have an entity that is supposed to do something without being triggered by an input (e.g. a <code>logic_eventlistener</code>) then you cannot set it up in your VScript, as the <code>__KeyValueFrom*</code> functions do not execute any related logic. You must instead set it up in Hammer.<br>
 If you have an entity that reads its keyvalues on input (e.g. a <code>env_hudhint</code>) then it's fine to set it up in your VScript, as it will read the keyvalue directly when you trigger it.</dd>
 </dl>
+
+## Known bugs
+- Cannot diferentiate AI from human players;
+- When taking over VIP Bot, VIP vanishes but round doesn't end;
+
+
