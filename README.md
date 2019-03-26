@@ -38,3 +38,13 @@ class Test {
 <dd>If you have an entity that is supposed to do something without being triggered by an input (e.g. a <code>logic_eventlistener</code>) then you cannot set it up in your VScript, as the <code>__KeyValueFrom*</code> functions do not execute any related logic. You must instead set it up in Hammer.<br>
 If you have an entity that reads its keyvalues on input (e.g. a <code>env_hudhint</code>) then it's fine to set it up in your VScript, as it will read the keyvalue directly when you trigger it.</dd>
 </dl>
+
+## Known bugs
+- Cannot differentiate AI from human players;<br>
+_Hard to fix in a way that's reliable._
+
+- When taking over a VIP Bot, VIP vanishes but round doesn't end;<br>
+_Potential fix: Save last known VIP position, and when there's no VIP and VIP didn't die, set closest CT to last known position as VIP._
+
+- When VIP disconnects from the server, VIP vanishes but round doesn't end;<br>
+_Potential fix: Have a grace time within which a VIP can be replaced by another under certain conditions (has VIP taken damage, etc, so it can't be abused easily). If VIP disconnects way into the round, CT's should just lose the round._
