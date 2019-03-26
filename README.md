@@ -40,7 +40,9 @@ If you have an entity that reads its keyvalues on input (e.g. a <code>env_hudhin
 </dl>
 
 ## Known bugs
-- Cannot diferentiate AI from human players;
+- Cannot differentiate AI from human players;
+Hard to fix in a way that's reliable;
 - When taking over VIP Bot, VIP vanishes but round doesn't end;
+Potential fix: Save last known VIP position, when there's not VIP and VIP didn't die, set closest CT to last known position as VIP.
 
 
