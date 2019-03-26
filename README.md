@@ -51,3 +51,16 @@ _Potential fix: Have a grace time within which a VIP can be replaced by another 
 
 - Bots don't know where to go;<br>
 _Not a whole lot can be done about teaching bots the gamemode, but could try spawning an Hostage entity inside Helicopter to "bait" CTs into the Helicopter, and making the hostage invisible/untargatable. This would of course cause some other weird problems such as Terrorist bots saying things like "Gonna camp the hostage" and such. No elegant solution._
+
+- Helicopter and smokes don't go well together;<br>
+_If a smoke lands close to the helicopter, depending on their perspective certain players might be able to see players through the smoke. Possible solution: have a dynamic model draw on top on the animated helicopter and disable that one on lift off(???) (hopefully works)_
+
+- Quickswitch may drop pistol on certain ocasions;
+
+- 200HP on VIP seems a bit too imbalanced, needs to be lowered to about 150HP;
+
+- Triggers need to be disabled after VIP escapes.
+
+- VIP sound sometimes plays in a position that it shouldn't.
+
+- Add Rescue Area on the map, to get that sweeeet [H] marker on the radar.
