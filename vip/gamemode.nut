@@ -79,30 +79,36 @@ class GameModeVIP {
             // printl("[VIP] We have "+cts.len()+" CTs, "+ts.len()+" Ts alive ("+shouldEndOnTeamWipe+")");
 
             local ended = false;
-            if (shouldEndOnTeamWipe && cts.len() == 0) {
-                EntFireByHandle(eGameRoundEnd, "EndRound_TerroristsWin", "5", 0.0, null, null);
-                isLive = false;
-
-                ::GiveMoneyT(3000, "Reward for eliminating the enemy team");
-                ended = true;
-            }
             if (!ended && shouldEndOnTeamWipe && ts.len() == 0) {
                 EntFireByHandle(eGameRoundEnd, "EndRound_CounterTerroristsWin", "5", 0.0, null, null);
-                isLive = false;
+                setLive(false);
 
                 ::GiveMoneyCT(3000, "Reward for eliminating the enemy team");
                 ended = true;
             }
             if (!ended && IsRoundOver()) {
 				EntFireByHandle(eGameRoundEnd, "EndRound_TerroristsWin", "5", 0.0, null, null);
-				isLive = false;
+				setLive(false);
 
                 ::GiveMoneyT(6969, "Reward for not letting VIP escape");
 				ended = true;
 			}
             if (!ended && cts.len() == 0 && ts.len() == 0) {
                 EntFireByHandle(eGameRoundEnd, "EndRound_Draw", "5", 0.0, null, null);
-                isLive = false;
+                setLive(false);
+            }
+        }
+    }
+
+    // sets `isLive` to a value, updating necessary entities
+    function setLive(value) {
+        isLive = value;
+        local eWinTrigger = Entities.FindByName(null, "vip_rescue");
+        if (eWinTrigger) {
+            if (isLive) {
+                EntFireByHandle(eWinTrigger, "Enable", "", 0.0, null, null);
+            } else {
+                EntFireByHandle(eWinTrigger, "Disable", "", 0.0, null, null);
             }
         }
     }
@@ -238,7 +244,7 @@ class GameModeVIP {
         eClientCommand = Entities.CreateByClassname("point_clientcommand");
         eGameRoundEnd = Entities.CreateByClassname("game_round_end");
         eServerCommand = Entities.CreateByClassname("point_servercommand");
-        isLive = false;
+        setLive(false);
         timeLimit = Time() + timeLimit; // timeLimit has been updated before this is called
 
         EntFireByHandle(eServerCommand, "Command", "mp_ignore_round_win_conditions 0", 0.0, null, null);
@@ -249,7 +255,7 @@ class GameModeVIP {
     // fired when round actually starts (freeze time is over)
     function OnFreezeEnd() {
         if (vip && vip.IsValid() && !ScriptIsWarmupPeriod()) {
-            isLive = true;
+            setLive(true);
             printl("[VIP] Round freeze ended");
             EntFireByHandle(eServerCommand, "Command", "mp_ignore_round_win_conditions 1", 0.0, null, null);
 
@@ -313,7 +319,7 @@ class GameModeVIP {
 
         if (isLive) {
             EntFireByHandle(eGameRoundEnd, "EndRound_TerroristsWin", "5", 0.0, null, null);
-            isLive = false;
+            setLive(false);
 
             ::GiveMoneyT(4999, "You got that motherfucker!");
         }
@@ -326,7 +332,7 @@ class GameModeVIP {
 
         if (isLive) {
             EntFireByHandle(eGameRoundEnd, "EndRound_CounterTerroristsWin", "5", 0.0, null, null);
-            isLive = false;
+            setLive(false);
 
             ::GiveMoneyCT(1337, "Reward for helping the VIP escape");
         }
