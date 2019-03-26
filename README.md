@@ -48,3 +48,6 @@ _Potential fix: Save last known VIP position, and when there's no VIP and VIP di
 
 - When VIP disconnects from the server, VIP vanishes but round doesn't end;<br>
 _Potential fix: Have a grace time within which a VIP can be replaced by another under certain conditions (has VIP taken damage, etc, so it can't be abused easily). If VIP disconnects way into the round, CT's should just lose the round._
+
+- Bots don't know where to go;<br>
+_Not a whole lot can be done about teaching bots the gamemode, but could try spawning an Hostage entity inside Helicopter to "bait" CTs into the Helicopter, and making the hostage invisible/untargatable. This would of course cause some other weird problems such as Terrorist bots saying things like "Gonna camp the hostage" and such. No elegant solution._
