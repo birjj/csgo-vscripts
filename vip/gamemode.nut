@@ -185,7 +185,7 @@ class GameModeVIP {
         local ambient = Entities.FindByName(null, "vip_snd");
         if (ambient) {
             ambient.SetOrigin(player.EyePosition());
-            EntFireByHandle(ambient, "PlaySound", "", 0.0, player, player);
+            EntFireByHandle(ambient, "PlaySound", "", 0.1, player, player);
         } else {
             printl("[VIP] Couldn't find VIP sound");
         }
