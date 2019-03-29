@@ -10,3 +10,30 @@ Extract `lib/` and `gamemode.nut` to `steamapps/Counter-Strike: Global Offensive
 Extract `resources/*` to `steamapps/Counter-Strike: Global Offensive/csgo` (so `models` merges with CS:GO's `models`).
 
 **Important:** In order for the VIP to be able to see his own arms, your map needs a `.kv` file. You can copy-paste the `vmfs/test_vip.kv` file from this repo and rename it to match your map.
+
+## Known bugs
+- Cannot differentiate AI from human players;<br>
+_Hard to fix in a way that's reliable._
+
+- When taking over a VIP Bot, VIP vanishes but round doesn't end;<br>
+_Potential fix: Save last known VIP position, and when there's no VIP and VIP didn't die, set closest CT to last known position as VIP._
+
+- When VIP disconnects from the server, VIP vanishes but round doesn't end;<br>
+_Potential fix: Have a grace time within which a VIP can be replaced by another under certain conditions (has VIP taken damage, etc, so it can't be abused easily). If VIP disconnects way into the round, CT's should just lose the round._
+
+- Bots don't know where to go;<br>
+_Not a whole lot can be done about teaching bots the gamemode, but could try spawning an Hostage entity inside Helicopter to "bait" CTs into the Helicopter, and making the hostage invisible/untargatable. This would of course cause some other weird problems such as Terrorist bots saying things like "Gonna camp the hostage" and such. No elegant solution._
+
+- Helicopter and smokes don't go well together;<br>
+_If a smoke lands close to the helicopter, depending on their perspective certain players might be able to see players through the smoke. Possible solution: have a dynamic model draw on top on the animated helicopter and disable that one on lift off(???) (hopefully works)_
+
+- Quickswitch may drop pistol on certain ocasions
+    This is caused by the delay between server and client. If client switches to another weapon before it receives the `drop` command from the server, then said weapon will be dropped instead. Not much we can do.
+
+- 200HP on VIP seems a bit too imbalanced, needs to be lowered to about 150HP;
+
+- Triggers need to be disabled after VIP escapes.
+
+- VIP sound sometimes plays in a position that it shouldn't.
+
+- Add Rescue Area on the map, to get that sweeeet [H] marker on the radar.
