@@ -92,6 +92,18 @@ class PlayerManager {
         return outp;
     }
 
+    function GetPlayersInRadius(origin, radius, filter = null) {
+        local outp = [];
+        local players = PlayerManager.GetPlayers();
+        foreach (ply in players) {
+            local deltaVector = origin - ply.GetOrigin();
+            if (deltaVector.Length() <= radius) {
+                outp.push(ply);
+            }
+        }
+        return outp;
+    }
+
     function GetCTs() {
         return GetPlayers(function(ply){
             return ply.GetTeam() == TEAM_CT;

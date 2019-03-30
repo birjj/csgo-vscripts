@@ -54,6 +54,7 @@ class GameModeVIP {
     lastIllegalTime = 0;
     lastHealthVIP = null; // used in case VIP disconnects
 	spawnPositionVIP = null; // used in case VIP disconnects
+    lastSeenPositionVIP = null; // used for taking over bots
 
     eGameRoundEnd = null;
     eServerCommand = null;
@@ -65,11 +66,29 @@ class GameModeVIP {
         // VIP entity could go invalid for a multitude of reasons (disconnect, etc.)
         if (vip != null && !vip.IsValid()) {
             printl("[VIP] === VIP INVALID!");
-            OnVIPDeath();
+            OnVIPDeath(null);
+        }
+
+        if (vip != null && vip.GetHealth() > 0) {
+            lastSeenPositionVIP = vip.GetOrigin();
         }
 		
         // check if one of the teams have been wiped off
         if (isLive) {
+            // if a bot was taken over, VIP will have 0 health (but won't have triggered the OnHurt listener)
+            if (vip.GetHealth() == 0) {
+                printl("[VIP] === VIP bot was taken over");
+                local nearbyAlivePlayers = Players.GetPlayersInRadius(lastSeenPositionVIP, 16, function(ply){
+                    return ply.GetTeam() == TEAM_CT && ply.GetHealth() > 0;
+                });
+
+                if (nearbyAlivePlayers.len() > 1) {
+                    SubstituteVIP(nearbyAlivePlayers[0]);
+                } else {
+                    OnVIPDeath(null);
+                }
+            }
+
             local cts = Players.GetPlayers(function(ply){
                 return ply.GetTeam() == TEAM_CT && ply.GetHealth() > 0;
             });
@@ -194,30 +213,23 @@ class GameModeVIP {
     // sets a player to be substitute VIP if the current VIP becomes invalid for some reason (e.g. disconnect)
     function SubstituteVIP(player){
         printl("[VIP] Setting substitute VIP to "+player);
-        ResetVIP();
 
+        // make sure we grab last health before overwriting stuff
+        local lastHealth = lastHealthVIP;
+        if (lastHealth == null) {
+            lastHealth = VIP_MAXHEALTH;
+        }
+
+        ResetVIP();
         SetEntityToVIP(player);
+        EntFireByHandle(eClientCommand, "Command", "slot3", 0.0, vip, null);
 		
-		// If Original VIP had less HP than new VIP - replace with Original VIP HP
+		// If original VIP had less HP than new VIP - replace with original VIP HP
 		local healthSubVIP = vip.GetHealth();
-		if (healthSubVIP > lastHealthVIP){ 
-			vip.SetHealth(lastHealthVIP);
+		if (healthSubVIP > lastHealth){ 
+			vip.SetHealth(lastHealth);
 		}
 		
-        ::ShowMessageSome("Substitute VIP has been selected, protect him!", function(ply) {
-            if (ply.GetTeam() == TEAM_CT) {
-                EntFireByHandle(ply, "color", "0 0 255", 0.0, null, null);
-                return true;
-            }
-            return false;
-        });
-        ::ShowMessageSome("The VIP claims to have fucked your mother. Kill him!", function(ply) {
-            if (ply.GetTeam() == TEAM_T) {
-                EntFireByHandle(ply, "color", "255 0 0", 0.0, null, null);
-                return true;
-            }
-            return false;
-        });
         ::ShowMessage("You're the VIP. Don't fuck it up now", vip, "color='#F00'");
     }
 
