@@ -147,7 +147,12 @@ class GameModeVIP {
         if (cts.len() != 0) {
             printl("[VIP] Picking from "+cts.len()+" CTs.");
             local vipPly = null;
+            local tries = 0;
             while (vipPly == null || !vipPly.IsValid() || vipPly.GetHealth() == 0) {
+                if (++tries > cts.len()) {
+                    printl("[VIP] Couldn't find a random CT");
+                    return null;
+                }
                 vipPly = cts[RandomInt(0, cts.len() - 1)];
             }
             return vipPly;
@@ -216,7 +221,7 @@ class GameModeVIP {
 
         // make sure we grab last health before overwriting stuff
         local lastHealth = lastHealthVIP;
-        if (lastHealth == null) {
+        if (lastHealth == null || lastHealth == 0) {
             lastHealth = VIP_MAXHEALTH;
         }
 
@@ -327,13 +332,18 @@ class GameModeVIP {
     // called when the VIP is RIP
     function OnVIPDeath(data) {
         printl("[VIP] VIP dieded :(");
-        ResetVIP();
 
-        if (isLive) {
+        // if it is warmup, pick a random CT player to be the new VIP
+        local newVIP = SelectRandomCT();
+
+        if (isLive || newVIP == null) {
+            ResetVIP();
             EntFireByHandle(eGameRoundEnd, "EndRound_TerroristsWin", "5", 0.0, null, null);
             setLive(false);
 
             ::GiveMoneyT(4999, "You got that motherfucker!");
+        } else {
+            SubstituteVIP(newVIP);
         }
     }
 
