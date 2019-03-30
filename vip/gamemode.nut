@@ -42,7 +42,7 @@ function Precache(){
     "molotov",
     "smokegrenade"
 ];
-::VIP_MAXHEALTH <- 200;
+::VIP_MAXHEALTH <- 150;
 
 class GameModeVIP {
     vip = null;

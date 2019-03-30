@@ -24,8 +24,6 @@ Extract `resources/*` to `steamapps/Counter-Strike: Global Offensive/csgo` (so `
 - Quickswitch may drop pistol on certain ocasions
     _This is caused by the delay between server and client. If client switches to another weapon before it receives the `drop` command from the server, then said weapon will be dropped instead. Not much we can do._
 
-- 200HP on VIP seems a bit too imbalanced, needs to be lowered to about 150HP;
-
 - Triggers need to be disabled after VIP escapes.
 
 - VIP sound sometimes plays in a position that it shouldn't.
