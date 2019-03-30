@@ -27,5 +27,3 @@ Extract `resources/*` to `steamapps/Counter-Strike: Global Offensive/csgo` (so `
 - Triggers need to be disabled after VIP escapes.
 
 - VIP sound sometimes plays in a position that it shouldn't.
-
-- Add Rescue Area on the map, to get that sweeeet [H] marker on the radar.
