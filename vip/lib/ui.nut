@@ -1,3 +1,5 @@
+// https://github.com/birjolaxew/csgo-vscripts
+// == UI messages
 // Handles displaying stuff to players
 // Exposes:
 //   ::ShowMessage(msg, player, style="", delay=0.0)

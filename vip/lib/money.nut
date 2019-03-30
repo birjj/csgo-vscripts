@@ -1,3 +1,5 @@
+// https://github.com/birjolaxew/csgo-vscripts
+// == Money
 // Handles giving money to players
 // Exposes:
 //   ::GiveMoney(amount, player, delay=0.0)

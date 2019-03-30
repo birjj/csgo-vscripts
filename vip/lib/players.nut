@@ -1,9 +1,11 @@
+// https://github.com/birjolaxew/csgo-vscripts
+// == PlayerManager
 // Keeps track of players, allowing you to find players by team or userid
 // Note that in order for the Userid binding to work, you *must* have your VMF
 //  setup such that we can attach a listener to player_use (see events.nut)
 // 
 // Exposes:
-//   ::Players.FindByUserid(userid)
+//   ::Players (instance of PlayerManager)
 
 ::TEAM_T <- 2;
 ::TEAM_CT <- 3;

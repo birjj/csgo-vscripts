@@ -1,3 +1,5 @@
+// https://github.com/birjolaxew/csgo-vscripts
+// == Chat messages
 // Handles displaying stuff to players
 // Exposes:
 //   ::COLORS{}

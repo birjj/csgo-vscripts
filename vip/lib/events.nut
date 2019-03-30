@@ -1,3 +1,4 @@
+// https://github.com/birjolaxew/csgo-vscripts
 // == Event listener
 // Listen for in-game events
 // The callback functions are called directly with the event data

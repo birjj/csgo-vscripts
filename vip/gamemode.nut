@@ -1,4 +1,5 @@
 /**
+ * https://github.com/birjolaxew/csgo-vscripts
  * VIP Gamemode
  * ---
  * CTs must escort the VIP to the chopper - Ts must assassinate the VIP before that happens.
