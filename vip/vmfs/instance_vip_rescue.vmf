@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "8075"
-	"mapversion" "38"
+	"mapversion" "39"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "38"
+	"mapversion" "39"
 	"classname" "worldspawn"
 	"comment" "Decompiled by BSPSource v1.3.24 from test_vip"
 	"detailmaterial" "detail/detailsprites"
@@ -407,7 +407,7 @@ entity
 	"targetname" "vip_rescue"
 	connections
 	{
-		"OnTrigger" "!selfRunScriptCode::gamemode_vip.OnVIPRescued(self)0-1"
+		"OnTrigger" "!selfRunScriptCode::gamemode_vip.OnVIPRescued()0-1"
 		"OnTrigger" "vip_heliSetAnimation4lift0-1"
 		"OnTrigger" "!activatorDisableDraw0-1"
 		"OnTrigger" "!activatorRemoveHealth0-1"
@@ -661,8 +661,8 @@ cameras
 	"activecamera" "0"
 	camera
 	{
-		"position" "[211.653 7.15512 111.549]"
-		"look" "[135.774 -201.346 -35.8657]"
+		"position" "[210.595 23.0463 81.631]"
+		"look" "[143.6 -223.564 6.41896]"
 	}
 	camera
 	{
