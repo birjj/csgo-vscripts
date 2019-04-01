@@ -123,13 +123,19 @@ class GameModeVIP {
     // sets `isLive` to a value, updating necessary entities
     function setLive(value) {
         isLive = value;
-        local eWinTrigger = Entities.FindByName(null, "vip_rescue");
-        if (eWinTrigger) {
-            if (isLive) {
-                EntFireByHandle(eWinTrigger, "Enable", "", 0.0, null, null);
-            } else {
-                EntFireByHandle(eWinTrigger, "Disable", "", 0.0, null, null);
+        local ent = Entities.FindByName(null, "*vip_rescue");
+        while (ent != null) {
+            // for some reason "*vip_rescue" matches some non-matching entities
+            local entName = ent.GetName();
+            if (entName != null && entName.find("vip_rescue") == entName.len() - "vip_rescue".len()) {
+                printl("[VIP] Enabling rescue trigger "+ent);
+                if (isLive) {
+                    EntFireByHandle(ent, "Enable", "", 0.0, null, null);
+                } else {
+                    EntFireByHandle(ent, "Disable", "", 0.0, null, null);
+                }
             }
+            ent = Entities.FindByName(ent, "*vip_rescue");
         }
     }
 	

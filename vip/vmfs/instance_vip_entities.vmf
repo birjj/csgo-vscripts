@@ -1,0 +1,281 @@
+versioninfo
+{
+	"editorversion" "400"
+	"editorbuild" "8075"
+	"mapversion" "2"
+	"formatversion" "100"
+	"prefab" "0"
+}
+visgroups
+{
+}
+viewsettings
+{
+	"bSnapToGrid" "1"
+	"bShowGrid" "1"
+	"bShowLogicalGrid" "0"
+	"nGridSpacing" "8"
+	"bShow3DGrid" "0"
+}
+world
+{
+	"id" "1"
+	"mapversion" "2"
+	"classname" "worldspawn"
+	"skyname" "sky_dust"
+	"maxpropscreenwidth" "-1"
+	"detailvbsp" "detail.vbsp"
+	"detailmaterial" "detail/detailsprites"
+}
+entity
+{
+	"id" "2"
+	"classname" "logic_eventlistener"
+	"EventName" "player_disconnect"
+	"FetchEventData" "1"
+	"IsEnabled" "1"
+	"targetname" "player_disconnect_listener"
+	"TeamNum" "-1"
+	connections
+	{
+		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_DISCONNECT)0-1"
+	}
+	"origin" "40 -8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 1500]"
+	}
+}
+entity
+{
+	"id" "4"
+	"classname" "logic_eventlistener"
+	"EventName" "round_start"
+	"FetchEventData" "1"
+	"IsEnabled" "1"
+	"targetname" "round_start_listener"
+	"TeamNum" "-1"
+	connections
+	{
+		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(ROUND_START)0-1"
+	}
+	"origin" "40 8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 2000]"
+	}
+}
+entity
+{
+	"id" "6"
+	"classname" "logic_eventlistener"
+	"EventName" "player_spawn"
+	"FetchEventData" "1"
+	"IsEnabled" "1"
+	"targetname" "player_spawn_listener"
+	"TeamNum" "-1"
+	connections
+	{
+		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_SPAWN)0-1"
+	}
+	"origin" "24 -8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 2500]"
+	}
+}
+entity
+{
+	"id" "8"
+	"classname" "logic_eventlistener"
+	"EventName" "player_hurt"
+	"FetchEventData" "1"
+	"IsEnabled" "1"
+	"targetname" "player_hurt_listener"
+	"TeamNum" "-1"
+	connections
+	{
+		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_HURT)0-1"
+	}
+	"origin" "24 8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 3500]"
+	}
+}
+entity
+{
+	"id" "10"
+	"classname" "logic_eventlistener"
+	"EventName" "player_use"
+	"FetchEventData" "1"
+	"IsEnabled" "1"
+	"targetname" "player_use_listener"
+	"TeamNum" "-1"
+	connections
+	{
+		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_USE)0-1"
+	}
+	"origin" "8 -8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 8500]"
+	}
+}
+entity
+{
+	"id" "12"
+	"classname" "logic_eventlistener"
+	"EventName" "player_death"
+	"FetchEventData" "1"
+	"IsEnabled" "1"
+	"targetname" "player_death_listener"
+	"TeamNum" "-1"
+	connections
+	{
+		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_DEATH)0-1"
+	}
+	"origin" "8 8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 7000]"
+	}
+}
+entity
+{
+	"id" "14"
+	"classname" "logic_eventlistener"
+	"EventName" "item_equip"
+	"FetchEventData" "1"
+	"IsEnabled" "1"
+	"targetname" "item_equip_listener"
+	"TeamNum" "-1"
+	connections
+	{
+		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(ITEM_EQUIP)0-1"
+	}
+	"origin" "-8 -8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 8000]"
+	}
+}
+entity
+{
+	"id" "16"
+	"classname" "logic_eventlistener"
+	"EventName" "round_freeze_end"
+	"FetchEventData" "1"
+	"IsEnabled" "1"
+	"targetname" "round_freeze_end_listener"
+	"TeamNum" "-1"
+	connections
+	{
+		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(ROUND_FREEZE_END)0-1"
+	}
+	"origin" "-8 8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 6500]"
+	}
+}
+entity
+{
+	"id" "18"
+	"classname" "logic_script"
+	"targetname" "vip_script"
+	"thinkfunction" "Think"
+	"vscripts" "vip/gamemode.nut"
+	"origin" "-24 -8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 7500]"
+	}
+}
+entity
+{
+	"id" "22"
+	"classname" "ambient_generic"
+	"health" "10"
+	"message" "vip.wav"
+	"pitch" "100"
+	"pitchstart" "100"
+	"radius" "1024"
+	"spawnflags" "16"
+	"targetname" "vip_snd"
+	"origin" "-24 8 8.21867"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 5500]"
+	}
+}
+entity
+{
+	"id" "58"
+	"classname" "filter_activator_name"
+	"filtername" "vip_vip"
+	"Negated" "Allow entities that match criteria"
+	"targetname" "vip_filter_onlyvip"
+	"origin" "-40 -8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 -11268]"
+	}
+}
+entity
+{
+	"id" "60"
+	"classname" "filter_activator_name"
+	"filtername" "vip_vip"
+	"Negated" "1"
+	"targetname" "vip_filter_notvip"
+	"origin" "-40 8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9000]"
+	}
+}
+cameras
+{
+	"activecamera" "-1"
+}
+cordons
+{
+	"active" "0"
+}

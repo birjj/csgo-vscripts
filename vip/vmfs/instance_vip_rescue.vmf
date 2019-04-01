@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "8075"
-	"mapversion" "27"
+	"mapversion" "38"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "27"
+	"mapversion" "38"
 	"classname" "worldspawn"
 	"comment" "Decompiled by BSPSource v1.3.24 from test_vip"
 	"detailmaterial" "detail/detailsprites"
@@ -152,35 +152,15 @@ entity
 	connections
 	{
 		"OnMapSpawn" "vip_helicopter_cameraDisable0-1"
-		"OnMapSpawn" "vip_rescuezoneDisable0-1"
+		"OnMapSpawn" "vip_rescueDisable0-1"
 	}
-	"origin" "40 8 264"
+	"origin" "16 8 248"
 	editor
 	{
 		"color" "220 30 220"
 		"visgroupshown" "1"
 		"visgroupautoshown" "1"
 		"logicalpos" "[0 0]"
-	}
-}
-entity
-{
-	"id" "1686"
-	"classname" "ambient_generic"
-	"health" "10"
-	"message" "vip.wav"
-	"pitch" "100"
-	"pitchstart" "100"
-	"radius" "1024"
-	"spawnflags" "16"
-	"targetname" "vip_snd"
-	"origin" "16 0 240"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 5500]"
 	}
 }
 entity
@@ -325,72 +305,6 @@ entity
 }
 entity
 {
-	"id" "1513"
-	"classname" "logic_eventlistener"
-	"EventName" "player_disconnect"
-	"FetchEventData" "1"
-	"IsEnabled" "1"
-	"targetname" "player_disconnect_listener"
-	"TeamNum" "-1"
-	connections
-	{
-		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_DISCONNECT)0-1"
-	}
-	"origin" "104 -8 264"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 1500]"
-	}
-}
-entity
-{
-	"id" "1469"
-	"classname" "logic_eventlistener"
-	"EventName" "round_start"
-	"FetchEventData" "1"
-	"IsEnabled" "1"
-	"targetname" "round_start_listener"
-	"TeamNum" "-1"
-	connections
-	{
-		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(ROUND_START)0-1"
-	}
-	"origin" "104 8 264"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 2000]"
-	}
-}
-entity
-{
-	"id" "1334"
-	"classname" "logic_eventlistener"
-	"EventName" "player_spawn"
-	"FetchEventData" "1"
-	"IsEnabled" "1"
-	"targetname" "player_spawn_listener"
-	"TeamNum" "-1"
-	connections
-	{
-		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_SPAWN)0-1"
-	}
-	"origin" "88 -8 264"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 2500]"
-	}
-}
-entity
-{
 	"id" "1374"
 	"classname" "trigger_softbarrier"
 	"filtername" "vip_filter_onlyts"
@@ -484,28 +398,6 @@ entity
 }
 entity
 {
-	"id" "1426"
-	"classname" "logic_eventlistener"
-	"EventName" "player_hurt"
-	"FetchEventData" "1"
-	"IsEnabled" "1"
-	"targetname" "player_hurt_listener"
-	"TeamNum" "-1"
-	connections
-	{
-		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_HURT)0-1"
-	}
-	"origin" "88 8 264"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 3500]"
-	}
-}
-entity
-{
 	"id" "1035"
 	"classname" "trigger_once"
 	"filtername" "vip_filter_onlyvip"
@@ -515,13 +407,13 @@ entity
 	"targetname" "vip_rescue"
 	connections
 	{
-		"OnTrigger" "vip_scriptRunScriptCode::gamemode_vip.OnVIPRescued()0-1"
+		"OnTrigger" "!selfRunScriptCode::gamemode_vip.OnVIPRescued(self)0-1"
 		"OnTrigger" "vip_heliSetAnimation4lift0-1"
-		"OnStartTouch" "!activatorDisableDraw0-1"
-		"OnStartTouch" "!activatorRemoveHealth0-1"
-		"OnStartTouch" "!activatorDisableDrawInFastReflection0-1"
-		"OnStartTouch" "!activatorTurnOff0-1"
-		"OnStartTouch" "vip_helicopter_cameraEnable0-1"
+		"OnTrigger" "!activatorDisableDraw0-1"
+		"OnTrigger" "!activatorRemoveHealth0-1"
+		"OnTrigger" "!activatorDisableDrawInFastReflection0-1"
+		"OnTrigger" "!activatorTurnOff0-1"
+		"OnTrigger" "vip_helicopter_cameraEnable0-1"
 	}
 	solid
 	{
@@ -755,7 +647,7 @@ entity
 	"filterteam" "2"
 	"Negated" "Allow entities that match criteria"
 	"targetname" "vip_filter_onlyts"
-	"origin" "56 -8 248"
+	"origin" "16 -8 248"
 	editor
 	{
 		"color" "220 30 220"
@@ -764,149 +656,13 @@ entity
 		"logicalpos" "[0 6000]"
 	}
 }
-entity
-{
-	"id" "1001"
-	"classname" "logic_eventlistener"
-	"EventName" "round_freeze_end"
-	"FetchEventData" "1"
-	"IsEnabled" "1"
-	"targetname" "round_freeze_end_listener"
-	"TeamNum" "-1"
-	connections
-	{
-		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(ROUND_FREEZE_END)0-1"
-	}
-	"origin" "56 8 264"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 6500]"
-	}
-}
-entity
-{
-	"id" "959"
-	"classname" "logic_eventlistener"
-	"EventName" "player_death"
-	"FetchEventData" "1"
-	"IsEnabled" "1"
-	"targetname" "player_death_listener"
-	"TeamNum" "-1"
-	connections
-	{
-		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_DEATH)0-1"
-	}
-	"origin" "72 8 264"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 7000]"
-	}
-}
-entity
-{
-	"id" "795"
-	"classname" "logic_script"
-	"targetname" "vip_script"
-	"thinkfunction" "Think"
-	"vscripts" "vip/gamemode.nut"
-	"origin" "40 -8 264"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 7500]"
-	}
-}
-entity
-{
-	"id" "815"
-	"classname" "logic_eventlistener"
-	"EventName" "item_equip"
-	"FetchEventData" "1"
-	"IsEnabled" "1"
-	"targetname" "item_equip_listener"
-	"TeamNum" "-1"
-	connections
-	{
-		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(ITEM_EQUIP)0-1"
-	}
-	"origin" "56 -8 264"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 8000]"
-	}
-}
-entity
-{
-	"id" "922"
-	"classname" "logic_eventlistener"
-	"EventName" "player_use"
-	"FetchEventData" "1"
-	"IsEnabled" "1"
-	"targetname" "player_use_listener"
-	"TeamNum" "-1"
-	connections
-	{
-		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_USE)0-1"
-	}
-	"origin" "72 -8 264"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 8500]"
-	}
-}
-entity
-{
-	"id" "758"
-	"classname" "filter_activator_name"
-	"filtername" "vip_vip"
-	"Negated" "1"
-	"targetname" "vip_filter_notvip"
-	"origin" "40 8 248"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 9000]"
-	}
-}
-entity
-{
-	"id" "394"
-	"classname" "filter_activator_name"
-	"filtername" "vip_vip"
-	"Negated" "Allow entities that match criteria"
-	"targetname" "vip_filter_onlyvip"
-	"origin" "40 -8 248"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 -11268]"
-	}
-}
 cameras
 {
 	"activecamera" "0"
 	camera
 	{
-		"position" "[-15.353 -23.2657 318.061]"
-		"look" "[212.788 -5.71246 181.66]"
+		"position" "[211.653 7.15512 111.549]"
+		"look" "[135.774 -201.346 -35.8657]"
 	}
 	camera
 	{
