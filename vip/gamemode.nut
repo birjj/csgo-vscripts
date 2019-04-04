@@ -76,21 +76,6 @@ class GameModeVIP {
         
         // check if one of the teams have been wiped off
         if (isLive) {
-            // if a bot was taken over, VIP will have 0 health (but won't have triggered the OnHurt listener)
-            /*if (vip.GetHealth() == 0) {
-                printl("[VIP] === VIP bot was taken over");
-                local nearbyAlivePlayers = Players.GetPlayersInRadius(lastSeenPositionVIP, 16, function(ply){
-                    return ply.GetTeam() == TEAM_CT && ply.GetHealth() > 0;
-                });
-
-                if (nearbyAlivePlayers.len() > 1) {
-                    // SubstituteVIP(nearbyAlivePlayers[0]);
-					printl("[VIP] VIP disapeared but didn't die, doing nothing");
-                } else {
-                    OnVIPDeath(null);
-                }
-            }*/
-
             local cts = Players.GetPlayers(function(ply){
                 return ply.GetTeam() == TEAM_CT && ply.GetHealth() > 0;
             });
@@ -446,15 +431,15 @@ if (!("gamemode_vip" in getroottable())) {
         ::gamemode_vip.OnRoundStart();
     });
     
-	::AddEventListener("bot_takeover", function(data) {
+    ::AddEventListener("bot_takeover", function(data) {
         local player = ::Players.FindByUserid(data.userid);
-		local botguy = ::Players.FindByUserid(data.botid);
-		if (botguy == ::gamemode_vip.vip){
-			::gamemode_vip.SubstituteVIP(player);
-			printl("[VIP] Human took over bot VIP");
-		}
+        local botguy = ::Players.FindByUserid(data.botid);
+        if (botguy == ::gamemode_vip.vip){
+            ::gamemode_vip.SubstituteVIP(player);
+            printl("[VIP] Human took over bot VIP");
+        }
     });
-	
+    
     ::AddEventListener("round_freeze_end", function(data) {
         ::gamemode_vip.OnFreezeEnd();
     });
