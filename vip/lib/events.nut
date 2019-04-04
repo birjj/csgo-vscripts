@@ -24,6 +24,8 @@
 ::ROUND_FREEZE_END <- "round_freeze_end";
 ::PLAYER_SPAWN <- "player_spawn";
 ::PLAYER_HURT <- "player_hurt";
+::BOT_TAKEOVER <- "bot_takeover";
+::INSPECT_WEAPON <- "inspect_weapon";
 
 DoIncludeScript("vip/lib/debug.nut",null);
 
