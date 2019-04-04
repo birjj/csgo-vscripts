@@ -11,6 +11,7 @@
 ::TEAM_CT <- 3;
 
 DoIncludeScript("vip/lib/events.nut",null);
+DoIncludeScript("vip/lib/debug.nut",null);
 
 // represents a single player, bound to a player entity
 class Player {

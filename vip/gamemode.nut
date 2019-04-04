@@ -30,18 +30,18 @@ function Precache(){
 
 ::VIP_WEAPON_WHITELIST <- [
     // pistols
-    "hkp2000",
-    "usp_silencer",
+    "weapon_hkp2000",
+    "weapon_usp_silencer",
     // knives
-    "knife",
-    "taser",
+    "weapon_knife",
+    "weapon_taser",
     // nades
-    "hegrenade",
-    "flashbang",
-    "decoy",
-    "incgrenade",
-    "molotov",
-    "smokegrenade"
+    "weapon_hegrenade",
+    "weapon_flashbang",
+    "weapon_decoy",
+    "weapon_incgrenade",
+    "weapon_molotov",
+    "weapon_smokegrenade"
 ];
 ::VIP_MAXHEALTH <- 150;
 
@@ -53,6 +53,7 @@ class GameModeVIP {
     eClientCommand = null;
     lastIllegalWeapon = null; // allows us to drop the second time we switch to an illegal weapon
     lastIllegalTime = 0;
+    hasSeenWeaponSwitchAfterIllegal = true;
     lastHealthVIP = null; // used in case VIP disconnects
     spawnPositionVIP = null; // used in case VIP disconnects
     lastSeenPositionVIP = null; // used for taking over bots
@@ -70,6 +71,37 @@ class GameModeVIP {
             OnVIPDeath(null);
         }
 
+        // bots won't switch off illegal items; detect that, and straight up kill the weapons instead
+        if ((isLive || ScriptIsWarmupPeriod()) && !hasSeenWeaponSwitchAfterIllegal) {
+            local timeSinceSwitch = Time() - lastIllegalTime;
+            if (timeSinceSwitch > 1) {
+                printl("[VIP] Haven't seen weapon switch after illegal: " + timeSinceSwitch);
+                local ent = vip.FirstMoveChild();
+                while (ent != null) {
+                    // weapons are in order weaponworldmodel -> weapon_x -> weaponworldmodel -> weapon_y -> ...
+                    local nextEnt = ent.NextMovePeer();
+                    local shouldKill = false;
+                    if (nextEnt && ent.GetClassname() == "weaponworldmodel") {
+                        local nextName = nextEnt.GetClassname();
+                        if (IsIllegalWeapon(nextEnt.GetClassname())) {
+                            shouldKill = true;
+                        }
+                    }
+                    if (IsIllegalWeapon(ent.GetClassname())) {
+                        shouldKill = true;
+                    }
+
+                    if (shouldKill) {
+                        printl("[VIP] Killing illegal "+ent);
+                        ent.Destroy();
+                    }
+                    ent = nextEnt;
+                }
+                hasSeenWeaponSwitchAfterIllegal = true;
+            }
+        }
+
+        // keep track of VIP position for bot takeover
         if (vip != null && vip.GetHealth() > 0) {
             lastSeenPositionVIP = vip.GetOrigin();
         }
@@ -202,10 +234,16 @@ class GameModeVIP {
         local ambient = Entities.FindByName(null, "vip_snd");
         if (ambient) {
             ambient.SetOrigin(player.EyePosition());
-            EntFireByHandle(ambient, "PlaySound", "", 0.5, player, player);
+            EntFireByHandle(ambient, "PlaySound", "", 0.25, player, player);
         } else {
             printl("[VIP] Couldn't find VIP sound");
         }
+
+        // we switch to knife on the VIP
+        // this ensures that our item_equip listener can get the active weapon
+        hasSeenWeaponSwitchAfterIllegal = false;
+        lastIllegalTime = Time();
+        EntFireByHandle(eClientCommand, "Command", "slot3", 0.0, vip, null);
     }
 
     // sets a player to be substitute VIP if the current VIP becomes invalid for some reason (e.g. disconnect)
@@ -229,6 +267,12 @@ class GameModeVIP {
         }
         
         ::ShowMessage("You're the VIP. Don't fuck it up now", vip, "color='#F00'");
+
+        // we switch to knife on the VIP
+        // this ensures that our item_equip listener can get the active weapon
+        hasSeenWeaponSwitchAfterIllegal = false;
+        lastIllegalTime = Time();
+        EntFireByHandle(eClientCommand, "Command", "slot3", 0.0, vip, null);
     }
 
     // updates an entity so it's VIP (sets local reference, updates targetname, updates model, etc.)
@@ -241,6 +285,19 @@ class GameModeVIP {
             scope._vipPrevModel <- ent.GetModelName();
         }
         ent.SetModel("models/player/custom_player/legacy/ctm_heavy2.mdl");
+    }
+
+    // check if a weapon is illegal - weaponName is in format "weapon_ak47"
+    function IsIllegalWeapon(weaponName) {
+        if (weaponName.find("weapon_") != 0) {
+            return false;
+        }
+        foreach (item in VIP_WEAPON_WHITELIST) {
+            if (weaponName == item) {
+                return false;
+            }
+        }
+        return true;
     }
 
 
@@ -279,10 +336,6 @@ class GameModeVIP {
             if (cts.len() != 0 && ts.len() != 0) {
                 shouldEndOnTeamWipe = true;
             }
-
-            // we switch to knife on VIP once freeze time ends
-            // this ensures that our item_equip listener cannot trigger before we know of the VIPs 
-            EntFireByHandle(eClientCommand, "Command", "slot3", 0.0, vip, null);
         }
     }
     
@@ -291,20 +344,16 @@ class GameModeVIP {
     function OnVIPWeapon(data) {
         printl("[VIP] Got VIP weapon switch");
         ::printtable(data);
+        hasSeenWeaponSwitchAfterIllegal = true;
 
-        local isLegal = false;
-        foreach (item in VIP_WEAPON_WHITELIST) {
-            if (data.item == item) {
-                isLegal = true;
-                break;
-            }
-        }
+        local weaponName = "weapon_"+data.item;
+        local isLegal = !IsIllegalWeapon(weaponName);
         if (!isLegal) {
             local timeDelta = Time() - lastIllegalTime;
             printl("[VIP] That man, officer! " + lastIllegalWeapon + " - " + timeDelta);
             local command = "drop";
             local message = "Only USP/P2000 is allowed when you're the VIP";
-            if (lastIllegalWeapon != data.item || timeDelta > 5 || timeDelta == 0) {
+            if (lastIllegalWeapon != weaponName || timeDelta > 5 || timeDelta == 0) {
                 command = "slot3";
                 message = message + "\nYou can drop the weapon by switching to it again";
             } else {
@@ -312,11 +361,12 @@ class GameModeVIP {
             }
             ::ShowMessage(message, vip, "color='#F00'", 0.05);
             EntFireByHandle(eClientCommand, "Command", command, 0.0, vip, null);
+            hasSeenWeaponSwitchAfterIllegal = false;
             if (command == "drop") {
                 lastIllegalWeapon = null;
                 lastIllegalTime = 0;
             } else {
-                lastIllegalWeapon = data.item;
+                lastIllegalWeapon = weaponName;
                 lastIllegalTime = Time();
             }
         }
