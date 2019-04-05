@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "8075"
-	"mapversion" "43"
+	"mapversion" "46"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -14,13 +14,13 @@ viewsettings
 	"bSnapToGrid" "1"
 	"bShowGrid" "1"
 	"bShowLogicalGrid" "0"
-	"nGridSpacing" "128"
+	"nGridSpacing" "64"
 	"bShow3DGrid" "0"
 }
 world
 {
 	"id" "1"
-	"mapversion" "43"
+	"mapversion" "46"
 	"classname" "worldspawn"
 	"comment" "Decompiled by BSPSource v1.3.24 from test_vip"
 	"detailmaterial" "detail/detailsprites"
@@ -653,7 +653,7 @@ entity
 	"fadescale" "1"
 	"MaxAnimTime" "10"
 	"MinAnimTime" "5"
-	"model" "models/props_vehicles/helicopter_rescue.mdl"
+	"model" "models/vip/helicopter.mdl"
 	"renderamt" "255"
 	"rendercolor" "255 255 255"
 	"skin" "0"
@@ -709,8 +709,8 @@ cameras
 	"activecamera" "0"
 	camera
 	{
-		"position" "[600.004 -280.188 282.745]"
-		"look" "[389.478 -179.335 154.412]"
+		"position" "[-103.868 291.478 128.888]"
+		"look" "[-56.6724 39.2828 57.2511]"
 	}
 	camera
 	{
