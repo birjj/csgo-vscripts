@@ -26,6 +26,7 @@
 ::PLAYER_HURT <- "player_hurt";
 ::BOT_TAKEOVER <- "bot_takeover";
 ::INSPECT_WEAPON <- "inspect_weapon";
+::ROUND_END <- "round_end";
 
 DoIncludeScript("vip/lib/debug.nut",null);
 

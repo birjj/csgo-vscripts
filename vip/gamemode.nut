@@ -32,9 +32,18 @@ function Precache(){
     // pistols
     "hkp2000",
     "usp_silencer",
+	"elite",
+	"cz75a",
+	"p250",
+	"tec9",
+	"fiveseven",
+	"deagle",
+	"revolver",
+	
     // knives
     "knife",
     "taser",
+	
     // nades
     "hegrenade",
     "flashbang",
@@ -76,6 +85,21 @@ class GameModeVIP {
         
         // check if one of the teams have been wiped off
         if (isLive) {
+            // if a bot was taken over, VIP will have 0 health (but won't have triggered the OnHurt listener)
+            /*if (vip.GetHealth() == 0) {
+                printl("[VIP] === VIP bot was taken over");
+                local nearbyAlivePlayers = Players.GetPlayersInRadius(lastSeenPositionVIP, 16, function(ply){
+                    return ply.GetTeam() == TEAM_CT && ply.GetHealth() > 0;
+                });
+
+                if (nearbyAlivePlayers.len() > 1) {
+                    // SubstituteVIP(nearbyAlivePlayers[0]);
+					printl("[VIP] VIP disapeared but didn't die, doing nothing");
+                } else {
+                    OnVIPDeath(null);
+                }
+            }*/
+
             local cts = Players.GetPlayers(function(ply){
                 return ply.GetTeam() == TEAM_CT && ply.GetHealth() > 0;
             });
@@ -89,14 +113,14 @@ class GameModeVIP {
                 EntFireByHandle(eGameRoundEnd, "EndRound_CounterTerroristsWin", "5", 0.0, null, null);
                 setLive(false);
 
-                ::GiveMoneyCT(3000, "Reward for eliminating the enemy team");
+                ::GiveMoneyCT(2000, "Reward for eliminating the enemy team");
                 ended = true;
             }
             if (!ended && IsRoundOver()) {
                 EntFireByHandle(eGameRoundEnd, "EndRound_TerroristsWin", "5", 0.0, null, null);
                 setLive(false);
 
-                ::GiveMoneyT(6969, "Reward for not letting VIP escape");
+                ::GiveMoneyT(2000, "Reward for not letting VIP escape");
                 ended = true;
             }
             if (!ended && cts.len() == 0 && ts.len() == 0) {
@@ -198,6 +222,11 @@ class GameModeVIP {
             return false;
         });
         ::ShowMessage("You're the VIP. Don't fuck it up now", vip, "color='#F00'");
+		EntFireByHandle(eClientCommand, "Command", "coverme", 0.0, vip, null);
+		
+		local hint_protect = Entities.FindByName(null, "vip_hint_protect");
+		EntFireByHandle(hint_protect, "AddOutput", "hint_target ::GameModeVIP.vip",0.5,null);
+		EntFireByHandle(hint_protect, "ShowHint","",0.5, player,player);
         
         local ambient = Entities.FindByName(null, "vip_snd");
         if (ambient) {
@@ -220,7 +249,7 @@ class GameModeVIP {
 
         ResetVIP();
         SetEntityToVIP(player);
-        EntFireByHandle(eClientCommand, "Command", "slot3", 0.0, vip, null);
+        EntFireByHandle(eClientCommand, "Command", "slot2", 0.0, vip, null);
         
         // If original VIP had less HP than new VIP - replace with original VIP HP
         local healthSubVIP = vip.GetHealth();
@@ -261,6 +290,7 @@ class GameModeVIP {
 
         SetVIP(SelectRandomCT());
     }
+	
     
     // fired when round actually starts (freeze time is over)
     function OnFreezeEnd() {
@@ -282,7 +312,7 @@ class GameModeVIP {
 
             // we switch to knife on VIP once freeze time ends
             // this ensures that our item_equip listener cannot trigger before we know of the VIPs 
-            EntFireByHandle(eClientCommand, "Command", "slot3", 0.0, vip, null);
+            EntFireByHandle(eClientCommand, "Command", "slot2", 0.0, vip, null);
         }
     }
     
@@ -303,9 +333,9 @@ class GameModeVIP {
             local timeDelta = Time() - lastIllegalTime;
             printl("[VIP] That man, officer! " + lastIllegalWeapon + " - " + timeDelta);
             local command = "drop";
-            local message = "Only USP/P2000 is allowed when you're the VIP";
+            local message = "Only pistols are allowed when you're the VIP";
             if (lastIllegalWeapon != data.item || timeDelta > 5 || timeDelta == 0) {
-                command = "slot3";
+                command = "slot2";
                 message = message + "\nYou can drop the weapon by switching to it again";
             } else {
                 ::GiveMoney(100, vip);
@@ -334,7 +364,7 @@ class GameModeVIP {
             EntFireByHandle(eGameRoundEnd, "EndRound_TerroristsWin", "5", 0.0, null, null);
             setLive(false);
 
-            ::GiveMoneyT(4999, "You got that motherfucker!");
+            ::GiveMoneyT(2000, "You got that motherfucker!");
         } else {
             SubstituteVIP(newVIP);
         }
@@ -343,13 +373,14 @@ class GameModeVIP {
     // called when the VIP is rescued - must be called by the map
     function OnVIPRescued() {
         printl("[VIP] VIP rescued!");
-        ResetVIP();
+		EntFireByHandle(eClientCommand, "Command", "cheer", 0.0, vip, null);
+        //ResetVIP();
 
         if (isLive) {
             EntFireByHandle(eGameRoundEnd, "EndRound_CounterTerroristsWin", "5", 0.0, null, null);
             setLive(false);
 
-            ::GiveMoneyCT(1337, "Reward for helping the VIP escape");
+            ::GiveMoneyCT(3500, "Reward for helping the VIP escape");
         }
     }
 
@@ -407,7 +438,11 @@ if (!("gamemode_vip" in getroottable())) {
     ::AddEventListener("player_death", function(data) {
         local player = ::Players.FindByUserid(data.userid);
         if (player != null && player == ::gamemode_vip.vip) {
+			local attacker = ::Players.FindByUserid(data.attacker);
             ::gamemode_vip.OnVIPDeath(data);
+			if (attacker!=null){
+				::GiveMoney(2500,attacker);
+			}
         }
     });
     ::AddEventListener("player_spawn", function(data) {
@@ -427,19 +462,27 @@ if (!("gamemode_vip" in getroottable())) {
     });
     
     ::AddEventListener("round_start", function(data) {
-        ::gamemode_vip.timeLimit = data.timelimit;
+		::gamemode_vip.timeLimit = data.timelimit;
         ::gamemode_vip.OnRoundStart();
     });
-    
-    ::AddEventListener("bot_takeover", function(data) {
-        local player = ::Players.FindByUserid(data.userid);
-        local botguy = ::Players.FindByUserid(data.botid);
-        if (botguy == ::gamemode_vip.vip){
-            ::gamemode_vip.SubstituteVIP(player);
-            printl("[VIP] Human took over bot VIP");
-        }
+	
+	::AddEventListener("round_freeze_end", function(data){
+		
+	});
+	
+	::AddEventListener("round_end", function(data) {
+		::gamemode_vip.ResetVIP();
     });
     
+	::AddEventListener("bot_takeover", function(data) {
+        local player = ::Players.FindByUserid(data.userid);
+		local botguy = ::Players.FindByUserid(data.botid);
+		if (botguy == ::gamemode_vip.vip){
+			::gamemode_vip.SubstituteVIP(player);
+			printl("[VIP] Human took over bot VIP");
+		}
+    });
+	
     ::AddEventListener("round_freeze_end", function(data) {
         ::gamemode_vip.OnFreezeEnd();
     });
