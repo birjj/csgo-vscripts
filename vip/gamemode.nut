@@ -53,6 +53,14 @@ function Precache(){
     "smokegrenade"
 ];
 ::VIP_MAXHEALTH <- 150;
+::ECONOMY <- {
+    ELIMINATION_CT = 2000, // reward for CTs when they kill all Ts
+    ELIMINATION_T = 2000, // reward for Ts when they kill all CTs
+    NO_ESCAPE = 2000, // reward for Ts when the time runs out without an escape
+    VIP_KILLED = 2000, // reward for Ts when the VIP is killed
+    VIP_KILLER = 2500, // extra reward for the one person who killed the VIP
+    VIP_ESCAPED = 3500 // reward for CTs when the VIP escapes
+};
 
 class GameModeVIP {
     vip = null;
@@ -98,14 +106,14 @@ class GameModeVIP {
                 EntFireByHandle(eGameRoundEnd, "EndRound_CounterTerroristsWin", "5", 0.0, null, null);
                 setLive(false);
 
-                ::GiveMoneyCT(2000, "Reward for eliminating the enemy team");
+                ::GiveMoneyCT(ECONOMY.ELIMINATION_CT, "Reward for eliminating the enemy team");
                 ended = true;
             }
             if (!ended && IsRoundOver()) {
                 EntFireByHandle(eGameRoundEnd, "EndRound_TerroristsWin", "5", 0.0, null, null);
                 setLive(false);
 
-                ::GiveMoneyT(2000, "Reward for not letting VIP escape");
+                ::GiveMoneyT(ECONOMY.NO_ESCAPE, "Reward for not letting VIP escape");
                 ended = true;
             }
             if (!ended && cts.len() == 0 && ts.len() == 0) {
@@ -322,8 +330,6 @@ class GameModeVIP {
             if (lastIllegalWeapon != data.item || timeDelta > 5 || timeDelta == 0) {
                 command = "slot2";
                 message = message + "\nYou can drop the weapon by switching to it again";
-            } else {
-                ::GiveMoney(100, vip);
             }
             ::ShowMessage(message, vip, "color='#F00'", 0.05);
             EntFireByHandle(eClientCommand, "Command", command, 0.0, vip, null);
@@ -349,7 +355,7 @@ class GameModeVIP {
             EntFireByHandle(eGameRoundEnd, "EndRound_TerroristsWin", "5", 0.0, null, null);
             setLive(false);
 
-            ::GiveMoneyT(2000, "You got that motherfucker!");
+            ::GiveMoneyT(ECONOMY.VIP_KILLED, "You got that motherfucker!");
         } else {
             SubstituteVIP(newVIP);
         }
@@ -365,7 +371,7 @@ class GameModeVIP {
             EntFireByHandle(eGameRoundEnd, "EndRound_CounterTerroristsWin", "5", 0.0, null, null);
             setLive(false);
 
-            ::GiveMoneyCT(3500, "Reward for helping the VIP escape");
+            ::GiveMoneyCT(ECONOMY.VIP_ESCAPED, "Reward for helping the VIP escape");
         }
     }
 
@@ -425,8 +431,8 @@ if (!("gamemode_vip" in getroottable())) {
         if (player != null && player == ::gamemode_vip.vip) {
             local attacker = ::Players.FindByUserid(data.attacker);
             ::gamemode_vip.OnVIPDeath(data);
-            if (attacker!=null){
-                ::GiveMoney(2500,attacker);
+            if (attacker != null) {
+                ::GiveMoney(ECONOMY.VIP_KILLER, attacker);
             }
         }
     });
@@ -449,10 +455,6 @@ if (!("gamemode_vip" in getroottable())) {
     ::AddEventListener("round_start", function(data) {
         ::gamemode_vip.timeLimit = data.timelimit;
         ::gamemode_vip.OnRoundStart();
-    });
-    
-    ::AddEventListener("round_freeze_end", function(data){
-        
     });
     
     ::AddEventListener("round_end", function(data) {
