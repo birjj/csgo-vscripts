@@ -36,10 +36,6 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
 
     _That or only when BotTakeOver occurs, the player taking over doesn't get money, needs to be verified_
 
-- **Fix round timer starting before freezetime is over**
-
-    _Round timer is starting OnMapSpawn, instead of starting after freezetime_
-
 - **When VIP is Rescued, ResetVIP() resets his skin to default**
 
     _This is noticeable by people outside the helicopter who are looking inside_
