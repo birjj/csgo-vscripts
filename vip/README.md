@@ -25,9 +25,16 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
     _This is caused by the delay between server and client. If client switches to another weapon before it receives the `drop` command from the server, then said weapon will be dropped instead. Not much we can do;_
 
 - VIP sound sometimes plays in a position that it shouldn't
+    _Most times sound is not playing or playing in the wrong position_
 
 - Fix economy
+    _Add propper economy balance_
 
 - Dead people don't get Money rewards
+    _That or only when BotTakeOver occurs, the player taking over doesn't get money, needs to be verified_
 
 - Fix round timer starting before freezetime is over
+    _Round timer is starting OnMapSpawn, instead of starting after freezetime_
+
+- When VIP is Rescued, ResetVIP() resets his skin to default.
+    _This is noticeable by people outside the helicopter who are looking inside_
