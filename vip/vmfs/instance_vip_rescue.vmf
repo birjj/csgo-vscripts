@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "8075"
-	"mapversion" "46"
+	"mapversion" "39"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -14,13 +14,13 @@ viewsettings
 	"bSnapToGrid" "1"
 	"bShowGrid" "1"
 	"bShowLogicalGrid" "0"
-	"nGridSpacing" "64"
+	"nGridSpacing" "8"
 	"bShow3DGrid" "0"
 }
 world
 {
 	"id" "1"
-	"mapversion" "46"
+	"mapversion" "39"
 	"classname" "worldspawn"
 	"comment" "Decompiled by BSPSource v1.3.24 from test_vip"
 	"detailmaterial" "detail/detailsprites"
@@ -32,17 +32,17 @@ entity
 {
 	"id" "1817"
 	"classname" "func_hostage_rescue"
-	"origin" "0 0 128"
+	"origin" "68 0 40"
 	"spawnflags" "4097"
 	"StartDisabled" "0"
 	"targetname" "vip_rescuezone"
 	solid
 	{
-		"id" "1958"
+		"id" "1815"
 		side
 		{
-			"id" "468"
-			"plane" "(-384 -128 256) (-384 128 256) (-128 384 256)"
+			"id" "291"
+			"plane" "(-80 48 48) (216 48 48) (216 -48 48)"
 			"material" "TOOLS/TOOLSTRIGGER"
 			"uaxis" "[1 0 0 0] 0.25"
 			"vaxis" "[0 -1 0 0] 0.25"
@@ -52,8 +52,8 @@ entity
 		}
 		side
 		{
-			"id" "467"
-			"plane" "(128 384 0) (-128 384 0) (-384 128 0)"
+			"id" "290"
+			"plane" "(-80 -48 32) (216 -48 32) (216 48 32)"
 			"material" "TOOLS/TOOLSTRIGGER"
 			"uaxis" "[1 0 0 0] 0.25"
 			"vaxis" "[0 -1 0 0] 0.25"
@@ -63,8 +63,30 @@ entity
 		}
 		side
 		{
-			"id" "466"
-			"plane" "(-128 384 0) (128 384 0) (128 384 256)"
+			"id" "289"
+			"plane" "(-80 48 48) (-80 -48 48) (-80 -48 32)"
+			"material" "TOOLS/TOOLSTRIGGER"
+			"uaxis" "[0 1 0 0] 0.25"
+			"vaxis" "[0 0 -1 0] 0.25"
+			"rotation" "0"
+			"lightmapscale" "16"
+			"smoothing_groups" "0"
+		}
+		side
+		{
+			"id" "288"
+			"plane" "(216 48 32) (216 -48 32) (216 -48 48)"
+			"material" "TOOLS/TOOLSTRIGGER"
+			"uaxis" "[0 1 0 0] 0.25"
+			"vaxis" "[0 0 -1 0] 0.25"
+			"rotation" "0"
+			"lightmapscale" "16"
+			"smoothing_groups" "0"
+		}
+		side
+		{
+			"id" "287"
+			"plane" "(216 48 48) (-80 48 48) (-80 48 32)"
 			"material" "TOOLS/TOOLSTRIGGER"
 			"uaxis" "[1 0 0 0] 0.25"
 			"vaxis" "[0 0 -1 0] 0.25"
@@ -74,76 +96,10 @@ entity
 		}
 		side
 		{
-			"id" "465"
-			"plane" "(-384 -128 0) (-384 128 0) (-384 128 256)"
-			"material" "TOOLS/TOOLSTRIGGER"
-			"uaxis" "[0 1 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		side
-		{
-			"id" "464"
-			"plane" "(128 -384 0) (-128 -384 0) (-128 -384 256)"
+			"id" "286"
+			"plane" "(216 -48 32) (-80 -48 32) (-80 -48 48)"
 			"material" "TOOLS/TOOLSTRIGGER"
 			"uaxis" "[1 0 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		side
-		{
-			"id" "463"
-			"plane" "(384 128 0) (384 -128 0) (384 -128 256)"
-			"material" "TOOLS/TOOLSTRIGGER"
-			"uaxis" "[0 1 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		side
-		{
-			"id" "462"
-			"plane" "(384 -128 0) (128 -384 0) (128 -384 256)"
-			"material" "TOOLS/TOOLSTRIGGER"
-			"uaxis" "[0 1 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		side
-		{
-			"id" "461"
-			"plane" "(-128 -384 0) (-384 -128 0) (-384 -128 256)"
-			"material" "TOOLS/TOOLSTRIGGER"
-			"uaxis" "[0 1 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		side
-		{
-			"id" "460"
-			"plane" "(-384 128 0) (-128 384 0) (-128 384 256)"
-			"material" "TOOLS/TOOLSTRIGGER"
-			"uaxis" "[0 1 0 0] 0.25"
-			"vaxis" "[0 0 -1 0] 0.25"
-			"rotation" "0"
-			"lightmapscale" "16"
-			"smoothing_groups" "0"
-		}
-		side
-		{
-			"id" "459"
-			"plane" "(128 384 0) (384 128 0) (384 128 256)"
-			"material" "TOOLS/TOOLSTRIGGER"
-			"uaxis" "[0 1 0 0] 0.25"
 			"vaxis" "[0 0 -1 0] 0.25"
 			"rotation" "0"
 			"lightmapscale" "16"
@@ -356,7 +312,6 @@ entity
 	"pushdir" "0 1 0"
 	"spawnflags" "4097"
 	"StartDisabled" "0"
-	"targetname" "vip_trigger_barrier"
 	solid
 	{
 		"id" "246"
@@ -459,8 +414,6 @@ entity
 		"OnTrigger" "!activatorDisableDrawInFastReflection0-1"
 		"OnTrigger" "!activatorTurnOff0-1"
 		"OnTrigger" "vip_helicopter_cameraEnable0-1"
-		"OnTrigger" "vip_trigger_barrierDisable1-1"
-		"OnTrigger" "vip_trigger_pushDisable1-1"
 	}
 	solid
 	{
@@ -558,7 +511,6 @@ entity
 	"spawnflags" "1"
 	"speed" "400"
 	"StartDisabled" "0"
-	"targetname" "vip_trigger_push"
 	solid
 	{
 		"id" "273"
@@ -653,7 +605,7 @@ entity
 	"fadescale" "1"
 	"MaxAnimTime" "10"
 	"MinAnimTime" "5"
-	"model" "models/vip/helicopter.mdl"
+	"model" "models/props_vehicles/helicopter_rescue.mdl"
 	"renderamt" "255"
 	"rendercolor" "255 255 255"
 	"skin" "0"
@@ -709,8 +661,8 @@ cameras
 	"activecamera" "0"
 	camera
 	{
-		"position" "[-103.868 291.478 128.888]"
-		"look" "[-56.6724 39.2828 57.2511]"
+		"position" "[210.595 23.0463 81.631]"
+		"look" "[143.6 -223.564 6.41896]"
 	}
 	camera
 	{
