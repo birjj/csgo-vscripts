@@ -77,7 +77,8 @@ class GameModeVIP {
     eGameRoundEnd = null;
     eServerCommand = null;
     
-    timeLimit = null;
+    timeLimit = null; // amount of time a round lasts
+    roundEndTime = null; // timestamp at which current round ends
     
 
     function Think() {
@@ -145,7 +146,7 @@ class GameModeVIP {
     // checks if the round is over due to time
     function IsRoundOver(){
         local currentTime = Time();
-        if (currentTime < timeLimit) {
+        if (currentTime < roundEndTime) {
             return false;
         }
         return true;
@@ -218,8 +219,8 @@ class GameModeVIP {
         EntFireByHandle(eClientCommand, "Command", "coverme", 0.0, vip, null);
         
         local hint_protect = Entities.FindByName(null, "vip_hint_protect");
-        EntFireByHandle(hint_protect, "AddOutput", "hint_target ::GameModeVIP.vip",0.5,null);
-        EntFireByHandle(hint_protect, "ShowHint","",0.5, player,player);
+        EntFireByHandle(hint_protect, "AddOutput", "hint_target ::GameModeVIP.vip", 0.5, null, null);
+        EntFireByHandle(hint_protect, "ShowHint", "", 0.5, player, player);
         
         local ambient = Entities.FindByName(null, "vip_snd");
         if (ambient) {
@@ -277,7 +278,6 @@ class GameModeVIP {
         eGameRoundEnd = Entities.CreateByClassname("game_round_end");
         eServerCommand = Entities.CreateByClassname("point_servercommand");
         setLive(false);
-        timeLimit = Time() + timeLimit; // timeLimit has been updated before this is called
 
         EntFireByHandle(eServerCommand, "Command", "mp_ignore_round_win_conditions 0", 0.0, null, null);
 
@@ -306,6 +306,11 @@ class GameModeVIP {
             // we switch to knife on VIP once freeze time ends
             // this ensures that our item_equip listener cannot trigger before we know of the VIPs 
             EntFireByHandle(eClientCommand, "Command", "slot2", 0.0, vip, null);
+        }
+
+        if (timeLimit != null && timeLimit > 0) {
+            printl("[VIP] Updating round end time: "+timeLimit);
+            roundEndTime = Time() + timeLimit; // timeLimit has been updated before this is called
         }
     }
     
