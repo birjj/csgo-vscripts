@@ -27,6 +27,8 @@
 ::BOT_TAKEOVER <- "bot_takeover";
 ::INSPECT_WEAPON <- "inspect_weapon";
 ::ROUND_END <- "round_end";
+::HOSTAGE_FOLLOWS <- "hostage_follows";
+
 
 DoIncludeScript("vip/lib/debug.nut",null);
 
