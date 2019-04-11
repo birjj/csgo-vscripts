@@ -23,6 +23,12 @@ function Think() {
 
 function Precache(){
     self.PrecacheModel("models/player/custom_player/legacy/ctm_heavy2.mdl");
+    self.PrecacheModel("models/hostage/v_vip_arm.mdl");
+    self.PrecacheModel("models/hostage/vip_carry.mdl");
+    self.PrecacheModel("models/hostage/vip_ground.mdl");
+	
+	
+	
 }
 
 
@@ -140,9 +146,9 @@ class GameModeVIP {
 	//GAME_TEXT
 	local vip_text_round_end = Entities.FindByName(null, "vip_text_round_end");
 	local presetColor = null;
-			if (color == "0"){ presetColor = "255 255 255";} 
-	else 	if (color == "1"){ presetColor = "188 168 116";} 
-	else 	if (color == "2"){ presetColor = "168 197 221";}
+			if (color == "0"){ presetColor = "255 255 255";}
+	else 	if (color == "1"){ presetColor = "188 168 116";}
+	else 	if (color == "2"){ presetColor = "168 197 221";} 
 	EntFireByHandle(vip_text_round_end, "SetTextColor", presetColor, 0.0,null,null);			// Sets color 0 = WHITE || 1 = YELLOW || 2 = BLUE
 	EntFireByHandle(vip_text_round_end, "SetText", message,0.0,null,null);							// Sets message
 	EntFireByHandle(vip_text_round_end, "AddOutput", "holdtime "+ duration, 0.0,null,null);	// Sets duration
@@ -300,7 +306,6 @@ class GameModeVIP {
 		//GAME_TEXT
 				SendGameText("The VIP was downed!", "1", "2");
 				
-		
 		//PLAY SOUND
 		local ambientVipDown = Entities.FindByName(null, "vip_down_snd");
         if (ambientVipDown) {
@@ -309,9 +314,33 @@ class GameModeVIP {
             printl("[VIP] Couldn't find VIP DOWN sound");
         }
 		
-		//local hostage = Entities.CreateByClassname("hostage_entity");
-		//printl("<<<<< THIS HERE THE FUKEN HOSTAGE_ENTITY: " + hostage + " >>>>>");
-		//hostage.SetOrigin(lastSeenPositionVIP);
+		local hMaker = Entities.FindByName(null, "vip_entity_maker");
+		hMaker.SetOrigin(Vector(lastSeenPositionVIP.x,lastSeenPositionVIP.y,lastSeenPositionVIP.z + 256.0));
+		EntFireByHandle(hMaker, "ForceSpawn","",0.0,null,null);
+		
+		local vip_hostage = Entities.FindByName(null, "vip_hostage");
+		if (vip_hostage!=null){
+		vip_hostage.SetModel("models/hostage/vip_ground.mdl");
+		}
+		else printl("[VIP] Couldn't find Hostage Entity named vip_hostage");
+		
+		
+		
+		/*local hostage = Entities.CreateByClassname("hostage_entity");
+		printl("Hostagas origin: " + hostage.GetOrigin())
+		
+		printl("<<<<< THIS HERE THE FUKEN HOSTAGE_ENTITY: " + hostage + " >>>>>");
+		hostage.SetOrigin(Vector(lastSeenPositionVIP.x,lastSeenPositionVIP.y,lastSeenPositionVIP.z + 256));
+		printl("Hostagas origin: " + hostage.GetOrigin());
+		EntFireByHandle(hostage, "Enable", "", 0.0, null, null);
+		EntFireByHandle(hostage, "EnableDraw", "", 0.0, null, null);*/
+		
+		
+		
+		//TESTING TONY
+		
+		/*local tony = Entities.FindByName(null,"tony");
+		tony.SetModel("models/hostage/vip_ground.mdl");*/
 		
 		
 		//local entMaker = Entities.FindByName(null, "vip_entity_maker");
@@ -319,7 +348,6 @@ class GameModeVIP {
 		
 		
 		//entMaker.SpawnEntityAtLocation(lastSeenPositionVIP, 0 0 0);
-		
 		
 		
 		
@@ -459,7 +487,8 @@ class GameModeVIP {
 			} else {
 				SubstituteVIP(newVIP);
 			}
-		} else if (secondChance == true){
+		} 
+		else if (secondChance == true){
 		SurrenderVIP();
 		}
     }
