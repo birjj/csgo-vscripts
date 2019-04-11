@@ -47,49 +47,40 @@ class PlayerManager {
         eventProxy_boundPlayer = null;
 
         // reset everything so that we don't have lingering outputs giving us false userids
-        local ent = Entities.First();
-        while (ent != null) {
-            if (ent.IsValid() && ent.GetClassname() == "player") {
-                if (ent.ValidateScriptScope()) {
-                    local scope = ent.GetScriptScope();
-                    if ("userid" in scope) {
-                        delete scope.userid;
-                    }
-                    if ("generating_userid" in scope) {
-                        delete scope.generating_userid;
-                    }
+        local ent = null;
+        while ((ent = Entities.FindByClassname(ent, "player")) != null) {
+            if (ent.IsValid() && ent.ValidateScriptScope()) {
+                local scope = ent.GetScriptScope();
+                if ("userid" in scope) {
+                    delete scope.userid;
+                }
+                if ("generating_userid" in scope) {
+                    delete scope.generating_userid;
                 }
             }
-            ent = Entities.Next(ent);
         }
     }
 
     function FindByUserid(userid) {
-        local ent = Entities.First();
-        while (ent != null) {
-            if (ent.GetClassname() == "player") {
-                if (ent.ValidateScriptScope()) {
-                    local scope = ent.GetScriptScope();
-                    if (("userid" in scope) && scope.userid == userid) {
-                        return ent;
-                    }
+        local ent = null;
+        while ((ent = Entities.FindByClassname(ent, "player")) != null) {
+            if (ent.ValidateScriptScope()) {
+                local scope = ent.GetScriptScope();
+                if (("userid" in scope) && scope.userid == userid) {
+                    return ent;
                 }
             }
-            ent = Entities.Next(ent);
         }
         return null;
     }
 
     function GetPlayers(filter = null) {
         local outp = [];
-        local ent = Entities.First();
-        while (ent != null) {
-            if (ent.GetClassname() == "player") {
-                if (filter == null || filter(ent)) {
-                    outp.push(ent);
-                }
+        local ent = null;
+        while ((ent = Entities.FindByClassname(ent, "player")) != null) {
+            if (filter == null || filter(ent)) {
+                outp.push(ent);
             }
-            ent = Entities.Next(ent);
         }
         return outp;
     }
@@ -119,31 +110,28 @@ class PlayerManager {
     }
 
     function Think() {
-        local ent = Entities.First();
         // only check if we have an entity to check with
         if (eventProxy == null || !eventProxy.IsValid()) {
             return;
         }
-        while (ent != null) {
-            if (ent.IsValid() && ent.GetClassname() == "player") {
-                if (ent.ValidateScriptScope()) {
-                    local scope = ent.GetScriptScope();
-                    if (!("userid" in scope) && !("generating_userid" in scope)) {
-                        // printl("[Players] Found new player "+ent+" - getting his userid");
-                        scope.generating_userid <- true;
-                        eventProxy_boundPlayer = ent;
-                        EntFireByHandle(eventProxy, "GenerateGameEvent", "", 0.0, ent, null);
-                        return; // can only bind one per think because we need the output to fire first
+        local ent = null;
+        while ((ent = Entities.FindByClassname(ent, "player")) != null) {
+            if (ent.IsValid() && ent.ValidateScriptScope()) {
+                local scope = ent.GetScriptScope();
+                if (!("userid" in scope) && !("generating_userid" in scope)) {
+                    // printl("[Players] Found new player "+ent+" - getting his userid");
+                    scope.generating_userid <- true;
+                    eventProxy_boundPlayer = ent;
+                    EntFireByHandle(eventProxy, "GenerateGameEvent", "", 0.0, ent, null);
+                    return; // can only bind one per think because we need the output to fire first
+                } else {
+                    if ("userid" in scope) {
+                        // printl("[Players] Already know userid of player "+ent+": "+scope.userid);
                     } else {
-                        if ("userid" in scope) {
-                            // printl("[Players] Already know userid of player "+ent+": "+scope.userid);
-                        } else {
-                            // printl("[Players] Awaiting userid of player "+ent);
-                        }
+                        // printl("[Players] Awaiting userid of player "+ent);
                     }
                 }
             }
-            ent = Entities.Next(ent);
         }
     }
 }
