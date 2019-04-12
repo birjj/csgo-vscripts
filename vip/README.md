@@ -52,6 +52,6 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
 
     _Should be fixed by using filter_damage_type (it is, I tried)_
     
-- **When VIP is downed, there should be a way to keep track on his HP on HUD.
+- **When VIP is downed, there should be a way to keep track on his HP on HUD.**
     
     _So people can see when he's about to die_
