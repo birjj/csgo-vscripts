@@ -60,7 +60,7 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
     
 - **When VIP dies to World (fall damage, trigger hurt, etc...), he receives damage, but that won't kill the VIP hostage**
     
-    _Undesirable scenario: VIP jumps off building, the hostage is spawned at an unreachable position.
+    _Undesirable scenario: VIP jumps off building, the hostage is spawned at an unreachable position._
 
     _**Proposed solutions:**_
     
