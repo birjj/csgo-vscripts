@@ -64,16 +64,18 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
 
     _**Proposed solutions:**_
     
-        _- Whenever VIP is touching trigger_hurt instantly kill and end the round._
+        - Whenever VIP is touching trigger_hurt instantly kill and end the round.
     
-        _- Only ever spawn an hostage entity if the VIP dies to a Player (aka not World), this could prevent intentional suicide transfering of VIP status too_
+        - Only ever spawn an hostage entity if the VIP dies to a Player (aka not World), this could prevent intentional suicide transfering of VIP status too.
     
 - **When the VIP dies to a multikill (f.e. AWP shot) some issues occur.**
 
     _Sometimes an Hostage VIP won't spawn, or 2 might spawn depending on who the shot hits first._
     
     _Case 1: VIP is lined up with a team mate. VIP gets shot, dies and the friend behind him dies too. No hostage will spawn in this case._
+    
     _Case 2: VIP is lined up with a team mate. Team mate gets shot first, dies and the VIP also dies behind him. 2 Hostages will spawn in this case._
+    
     _Case 3: If in like Case 2, 2 team mates are standing in front of VIP, all 3 die and VIP is the last one to die, 3 Hostages will spawn._
     
     _In all these cases only the first VIP to spawn gets the VIP skin._
