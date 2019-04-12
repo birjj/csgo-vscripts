@@ -39,3 +39,18 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
 - **When VIP is Rescued, ResetVIP() resets his skin to default**
 
     _This is noticeable by people outside the helicopter who are looking inside_
+    
+- **Gamemode shouldn't work until warmup is over**
+
+    _Can be solved with event_listener for warmup detection_
+
+- **When Hostage is spawned, he may sometimes be floating**
+
+    _This is due to him spawning where there is a grenade projectile or a player_
+    
+- **Hostage VIP shouldn't take damage from grenades or shots**
+
+    _Should be fixed by using filter_damage_type (it is, I tried)_
+    
+    
+    
