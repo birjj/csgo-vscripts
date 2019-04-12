@@ -62,6 +62,7 @@ function Precache(){
     "smokegrenade"
 ];
 ::VIP_MAXHEALTH <- 150;
+::VIP_BOTGRACETIME <- 10;
 ::ECONOMY <- {
     ELIMINATION_CT = 2000, // reward for CTs when they kill all Ts
     ELIMINATION_T = 2000, // reward for Ts when they kill all CTs
@@ -75,7 +76,17 @@ class GameModeVIP {
     vip = null;
     
     secondChance = true; // determine if VIP has second chance
-    downedOnce = false;
+    vipJustDowned = false;
+    vipDowned = false; // used for starting bleeding out the VIP
+	vipBleedOutHP = 100.0; // starting HP when VIP gets downed
+    vipHostage = null; // is set when VIP first drops
+    vipDownedTimeBeforeDeath = 20.0;
+    vipDownedTime = null; // set when VIP gets downed
+	
+    vipRunGraceTime = false;
+    vipSetGraceTime = true;
+    vipBotGraceTime = null; // window of time in seconds during which you can steal VIP status
+
     isLive = false; // is set to true after freeze time
     shouldEndOnTeamWipe = false; // don't end on team wipe if we don't have anyone on one of the teams to begin with
 
@@ -148,10 +159,23 @@ class GameModeVIP {
         // it takes 1 frame for the hostage to be spawned after VIP is downed - we also kill VIP's ragdoll here
         if (hasHostageJustBeenPickedUp == true) {
             local vip_hostage = Entities.FindByName(null, "vip_hostage");
+            //local vip_hostage_dmg_filter = Entities.FindByName(null,"vip_filter_damage");
             if (vip_hostage!=null){
+                vipHostage = vip_hostage;
                 vip_hostage.SetModel("models/hostage/vip_ground.mdl");
+                EntFireByHandle(vipHostage, "SetDamageFilter", "vip_filter_damage",0.0,null,null);
+
+
                 hasHostageJustBeenPickedUp = false;
+        
             }
+        }
+        if (vipRunGraceTime){
+            OnGraceTime();
+        }
+
+        if (vipDowned){
+            BleedOutVIP();
         }	
     }
     
@@ -168,6 +192,7 @@ class GameModeVIP {
     EntFireByHandle(vip_text_round_end, "Display", "",0.0,null,null);									// Displays Game_Text
 
     }
+
 
     // sets `isLive` to a value, updating necessary entities
     function setLive(value) {
@@ -188,6 +213,23 @@ class GameModeVIP {
         }
     }
     
+    // activate grace time
+    function OnGraceTime(){
+        if (vipSetGraceTime){
+            vipBotGraceTime = Time()+::VIP_BOTGRACETIME;
+            vipSetGraceTime = false;
+        }
+
+        local graceTime = vipBotGraceTime - Time();
+        if (Time() >= vipBotGraceTime){
+            printl("[VIP] Grace time is over");
+            vipRunGraceTime = false;
+        } else if (Time() < vipBotGraceTime){
+            //print("[VIP] Can steal VIP status from BOTs in the next "+graceTime+" seconds");
+        }
+    }
+
+
     // checks if the round is over due to time
     function IsRoundOver(){
         local currentTime = Time();
@@ -223,6 +265,13 @@ class GameModeVIP {
         vip = null;
         lastIllegalWeapon = null;
         lastIllegalTime = 0;
+
+        vipHostage = null;
+        vipDowned = false;
+        vipBleedOutHP = 100;
+
+        vipSetGraceTime = true;
+        vipBotGraceTime = null;
         
         lastHealthVIP = null;
         spawnPositionVIP = null;
@@ -315,6 +364,10 @@ class GameModeVIP {
     
     function OnVIPDowned(){
         printl("[VIP] VIP has been downed!");
+
+        //This starts draining VIPs HP
+        vipDowned = true;
+        vipJustDowned = true;
         
         //GAME_TEXT
                 SendGameText("The VIP was downed!", "1", "2");
@@ -343,6 +396,32 @@ class GameModeVIP {
         }
     }
     
+	function BleedOutVIP(){
+        
+        local bleedOutHP = null;
+
+        if (vipJustDowned == true){
+            //vipBleedOutHP = 100.0;
+            vipDownedTime = Time();
+            print("[VIP] Downed time = "+vipDownedTime);
+            vipJustDowned = false;
+        }
+
+        bleedOutHP = Time()-vipDownedTime;
+        vipBleedOutHP = 100.0 - (bleedOutHP*(100.0/vipDownedTimeBeforeDeath));
+        EntFireByHandle(vipHostage,"AddOutput","health "+vipBleedOutHP,0.0,null,null);
+        
+        printl("[VIP] VIP HP = " +vipBleedOutHP );
+        
+
+        if (vipBleedOutHP<=0){
+            printl("[VIP] GAME IS OVER - VIP BLED OUT");
+            printl("[VIP] GAME IS OVER - VIP BLED OUT");
+            printl("[VIP] GAME IS OVER - VIP BLED OUT");
+            vipDowned = false;
+        } 
+        
+	}
     
     
     function OnVIPPickedUp(){
@@ -381,6 +460,8 @@ class GameModeVIP {
         setLive(false);
 
         EntFireByHandle(eServerCommand, "Command", "mp_ignore_round_win_conditions 0", 0.0, null, null);
+		EntFireByHandle(eServerCommand, "Command", "mp_hostages_rescuetime 0", 0.0, null, null);
+		EntFireByHandle(eServerCommand, "Command", "mp_hostages_takedamage 1", 0.0, null, null);
 
         SetVIP(SelectRandomCT());
         //OnVIPDowned();
@@ -414,6 +495,7 @@ class GameModeVIP {
             printl("[VIP] Updating round end time: "+timeLimit);
             roundEndTime = Time() + timeLimit; // timeLimit has been updated before this is called
         }
+        vipRunGraceTime = true;
     }
     
     // fired when VIP switches weapons
