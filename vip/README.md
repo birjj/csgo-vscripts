@@ -44,7 +44,7 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
 
     _Can be solved with event_listener for warmup detection_
 
-- **When Hostage is spawned, he may sometimes be floating**
+~~- **When Hostage is spawned, he may sometimes be floating**~~
 
     _This is due to him spawning where there is a grenade projectile or a player_
     
@@ -58,7 +58,7 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
 
     _Seems to be caused because there's still an entity in the position the VIP should take the exact moment he spawns. Could probably delay another frame? This is a bigger problem when he is enclosed in tight space (vents, where he could be pushed outside the map)_
 
-- **Hostage VIP shouldn't take damage from grenades or shots**
+~~- **Hostage VIP shouldn't take damage from grenades or shots**~~
 
     _Should be fixed by using filter_damage_type (it is, I tried)_
     
@@ -66,7 +66,7 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
 
     _Se7en should be on it, need ragdoll animation for this to work. If it doesn't work, we could still instantiate a prop_ragdoll with VIPs model on that position. Purely cosmetic feature._
     
-- **When VIP is downed, there should be a way to keep track on his HP on HUD.**
+~~- **When VIP is downed, there should be a way to keep track on his HP on HUD.**~~
     
     _So people can see when he's about to die_
     
