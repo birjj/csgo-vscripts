@@ -64,7 +64,7 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
     
 - **When Hostage HP reaches 0% he should become Ragdoll**
 
-    _Se7en should be on it, need ragdoll animation for this to work. If it doesn't work, we could still instantiate a prop_ragdoll with VIPs model on that position. Purely cosmetic feature.
+    _Se7en should be on it, need ragdoll animation for this to work. If it doesn't work, we could still instantiate a prop_ragdoll with VIPs model on that position. Purely cosmetic feature._
     
 - **When VIP is downed, there should be a way to keep track on his HP on HUD.**
     
