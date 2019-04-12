@@ -63,8 +63,10 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
     _Undesirable scenario: VIP jumps off building, the hostage is spawned at an unreachable position.
 
     _**Proposed solutions:**_
-    _- Whenever VIP is touching trigger_hurt instantly kill and end the round._
-    _- Only ever spawn an hostage entity if the VIP dies to a Player (aka not World), this could prevent intentional suicide transfering of VIP status too_
+    
+        _- Whenever VIP is touching trigger_hurt instantly kill and end the round._
+    
+        _- Only ever spawn an hostage entity if the VIP dies to a Player (aka not World), this could prevent intentional suicide transfering of VIP status too_
     
 - **When the VIP dies to a multikill (f.e. AWP shot) some issues occur.**
 
