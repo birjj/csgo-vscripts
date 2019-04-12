@@ -54,6 +54,9 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
     
     _We need to take VIPs rotation and rotate entity_maker to match that._
 
+- **When Hostage is spawned, he gets slightly offset to the side.**
+
+    _Seems to be caused because there's still an entity in the position the VIP should take the exact moment he spawns. Could probably delay another frame? This is a bigger problem when he is enclosed in tight space (vents, where he could be pushed outside the map)_
     
 - **Hostage VIP shouldn't take damage from grenades or shots**
 
