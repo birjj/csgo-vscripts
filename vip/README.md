@@ -58,7 +58,7 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
     
 - **When the VIP dies to a multikill (f.e. AWP shot) some issues occur.**
 
-    _Sometimes an Hostage VIP won't spawn, or 2 might spawn depending on who the shot hits first.
+    _Sometimes an Hostage VIP won't spawn, or 2 might spawn depending on who the shot hits first._
     
     _Case 1: VIP is lined up with a team mate. VIP gets shot, dies and the friend behind him dies too. No hostage will spawn in this case._
     _Case 2: VIP is lined up with a team mate. Team mate gets shot first, dies and the VIP also dies behind him. 2 Hostages will spawn in this case._
