@@ -48,6 +48,8 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
 
     _This is due to him spawning where there is a grenade projectile or a player_
     
+    _**ALSO RELATED:** z offset for spawning hostage needs to be adjusted, otherwise dieing in "underground" may spawn hostage on floor above._
+    
 - **Hostage VIP shouldn't take damage from grenades or shots**
 
     _Should be fixed by using filter_damage_type (it is, I tried)_
@@ -56,9 +58,13 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
     
     _So people can see when he's about to die_
     
-- **When VIP jumps off a building, he may die to the fall damage, but that won't kill the VIP and trigger end of round by itself**
+- **When VIP dies to World (fall damage, trigger hurt, etc...), he receives damage, but that won't kill the VIP hostage**
+    
+    _Undesirable scenario: VIP jumps off building, the hostage is spawned at an unreachable position.
 
+    _**Proposed solutions:**_
     _Whenever VIP is touching trigger_hurt instantly kill and end the round._
+    _Only ever spawn an hostage entity if the VIP dies to a Terrorist, this could prevent intentional suicide transfering of VIP status too_
     
 - **When the VIP dies to a multikill (f.e. AWP shot) some issues occur.**
 
