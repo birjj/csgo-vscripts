@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "8075"
-	"mapversion" "73"
+	"mapversion" "75"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -14,13 +14,13 @@ viewsettings
 	"bSnapToGrid" "1"
 	"bShowGrid" "1"
 	"bShowLogicalGrid" "0"
-	"nGridSpacing" "32"
+	"nGridSpacing" "8"
 	"bShow3DGrid" "0"
 }
 world
 {
 	"id" "1"
-	"mapversion" "73"
+	"mapversion" "75"
 	"classname" "worldspawn"
 	"comment" "Decompiled by BSPSource v1.3.24 from test_vip"
 	"detailmaterial" "detail/detailsprites"
@@ -739,8 +739,8 @@ cameras
 	"activecamera" "0"
 	camera
 	{
-		"position" "[177.992 7.96799 98.819]"
-		"look" "[-84.5863 1.54998 54.3938]"
+		"position" "[370.919 91.4771 182.983]"
+		"look" "[163.728 -14.0906 53.023]"
 	}
 	camera
 	{
