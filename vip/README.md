@@ -57,10 +57,14 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
 - **When Hostage is spawned, he gets slightly offset to the side.**
 
     _Seems to be caused because there's still an entity in the position the VIP should take the exact moment he spawns. Could probably delay another frame? This is a bigger problem when he is enclosed in tight space (vents, where he could be pushed outside the map)_
-    
+
 - **Hostage VIP shouldn't take damage from grenades or shots**
 
     _Should be fixed by using filter_damage_type (it is, I tried)_
+    
+- **When Hostage HP reaches 0% he should become Ragdoll**
+
+    _Se7en should be on it, need ragdoll animation for this to work. If it doesn't work, we could still instantiate a prop_ragdoll with VIPs model on that position. Purely cosmetic feature.
     
 - **When VIP is downed, there should be a way to keep track on his HP on HUD.**
     
