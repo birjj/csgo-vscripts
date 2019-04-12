@@ -19,21 +19,9 @@ In addition to this you have a root table, which every script in any context has
 <dd>The version of Squirrel that is embedded in CS:GO is <a href="http://www.squirrel-lang.org/doc/squirrel2.html" target="_blank">Squirrel 2.2</a>. This means that some of the newer features (e.g. <code>.find()</code> or <code>in</code> on arrays) aren't available.</dd>
 <dt>Script files are executed every round, but root table remains unchanged</dt>
 <dd>At the start of every round, every entity's script is executed. However, the root table still contains any data set from previous runs. Any code you want to run every round (e.g. creating entities, which are invalidated at the end of every round) is fine with this, but any code you want to keep across rounds (e.g. keeping track of state) should be placed behind a guard and store its state in the root table.</dd>
-<dt>Callbacks cannot access their containing closure</dt>
-<dd><p>Even though functions are first-order citizens in Squirrel, they do not have access to the closure in which they were defined. You have to work around this by using <code>.bindenv()</code>, or by using a class method (in which case <code>this</code> refers to the class instance).</p>
-<pre>function CallCallback(cb) { cb(); }
-class Test {
-    test = null;
-    constructor() {
-        test = "a";
-        PrintTest();
-        CallCallback(PrintTest);
-    }
-    function PrintTest() {
-        printl("this.test: "+this.test); // will succeed
-        printl("test: "+test); // will error if called as callback
-    }
-}</pre></dd>
+<dt>VScripts are fucked</dt>
+<dd><p>Valve's code tends to be... <i>interesting</i>. The VScript implementation is no exception. Whenever you rely on some Valve-implemented API (e.g. <code>Entities.FindByClassname()</code> make sure you test that it returns what you expect.</p>
+<p>An example of this: if you loop through entities using <code>Entities.First()/Entities.Next(ent)</code> and check <code>ent.GetClassname() == "player"</code> on each entity, you'll get all bots and players. If you instead loop through entities using <code>Entities.FindByClassname(ent, "player")</code>, then you'll only get players and not bots. Why? Because that's just the way it is. Welcome to the Source engine.</dd>
 <dt>Outputs are asynchronous</dt>
 <dd>Be careful when triggering outputs on entities (e.g. showing messages using an <code>env_hudhint</code>) - they will not execute until your Squirrel code is finished. You can wait until the next think cycle to work around this.</dd>
 <dt>Entities will not react to script-created keyvalues by themselves</dt>

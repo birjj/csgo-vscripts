@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "8075"
-	"mapversion" "2"
+	"mapversion" "35"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,12 +20,348 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "2"
+	"mapversion" "35"
 	"classname" "worldspawn"
-	"skyname" "sky_dust"
-	"maxpropscreenwidth" "-1"
-	"detailvbsp" "detail.vbsp"
 	"detailmaterial" "detail/detailsprites"
+	"detailvbsp" "detail.vbsp"
+	"maxpropscreenwidth" "-1"
+	"skyname" "sky_dust"
+}
+entity
+{
+	"id" "541"
+	"classname" "filter_damage_type"
+	"damagetype" "512"
+	"Negated" "Allow entities that match criteria"
+	"targetname" "vip_filter_damage"
+	"origin" "-56 8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 500]"
+	}
+}
+entity
+{
+	"id" "510"
+	"classname" "ambient_generic"
+	"health" "10"
+	"message" "player/vo/seal/commanderdown01.wav"
+	"pitch" "100"
+	"pitchstart" "100"
+	"radius" "1250"
+	"spawnflags" "49"
+	"targetname" "vip_down_snd"
+	"origin" "-24 24 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 1500]"
+	}
+}
+entity
+{
+	"id" "433"
+	"classname" "logic_eventlistener"
+	"EventName" "hostage_follows"
+	"FetchEventData" "1"
+	"IsEnabled" "1"
+	"targetname" "hostage_follows_listener"
+	"TeamNum" "-1"
+	connections
+	{
+		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(HOSTAGE_FOLLOWS)0-1"
+	}
+	"origin" "120 8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 1500]"
+	}
+}
+entity
+{
+	"id" "435"
+	"classname" "filter_damage_type"
+	"damagetype" "2"
+	"Negated" "1"
+	"targetname" "vip_hostage_damage_filter"
+	"origin" "120 -8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 2500]"
+	}
+}
+entity
+{
+	"id" "437"
+	"classname" "hostage_entity"
+	"angles" "0 270 0"
+	"HostageSpawnRandomFactor" "1"
+	"targetname" "vip_hostage"
+	connections
+	{
+		"OnFirstPickedUp" "!selfRunScriptCode::gamemode_vip.OnVIPPickedUp()0-1"
+	}
+	"origin" "160 0 0"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 500]"
+	}
+}
+entity
+{
+	"id" "439"
+	"classname" "env_entity_maker"
+	"angles" "0 0 0"
+	"EntityTemplate" "vip_template"
+	"PostSpawnDirection" "0 0 0"
+	"PostSpawnDirectionVariance" "0.15"
+	"spawnflags" "0"
+	"targetname" "vip_entity_maker"
+	"origin" "136 8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 0]"
+	}
+}
+entity
+{
+	"id" "481"
+	"classname" "point_template"
+	"spawnflags" "2"
+	"targetname" "vip_template"
+	"Template01" "vip_hostage"
+	"origin" "136 -8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 0]"
+	}
+}
+entity
+{
+	"id" "203"
+	"classname" "game_text"
+	"channel" "1"
+	"color" "255 255 255"
+	"color2" "49 82 102"
+	"effect" "2"
+	"fadein" "0.02"
+	"fadeout" "1"
+	"fxtime" "0.25"
+	"holdtime" "4"
+	"message" "You are the VIP!"
+	"spawnflags" "0"
+	"targetname" "vip_text_notification"
+	"x" "-1"
+	"y" "0.4"
+	"origin" "40 24 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 0]"
+	}
+}
+entity
+{
+	"id" "265"
+	"classname" "game_text"
+	"channel" "1"
+	"color" "255 255 255"
+	"color2" "0 0 0"
+	"effect" "2"
+	"fadein" "0.02"
+	"fadeout" "1"
+	"fxtime" "0.25"
+	"holdtime" "10"
+	"message" "The VIP was assassinated!"
+	"spawnflags" "1"
+	"targetname" "vip_text_round_end"
+	"x" "-1"
+	"y" "0.3"
+	"origin" "24 24 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 0]"
+	}
+}
+entity
+{
+	"id" "409"
+	"classname" "game_text"
+	"channel" "1"
+	"color" "255 255 255"
+	"color2" "0 0 0"
+	"fadein" "0.5"
+	"fadeout" "1"
+	"fxtime" "0.25"
+	"holdtime" "10"
+	"message" "The VIP was assassinated!"
+	"spawnflags" "1"
+	"targetname" "vip_text_backup"
+	"x" "-1"
+	"y" "0.3"
+	"origin" "-8 24 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 0]"
+	}
+}
+entity
+{
+	"id" "114"
+	"classname" "logic_eventlistener"
+	"EventName" "round_end"
+	"FetchEventData" "1"
+	"IsEnabled" "1"
+	"targetname" "round_end_listener"
+	"TeamNum" "-1"
+	connections
+	{
+		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(ROUND_END)0-1"
+	}
+	"origin" "72 8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 0]"
+	}
+}
+entity
+{
+	"id" "168"
+	"classname" "game_money"
+	"AwardText" "Award for escaping"
+	"Money" "2500"
+	"targetname" "vip_money_vip_escaped"
+	"origin" "32 -48 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 1500]"
+	}
+}
+entity
+{
+	"id" "170"
+	"classname" "game_money"
+	"AwardText" "Team award for escorting VIP"
+	"Money" "3500"
+	"targetname" "vip_team_ct_money_vip_escaped"
+	"origin" "56 -48 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 1500]"
+	}
+}
+entity
+{
+	"id" "174"
+	"classname" "game_money"
+	"AwardText" "Team award for assassinating the VIP"
+	"Money" "2000"
+	"targetname" "vip_team_t_money_vip_killed"
+	"origin" "-16 -48 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 1500]"
+	}
+}
+entity
+{
+	"id" "176"
+	"classname" "game_money"
+	"AwardText" "Award for assassinating VIP"
+	"Money" "2620"
+	"targetname" "vip_money_vip_killed"
+	"origin" "-40 -48 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 1500]"
+	}
+}
+entity
+{
+	"id" "74"
+	"classname" "logic_eventlistener"
+	"EventName" "inspect_weapon"
+	"FetchEventData" "1"
+	"IsEnabled" "1"
+	"targetname" "inspect_weapon_listener"
+	"TeamNum" "-1"
+	connections
+	{
+		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(INSPECT_WEAPON)0-1"
+	}
+	"origin" "56 8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 0]"
+	}
+}
+entity
+{
+	"id" "76"
+	"classname" "logic_eventlistener"
+	"EventName" "bot_takeover"
+	"FetchEventData" "1"
+	"IsEnabled" "1"
+	"targetname" "bot_takeover_listener"
+	"TeamNum" "-1"
+	connections
+	{
+		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(BOT_TAKEOVER)0-1"
+	}
+	"origin" "56 -8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 0]"
+	}
 }
 entity
 {
