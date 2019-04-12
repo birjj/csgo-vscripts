@@ -56,6 +56,10 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
     
     _So people can see when he's about to die_
     
+- **When VIP jumps off a building, he may die to the fall damage, but that won't kill the VIP and trigger end of round by itself**
+
+    _Whenever VIP is touching trigger_hurt instantly kill and end the round._
+    
 - **When the VIP dies to a multikill (f.e. AWP shot) some issues occur.**
 
     _Sometimes an Hostage VIP won't spawn, or 2 might spawn depending on who the shot hits first._
