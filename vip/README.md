@@ -93,3 +93,7 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
     _In all these cases only the first VIP to spawn gets the VIP skin._
     
     _When checking if VIP died, of all units that died in the same tick, only the last one will be considered to determine whether or not the VIP died. If the VIP dies last of **X** people to the same shot, **X** hostages will spawn, if he is in the middle or is first, no hostage will be spawned because the last person to die was not VIP._
+    
+- **It is possible for VIP to use primary.
+
+    _How to replicate: Be VIP, buy m4, hold pistol. Drop pistol and m4 automaticly comes out and you can use it, as long as you don't swap back to knife or pistol._
