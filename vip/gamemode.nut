@@ -60,7 +60,7 @@ function Precache(){
     "smokegrenade"
 ];
 ::VIP_MAXHEALTH <- 150;
-::VIP_DEATHTIMER <- 30;
+::VIP_DEATHTIMER <- 5;
 ::VIP_BOTGRACETIME <- 10;
 ::ECONOMY <- {
     ELIMINATION_CT = 2000, // reward for CTs when they kill all Ts
@@ -81,6 +81,8 @@ class GameModeVIP {
     vipHostage = null; // is set when VIP first drops
     vipDownedTime = null; // set when VIP gets downed
     vipDownedOnce = false; // has VIP fallen once yet?
+    vipJustBledOut = false; // toggled the instant VIP dies from bleeding
+    vipSaved = false; // has VIP been saved from bleeding out?
 	
     vipDiedToWorld = false;
 
@@ -188,11 +190,23 @@ class GameModeVIP {
         
             }
         }
+
+        // can only kill entity owners after 1 frame, this kills VIP Hostage main body after BecomeRagdoll
+        if (vipJustBledOut){
+            local tempHostage = Entities.FindByName(null,"vip_hostage");
+            if (tempHostage!=null){
+                EntFireByHandle(tempHostage,"kill","",0.0,null,null);
+                vipJustBledOut = false;
+            } else {
+                printl("[VIP] Couldn't find tempHostage to destroy! WHAT!?");
+            }
+        }
+
         if (vipRunGraceTime){
             OnGraceTime();
         }
 
-        if (vipDowned){
+        if (vipDowned && !vipSaved){
             BleedOutVIP();
         }	
     }
@@ -287,6 +301,7 @@ class GameModeVIP {
         vipHostage = null;
         vipDowned = false;
         vipBleedOutHP = 100;
+        vipSaved = false;
 
         vipDiedToWorld = false;
         secondChance = true;
@@ -428,32 +443,33 @@ class GameModeVIP {
             print("[VIP] Downed time = "+vipDownedTime);
             vipJustDowned = false;
         }
-
-        bleedOutHP = Time()-vipDownedTime;
-        vipBleedOutHP = 100.0 - (bleedOutHP*(100.0/::VIP_DEATHTIMER));
-        EntFireByHandle(vipHostage,"AddOutput","health "+vipBleedOutHP,0.0,null,null);
         
-        if (vipBleedOutHP>0){
-        local health = ceil(vipBleedOutHP);
+        if (vipBleedOutHP>0 && vipHostage != null){
 
+            bleedOutHP = Time()-vipDownedTime;
+            vipBleedOutHP = 100.0 - (bleedOutHP*(100.0/::VIP_DEATHTIMER));
+            EntFireByHandle(vipHostage,"AddOutput","health "+vipBleedOutHP,0.0,null,null);
 
-        timeleft = ::VIP_DEATHTIMER - bleedOutHP;
+            local health = ceil(vipBleedOutHP);
 
+            timeleft = ::VIP_DEATHTIMER - bleedOutHP;
 
-        local textColor = "#990000";
+            local textColor = "#990000";
+            local msg1 = "VIP down and bleeding!\n You have <font color='"+textColor+"'>"+ format("%.1f", timeleft) + " sec" + "</font> to pick him up!";
+            ::ShowMessageSome(msg1, function(ply){
+                return ply.GetTeam() == TEAM_CT;
+            });
         
-        local msg1 = "VIP down and bleeding!\n You have <font color='"+textColor+"'>"+ format("%.1f", timeleft) + " sec" + "</font> to pick him up!";
-        
-        ::ShowMessageSome(msg1, function(ply){
-            return ply.GetTeam() == TEAM_CT;
-        });
-        
-        printl("[VIP] VIP HP = " +health );
+            printl("[VIP] VIP HP = " +health );
         
         } else if (vipBleedOutHP<=0){
             printl("[VIP] GAME IS OVER - VIP BLED OUT");
             printl("[VIP] GAME IS OVER - VIP BLED OUT");
             printl("[VIP] GAME IS OVER - VIP BLED OUT");
+
+            EntFireByHandle(vipHostage, "BecomeRagdoll", "",0.0,null,null);
+            vipJustBledOut = true;
+            
             vipDowned = false;
             secondChance = false;
 
@@ -480,6 +496,7 @@ class GameModeVIP {
         local vip_carrier = Entities.FindByClassnameNearest("player",vip_prop_pos,256.0);
 
         EntFireByHandle(vip_carrier, "AddOutput", "targetname vip_vip", null,null);
+        vipSaved = true;
     }
     
     
@@ -724,9 +741,9 @@ if (!("gamemode_vip" in getroottable())) {
        printl("[VIP] SOMEONE TOOK THE HOSTAGE");
        printl("[VIP] SOMEONE TOOK THE HOSTAGE");
        printl("[VIP] SOMEONE TOOK THE HOSTAGE");
-       printl("[VIP] SOMEONE TOOK THE HOSTAGE");
-       printl("[VIP] SOMEONE TOOK THE HOSTAGE");
+
        local vipCarrier = Players.FindByUserid(data.userid);
+       vipSaved = true;
         if (vipCarrier != null) {
             EntFireByHandle(vipCarrier, "AddOutput", "targetname " + ::VIP_TARGETNAME, 0.0, null, null);
         }
