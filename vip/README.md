@@ -38,7 +38,8 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
 
 - **When VIP is Rescued, ResetVIP() resets his skin to default**
 
-    _This is noticeable by people outside the helicopter who are looking inside_
+    _This is noticeable by people outside the helicopter who are looking inside._
+    _Consider: Only ResetingVIP on very very round end OR at the begining of every round before anything else._
     
 - **Gamemode shouldn't work until warmup is over**
 
@@ -70,7 +71,7 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
     
     _So people can see when he's about to die_
     
-- **When VIP dies to World (fall damage, trigger hurt, etc...), he receives damage, but that won't kill the VIP hostage**
+~~- **When VIP dies to World (fall damage, trigger hurt, etc...), he receives damage, but that won't kill the VIP hostage**~~
     
     _Undesirable scenario: VIP jumps off building, the hostage is spawned at an unreachable position._
 
