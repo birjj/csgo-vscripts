@@ -98,3 +98,7 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
 ~~- **It is possible for VIP to use primary.**~~
 
     _How to replicate: Be VIP, buy m4, hold pistol. Drop pistol and m4 automaticly comes out and you can use it, as long as you don't swap back to knife or pistol._
+
+- **When using multiple Rescue Zone the VIP filter seems to be ignored**
+
+    _Probably due to prefixing, need to make sure we consider prefix when we filter VIP somehow._
