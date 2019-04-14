@@ -11,6 +11,7 @@ DoIncludeScript("vip/lib/ui.nut", null);
 DoIncludeScript("vip/lib/money.nut", null);
 DoIncludeScript("vip/lib/chat.nut", null);
 
+
 function Think() {
     local root = getroottable();
     if ("Players" in root) {
@@ -28,9 +29,6 @@ function Precache(){
     self.PrecacheModel("models/hostage/v_vip_arm.mdl");
     self.PrecacheModel("models/hostage/vip_carry.mdl");
     self.PrecacheModel("models/hostage/vip_ground.mdl");
-    
-    
-    
 }
 
 
@@ -62,6 +60,7 @@ function Precache(){
     "smokegrenade"
 ];
 ::VIP_MAXHEALTH <- 150;
+::VIP_DEATHTIMER <- 30;
 ::VIP_BOTGRACETIME <- 10;
 ::ECONOMY <- {
     ELIMINATION_CT = 2000, // reward for CTs when they kill all Ts
@@ -80,9 +79,11 @@ class GameModeVIP {
     vipDowned = false; // used for starting bleeding out the VIP
 	vipBleedOutHP = 100.0; // starting HP when VIP gets downed
     vipHostage = null; // is set when VIP first drops
-    vipDownedTimeBeforeDeath = 20.0;
     vipDownedTime = null; // set when VIP gets downed
+    vipDownedOnce = false; // has VIP fallen once yet?
 	
+    vipDiedToWorld = false;
+
     vipRunGraceTime = false;
     vipSetGraceTime = true;
     vipBotGraceTime = null; // window of time in seconds during which you can steal VIP status
@@ -96,6 +97,7 @@ class GameModeVIP {
     lastHealthVIP = null; // used in case VIP disconnects
     spawnPositionVIP = null; // used in case VIP disconnects
     lastSeenPositionVIP = null; // used for taking over bots
+    lastSeenAnglesVIP = null;
     hasHostageJustBeenPickedUp = false;
 
     eGameRoundEnd = null;
@@ -114,6 +116,7 @@ class GameModeVIP {
 
         if (vip != null && vip.GetHealth() > 0) {
             lastSeenPositionVIP = vip.GetOrigin();
+            lastSeenAnglesVIP = vip.GetAngles();
         }
         
         // check if one of the teams have been wiped off
@@ -139,6 +142,20 @@ class GameModeVIP {
                 ended = true;
             }
             if (!ended && IsRoundOver()) {
+                
+                //ALL HELICOPTERS DEPART
+                local ent = Entities.FindByName(null, "*vip_relay_heli_takeoff");
+                while (ent != null) {
+                    // for some reason "*vip_rescue" matches some non-matching entities
+                    local entName = ent.GetName();
+                    if (entName != null && entName.find("vip_relay_heli_takeoff") == entName.len() - "vip_relay_heli_takeoff".len()) {
+                        if (isLive) {
+                            EntFireByHandle(ent, "Trigger", "", 0.0, null, null);
+                        }
+                    }
+                    ent = Entities.FindByName(ent, "*vip_relay_heli_takeoff");
+                }
+
                 EntFireByHandle(eGameRoundEnd, "EndRound_TerroristsWin", "5", 0.0, null, null);
                 
                 //GAME_TEXT
@@ -164,6 +181,7 @@ class GameModeVIP {
                 vipHostage = vip_hostage;
                 vip_hostage.SetModel("models/hostage/vip_ground.mdl");
                 EntFireByHandle(vipHostage, "SetDamageFilter", "vip_filter_damage",0.0,null,null);
+                vip_hostage.SetAngles(lastSeenAnglesVIP.x, lastSeenAnglesVIP.y, lastSeenAnglesVIP.z);
 
 
                 hasHostageJustBeenPickedUp = false;
@@ -270,6 +288,9 @@ class GameModeVIP {
         vipDowned = false;
         vipBleedOutHP = 100;
 
+        vipDiedToWorld = false;
+        secondChance = true;
+
         vipSetGraceTime = true;
         vipBotGraceTime = null;
         
@@ -370,7 +391,7 @@ class GameModeVIP {
         vipJustDowned = true;
         
         //GAME_TEXT
-                SendGameText("The VIP was downed!", "1", "2");
+                SendGameText("The VIP has been downed!", "1", "2");
                 
         //PLAY SOUND
         local ambientVipDown = Entities.FindByName(null, "vip_down_snd");
@@ -381,7 +402,8 @@ class GameModeVIP {
         }
         
         local hMaker = Entities.FindByName(null, "vip_entity_maker");
-        hMaker.SetOrigin(Vector(lastSeenPositionVIP.x,lastSeenPositionVIP.y,lastSeenPositionVIP.z + 256.0));
+        hMaker.SetOrigin(Vector(lastSeenPositionVIP.x,lastSeenPositionVIP.y,lastSeenPositionVIP.z + 16.0));
+        //hMaker.SetAngles(lastSeenAnglesVIP.pitch, lastSeenAnglesVIP.yaw, lastSeenAnglesVIP.roll);
         EntFireByHandle(hMaker, "ForceSpawn","",0.0,null,null);
         
         
@@ -399,28 +421,44 @@ class GameModeVIP {
 	function BleedOutVIP(){
         
         local bleedOutHP = null;
+        local timeleft = null;
 
         if (vipJustDowned == true){
-            //vipBleedOutHP = 100.0;
             vipDownedTime = Time();
             print("[VIP] Downed time = "+vipDownedTime);
             vipJustDowned = false;
         }
 
         bleedOutHP = Time()-vipDownedTime;
-        vipBleedOutHP = 100.0 - (bleedOutHP*(100.0/vipDownedTimeBeforeDeath));
+        vipBleedOutHP = 100.0 - (bleedOutHP*(100.0/::VIP_DEATHTIMER));
         EntFireByHandle(vipHostage,"AddOutput","health "+vipBleedOutHP,0.0,null,null);
         
-        printl("[VIP] VIP HP = " +vipBleedOutHP );
-        
+        if (vipBleedOutHP>0){
+        local health = ceil(vipBleedOutHP);
 
-        if (vipBleedOutHP<=0){
+
+        timeleft = ::VIP_DEATHTIMER - bleedOutHP;
+
+
+        local textColor = "#990000";
+        
+        local msg1 = "VIP down and bleeding!\n You have <font color='"+textColor+"'>"+ format("%.1f", timeleft) + " sec" + "</font> to pick him up!";
+        
+        ::ShowMessageSome(msg1, function(ply){
+            return ply.GetTeam() == TEAM_CT;
+        });
+        
+        printl("[VIP] VIP HP = " +health );
+        
+        } else if (vipBleedOutHP<=0){
             printl("[VIP] GAME IS OVER - VIP BLED OUT");
             printl("[VIP] GAME IS OVER - VIP BLED OUT");
             printl("[VIP] GAME IS OVER - VIP BLED OUT");
             vipDowned = false;
+            secondChance = false;
+
+            OnVIPDeath(null);
         } 
-        
 	}
     
     
@@ -460,11 +498,14 @@ class GameModeVIP {
         setLive(false);
 
         EntFireByHandle(eServerCommand, "Command", "mp_ignore_round_win_conditions 0", 0.0, null, null);
-		EntFireByHandle(eServerCommand, "Command", "mp_hostages_rescuetime 0", 0.0, null, null);
-		EntFireByHandle(eServerCommand, "Command", "mp_hostages_takedamage 1", 0.0, null, null);
+		
+        // TUNE HOSTAGE CVARS
+        // I'd be very upset had Valve not implemented these _O_ Bless Gaben
+        // Sorry aparently paragraphs break the code so all I have is this very long string of server commands
+        local hostageCVars = "mp_hostages_rescuetime 0; mp_hostages_takedamage 1; cash_player_damage_hostage 0; cash_player_interact_with_hostage 0; cash_player_killed_hostage 0; cash_player_rescued_hostage 0; cash_team_hostage_alive 0; cash_team_hostage_interaction 0; cash_team_rescued_hostage 0; hostage_is_silent 1";
+        EntFireByHandle(eServerCommand, "Command", hostageCVars, 0.0, null, null);
 
         SetVIP(SelectRandomCT());
-        //OnVIPDowned();
     }
     
     
@@ -517,7 +558,7 @@ class GameModeVIP {
             local command = "drop";
             local message = "Only pistols are allowed when you're the VIP";
             if (lastIllegalWeapon != data.item || timeDelta > 5 || timeDelta == 0) {
-                command = "slot2";
+                command = "slot3;slot2;"; //we switch to knife first in case player doesn't have a pistol
                 message = message + "\nYou can drop the weapon by switching to it again";
             }
             ::ShowMessage(message, vip, "color='#F00'", 0.05);
@@ -539,7 +580,9 @@ class GameModeVIP {
         // if it is warmup, pick a random CT player to be the new VIP
         local newVIP = SelectRandomCT();
 
-        
+        if (vipDiedToWorld == false && secondChance == true){
+            OnVIPDowned();
+        }
         if (secondChance == false){
             if (isLive || newVIP == null) {
                 ResetVIP();
@@ -547,6 +590,11 @@ class GameModeVIP {
                 
                 //GAME_TEXT
                 SendGameText("The VIP was assassinated!", "1", "10");
+
+                //HUD INFO
+                ::ShowMessageSome("You let the VIP die dummy!", function(ply){
+                return ply.GetTeam() == TEAM_CT;
+                });
             
                 setLive(false);
                 
@@ -555,14 +603,47 @@ class GameModeVIP {
             } else {
                 SubstituteVIP(newVIP);
             }
-        } 
-        else if (secondChance == true){
-            //if (downedOnce == false){
-                //downedOnce = true;
-                OnVIPDowned();
-            //}
         }
+        
     }
+
+    // called when the VIP is hurt
+    // used to display updates to the CTs
+
+    function OnVIPHurt(data) {
+        local health = data.health;
+        printl("[VIP] VIP hurt! "+health);
+        
+        lastHealthVIP = data.health;
+
+        local damage = data.dmg_health;
+        if (damage > 600){
+            printl("[VIP] VIP was killed by Trigger_Hurt");
+            secondChance = false;
+            vipDiedToWorld = true;
+        }
+        
+
+        // colors go hsl(0, 100%, 30%), hsl(0, 100%, 45%), hsl(25,100%,50%), hsl(55,100%,47%), hsl(70, 100%, 47%, 1), hsl(100, 100%, 45%, 1)
+        //           dark red         , red              , orange          , yellow          , yellow-green         , green
+        local color = null;
+        if (health <= 0.05 * ::VIP_MAXHEALTH) { color = "#990000"; }
+        if (color == null && health <= 0.1 * ::VIP_MAXHEALTH) { color = "#E60000"; }
+        if (color == null && health <= 0.25 * ::VIP_MAXHEALTH) { color = "#FF6A00"; }
+        if (color == null && health <= 0.5 * ::VIP_MAXHEALTH) { color = "#F0DC00"; }
+        if (color == null && health <= 0.75 * ::VIP_MAXHEALTH) { color = "#C8F000"; }
+        if (color == null) { color = "#4CE600"; }
+
+        local msg = "VIP has <font color='"+color+"'>"+ health + " HP" + "</font> left.";
+        if (health == 0) {
+            msg = "VIP is <font color='"+color+"'>DEAD</font>!";
+            
+        }
+        ::ShowMessageSome(msg, function(ply){
+            return ply.GetTeam() == TEAM_CT;
+        });
+    }
+
 
     // called when the VIP is rescued - must be called by the map
     function OnVIPRescued() {
@@ -582,33 +663,6 @@ class GameModeVIP {
 
             ::GiveMoneyCT(ECONOMY.VIP_ESCAPED, "Reward for helping the VIP escape");
         }
-    }
-
-    // called when the VIP is hurt
-    // used to display updates to the CTs
-    function OnVIPHurt(data) {
-        local health = data.health;
-        printl("[VIP] VIP hurt! "+health);
-        
-        lastHealthVIP = data.health;
-
-        // colors go hsl(0, 100%, 30%), hsl(0, 100%, 45%), hsl(25,100%,50%), hsl(55,100%,47%), hsl(70, 100%, 47%, 1), hsl(100, 100%, 45%, 1)
-        //           dark red         , red              , orange          , yellow          , yellow-green         , green
-        local color = null;
-        if (health <= 0.05 * ::VIP_MAXHEALTH) { color = "#990000"; }
-        if (color == null && health <= 0.1 * ::VIP_MAXHEALTH) { color = "#E60000"; }
-        if (color == null && health <= 0.25 * ::VIP_MAXHEALTH) { color = "#FF6A00"; }
-        if (color == null && health <= 0.5 * ::VIP_MAXHEALTH) { color = "#F0DC00"; }
-        if (color == null && health <= 0.75 * ::VIP_MAXHEALTH) { color = "#C8F000"; }
-        if (color == null) { color = "#4CE600"; }
-
-        local msg = "VIP has <font color='"+color+"'>"+ health + " HP" + "</font> left.";
-        if (health == 0) {
-            msg = "VIP is <font color='"+color+"'>DEAD</font>!";
-        }
-        ::ShowMessageSome(msg, function(ply){
-            return ply.GetTeam() == TEAM_CT;
-        });
     }
 
     // called when a player spawns
