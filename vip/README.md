@@ -102,3 +102,8 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
 - **When using multiple Rescue Zone the VIP filter seems to be ignored**
 
     _Probably due to prefixing, need to make sure we consider prefix when we filter VIP somehow._
+    
+    
+- **If someone tries to rescue VIP hostage but time runs out during the action they get stuck**
+
+    _Should issue "Command" "-use" to unstuck right before they finish action._
