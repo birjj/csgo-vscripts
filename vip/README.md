@@ -50,7 +50,7 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
     
     _**ALSO RELATED:** z offset for spawning hostage needs to be adjusted, otherwise dieing in "underground" may spawn hostage on floor above._
 
-- **When Hostage is spawned, he always spawns with the same rotation regardless of player orientation**
+~~- **When Hostage is spawned, he always spawns with the same rotation regardless of player orientation**~~
     
     _We need to take VIPs rotation and rotate entity_maker to match that._
 
