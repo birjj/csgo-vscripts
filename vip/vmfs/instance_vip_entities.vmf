@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "8075"
-	"mapversion" "50"
+	"mapversion" "52"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,7 +20,7 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "50"
+	"mapversion" "52"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
@@ -29,7 +29,7 @@ world
 }
 entity
 {
-	"id" "646"
+	"id" "693"
 	"classname" "logic_eventlistener"
 	"EventName" "player_connect"
 	"FetchEventData" "1"
@@ -39,6 +39,28 @@ entity
 	connections
 	{
 		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_CONNECT)0-1"
+	}
+	"origin" "200 8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 1500]"
+	}
+}
+entity
+{
+	"id" "646"
+	"classname" "logic_eventlistener"
+	"EventName" "player_changename"
+	"FetchEventData" "1"
+	"IsEnabled" "1"
+	"targetname" "player_changename_listener"
+	"TeamNum" "-1"
+	connections
+	{
+		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_CHANGENAME)0-1"
 	}
 	"origin" "184 -8 8"
 	editor

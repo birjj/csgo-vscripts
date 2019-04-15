@@ -342,13 +342,13 @@ class GameModeVIP {
         SetEntityToVIP(player);
         
         vip.SetHealth(::VIP_MAXHEALTH);
-        ::ShowMessageSome("Protect the VIP at all costs!", function(ply) {
+        ::ShowMessageSome("Protect "+Players.FindDisplayName(vip)+" at all costs!", function(ply) {
             if (ply.GetTeam() == TEAM_CT) {
                 return true;
             }
             return false;
         });
-        ::ShowMessageSome("The VIP claims to have fucked your mother. Kill him!", function(ply) {
+        ::ShowMessageSome(Players.FindDisplayName(vip) + " claims to have fucked your mother. Kill him!", function(ply) {
             if (ply.GetTeam() == TEAM_T) {
                 return true;
             }
@@ -775,8 +775,8 @@ if (!("gamemode_vip" in getroottable())) {
         local entity = ::Players.FindByUserid(data.entity);
 
         //local myString = entity.GetName();
-        printl("[VIP] entity: "+entity);
-        printl("[VIP] entity: "+data.entity);
+        // printl("[VIP] entity: "+entity);
+        // printl("[VIP] entity: "+data.entity);
         /*if (entity.GetClassname() == "player"){
             printl("[VIP] is player");
         }else 
@@ -784,7 +784,7 @@ if (!("gamemode_vip" in getroottable())) {
 
         //local myString = entity.GetClassname();
 
-        printl("[VIP] Player pressed [E] User: "+data.userid+" Entity: "+data.entity+" and this is a ");
+        // printl("[VIP] Player pressed [E] User: "+data.userid+" Entity: "+data.entity+" and this is a ");
         //printl("[VIP] Player pressed [E] User: "+user+" Entity: "+data.entity+" and this is a "+myString);
 
         /*if ((user != null) && (entity == ::gamemode_vip.vip_vip) ){

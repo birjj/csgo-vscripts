@@ -20,7 +20,6 @@
 ::PLAYER_USE <- "player_use";
 ::PLAYER_DEATH <- "player_death";
 ::PLAYER_CONNECT <- "player_connect";
-::PLAYER_CONNECT_FULL <- "player_connect_full";
 ::PLAYER_DISCONNECT <- "player_disconnect";
 ::PLAYER_CHANGENAME <- "player_changename";
 ::PLAYER_TEAM <- "player_team";
@@ -33,7 +32,6 @@
 ::ROUND_END <- "round_end";
 ::HOSTAGE_FOLLOWS <- "hostage_follows";
 ::HOSTAGE_STOPS_FOLLOWING <- "hostage_stops_following";
-::PLAYER_CONNECT <- "player_connect";
 
 
 DoIncludeScript("vip/lib/debug.nut",null);

@@ -20,6 +20,7 @@ class Player {
     ent = null;
     userid = null;
     name = null;
+    bot = false;
 
     constructor(ply) {
         ent = ply;
@@ -42,6 +43,11 @@ class Player {
             return "[Unknown]";
         }
         return name;
+    }
+
+    function SetBot(bt) { bot = bt; }
+    function IsBot() {
+        return bot;
     }
 }
 
@@ -102,6 +108,12 @@ class PlayerManager {
         local instance = FindInstanceByEntity(ent);
         if (instance == null) { return "<Unknown>"; }
         return instance.GetDisplayName();
+    }
+
+    function FindIsBot(ent) {
+        local instance = FindInstanceByEntity(ent);
+        if (instance == null) { return false; }
+        return instance.IsBot();
     }
 
     function GetPlayers(filter = null) {
@@ -171,21 +183,33 @@ class PlayerManager {
 if (!("Players" in getroottable())) {
     printl("[Players] Binding");
     ::_players_instances <- [];
-    ::_name_to_userid <- {};
+    ::_players_name_to_userid <- {};
 
     // listen for player_connect which gives us display name
-    local nameUpdater = function(userid, name){
-        ::_name_to_userid[userid] <- name;
+    ::_players_name_updater <- function(userid, name){
+        printl("[Players] Setting name of "+userid+" to "+name);
+        ::_players_name_to_userid[userid] <- name;
         local instance = ::Players.FindInstanceByEntity(::Players.FindByUserid(userid));
         if (instance != null) {
             instance.SetDisplayName(name);
         }
     };
+    ::AddEventListener("player_connect", function(data) {
+        ::_players_name_updater(data.userid, data.name);
+    });
     ::AddEventListener("player_changename", function(data) {
-        nameUpdater(data.userid, data.newname);
+        ::_players_name_updater(data.userid, data.newname);
     });
     ::AddEventListener("player_team", function(data) {
-        nameUpdater(data.userid, data.name);
+        if ("isbot" in data) {
+            local instance = ::Players.FindInstanceByEntity(::Players.FindByUserid(data.userid));
+            if (instance != null) {
+                instance.SetBot(true);
+            }
+        }
+        if ("name" in data) {
+            ::_players_name_updater(data.userid, data.name);
+        }
     });
 
     // listen for our fake player_use, which gives us userid
@@ -203,8 +227,8 @@ if (!("Players" in getroottable())) {
                 }
                 local instance = Player(ply);
                 instance.SetUserid(data.userid);
-                if (data.userid in ::_name_to_userid) {
-                    instance.SetDisplayName(::_name_to_userid[data.userid]);
+                if (data.userid in ::_players_name_to_userid) {
+                    instance.SetDisplayName(::_players_name_to_userid[data.userid]);
                 }
                 ::_players_instances.append(instance);
                 ::Players.eventProxy_boundPlayer = null;
