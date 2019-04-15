@@ -395,20 +395,9 @@ class GameModeVIP {
         ::ShowMessage("You're the VIP. Don't fuck it up now", vip, "color='#F00'");
     }
 
-    function TransferVIP(data){
-        local ourNewVIP = ::Players.FindByUserid(data.userid);
-        local entVIP = null;
-        while ((entVIP = Entities.FindByName(entVIP, ::VIP_TARGETNAME)) != null) {
-            entVIP.SetHealth(100);
-            EntFireByHandle(entVIP, "AddOutput", "targetname default", 0.0, null, null);
-            if (entVIP.ValidateScriptScope()) {
-                local scope = entVIP.GetScriptScope();
-                if ("_vipPrevModel" in scope) {
-                    entVIP.SetModel(scope._vipPrevModel);
-                }
-            }
-        }
-        SetVIP(ourNewVIP);
+    function TransferVIP(newVIP){
+        ResetVIP();
+        SetVIP(newVIP);
     }
 
     // updates an entity so it's VIP (sets local reference, updates targetname, updates model, etc.)
@@ -772,25 +761,18 @@ if (!("gamemode_vip" in getroottable())) {
 
     ::AddEventListener("player_use", function(data) {
         local user = ::Players.FindByUserid(data.userid);
-        local entity = ::Players.FindByUserid(data.entity);
-
-        //local myString = entity.GetName();
-        // printl("[VIP] entity: "+entity);
-        // printl("[VIP] entity: "+data.entity);
-        /*if (entity.GetClassname() == "player"){
-            printl("[VIP] is player");
-        }else 
-            printl("[VIP] is NOT player");*/
-
-        //local myString = entity.GetClassname();
-
-        // printl("[VIP] Player pressed [E] User: "+data.userid+" Entity: "+data.entity+" and this is a ");
-        //printl("[VIP] Player pressed [E] User: "+user+" Entity: "+data.entity+" and this is a "+myString);
-
-        /*if ((user != null) && (entity == ::gamemode_vip.vip_vip) ){
-            printl("[VIP] Transfering VIP from "+entity+" to user "+user);
-            ::gamemode_vip.TransferVIP(data);
-        } else printl("[VIP] Couldn't find player to Transfer VIP to.")*/
+        local ent = Entities.First();
+        while (ent != null) {
+            if (ent.entindex() == data.entity) {
+                printl(""+user+" pressed use on "+ent);
+                printl("("+(ent == ::gamemode_vip.vip)+"|"+(Players.FindIsBot(ent))+")");
+                if (ent == ::gamemode_vip.vip && Players.FindIsBot(ent) == true) {
+                    ::gamemode_vip.TransferVIP(user);
+                }
+                break;
+            }
+            ent = Entities.Next(ent);
+        }
     });
 
     ::AddEventListener("player_death", function(data) {

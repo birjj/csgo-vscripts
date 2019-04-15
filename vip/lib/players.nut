@@ -98,6 +98,7 @@ class PlayerManager {
     }
 
     function FindInstanceByEntity(ent) {
+        if (ent == null) { return null; }
         if (!ent.ValidateScriptScope()) { return null; }
         local scope = ent.GetScriptScope();
         if (!("player_instance" in scope)) { return null; }
@@ -112,7 +113,10 @@ class PlayerManager {
 
     function FindIsBot(ent) {
         local instance = FindInstanceByEntity(ent);
-        if (instance == null) { return false; }
+        if (instance == null) {
+            printl("[Players] Couldn't find entity while checking bot " + ent);
+            return false;
+        }
         return instance.IsBot();
     }
 
@@ -183,17 +187,27 @@ class PlayerManager {
 if (!("Players" in getroottable())) {
     printl("[Players] Binding");
     ::_players_instances <- [];
-    ::_players_name_to_userid <- {};
+    ::_players_userid_to_name <- {};
+    ::_players_userid_to_bot <- {};
 
-    // listen for player_connect which gives us display name
-    ::_players_name_updater <- function(userid, name){
+    // listen for name changes, or whether a player is a bot
+    ::_players_name_updater <- function(userid, name) {
         printl("[Players] Setting name of "+userid+" to "+name);
-        ::_players_name_to_userid[userid] <- name;
+        ::_players_userid_to_name[userid] <- name;
         local instance = ::Players.FindInstanceByEntity(::Players.FindByUserid(userid));
         if (instance != null) {
             instance.SetDisplayName(name);
         }
     };
+    ::_players_bot_updater <- function(userid, isbot) {
+        printl("[Players] Setting bot of "+userid+" to "+isbot);
+        ::_players_userid_to_bot[userid] <- isbot;
+        local instance = ::Players.FindInstanceByEntity(::Players.FindByUserid(userid));
+        if (instance != null) {
+            instance.SetBot(isbot);
+        }
+    };
+
     ::AddEventListener("player_connect", function(data) {
         ::_players_name_updater(data.userid, data.name);
     });
@@ -202,10 +216,7 @@ if (!("Players" in getroottable())) {
     });
     ::AddEventListener("player_team", function(data) {
         if ("isbot" in data) {
-            local instance = ::Players.FindInstanceByEntity(::Players.FindByUserid(data.userid));
-            if (instance != null) {
-                instance.SetBot(true);
-            }
+            ::_players_bot_updater(data.userid, true);
         }
         if ("name" in data) {
             ::_players_name_updater(data.userid, data.name);
@@ -227,8 +238,11 @@ if (!("Players" in getroottable())) {
                 }
                 local instance = Player(ply);
                 instance.SetUserid(data.userid);
-                if (data.userid in ::_players_name_to_userid) {
-                    instance.SetDisplayName(::_players_name_to_userid[data.userid]);
+                if (data.userid in ::_players_userid_to_name) {
+                    instance.SetDisplayName(::_players_userid_to_name[data.userid]);
+                }
+                if (data.userid in ::_players_userid_to_bot) {
+                    instance.SetBot(::_players_userid_to_bot[data.userid]);
                 }
                 ::_players_instances.append(instance);
                 ::Players.eventProxy_boundPlayer = null;
