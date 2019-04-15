@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "8075"
-	"mapversion" "75"
+	"mapversion" "79"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -14,13 +14,13 @@ viewsettings
 	"bSnapToGrid" "1"
 	"bShowGrid" "1"
 	"bShowLogicalGrid" "0"
-	"nGridSpacing" "8"
+	"nGridSpacing" "64"
 	"bShow3DGrid" "0"
 }
 world
 {
 	"id" "1"
-	"mapversion" "75"
+	"mapversion" "79"
 	"classname" "worldspawn"
 	"comment" "Decompiled by BSPSource v1.3.24 from test_vip"
 	"detailmaterial" "detail/detailsprites"
@@ -53,14 +53,16 @@ entity
 	"id" "2107"
 	"classname" "logic_relay"
 	"spawnflags" "0"
-	"targetname" "vip_invisible"
+	"targetname" "vip_relay_heli_takeoff"
 	connections
 	{
-		"OnTrigger" "!activatorTurnOff1-1"
-		"OnTrigger" "!activatorDisableDrawInFastReflection1-1"
-		"OnTrigger" "!activatorDisableDraw1-1"
+		"OnTrigger" "vip_heliSetAnimation4lift0-1"
+		"OnTrigger" "vip_heli_sound_takeoffPlaySound0-1"
+		"OnTrigger" "vip_trigger_pushDisable1-1"
+		"OnTrigger" "vip_trigger_barrierDisable1-1"
+		"OnTrigger" "vip_heli_bladeshurtDisable0-1"
 	}
-	"origin" "198.439 -10.4809 120"
+	"origin" "192 0 128"
 	editor
 	{
 		"color" "220 30 220"
@@ -483,14 +485,10 @@ entity
 	connections
 	{
 		"OnTrigger" "!selfRunScriptCode::gamemode_vip.OnVIPRescued()0-1"
-		"OnTrigger" "vip_heliSetAnimation4lift0-1"
 		"OnTrigger" "!activatorRemoveHealth0-1"
 		"OnTrigger" "vip_helicopter_cameraEnable0-1"
-		"OnTrigger" "vip_trigger_barrierDisable1-1"
-		"OnTrigger" "vip_trigger_pushDisable1-1"
-		"OnTrigger" "vip_heli_bladeshurtDisable0-1"
 		"OnTrigger" "!activatorSetParentvip_fixup0-1"
-		"OnTrigger" "vip_heli_sound_takeoffPlaySound0-1"
+		"OnStartTouch" "vip_relay_heli_takeoffTrigger0-1"
 	}
 	solid
 	{
@@ -739,8 +737,8 @@ cameras
 	"activecamera" "0"
 	camera
 	{
-		"position" "[370.919 91.4771 182.983]"
-		"look" "[163.728 -14.0906 53.023]"
+		"position" "[298.517 36.1443 112.256]"
+		"look" "[59.0278 -77.5723 138.251]"
 	}
 	camera
 	{

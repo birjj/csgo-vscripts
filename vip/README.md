@@ -38,19 +38,20 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
 
 - **When VIP is Rescued, ResetVIP() resets his skin to default**
 
-    _This is noticeable by people outside the helicopter who are looking inside_
+    _This is noticeable by people outside the helicopter who are looking inside._
+    _Consider: Only ResetingVIP on very very round end OR at the begining of every round before anything else._
     
 - **Gamemode shouldn't work until warmup is over**
 
     _Can be solved with event_listener for warmup detection_
 
-- **When Hostage is spawned, he may sometimes be floating**
+~~- **When Hostage is spawned, he may sometimes be floating**~~
 
     _This is due to him spawning where there is a grenade projectile or a player_
     
     _**ALSO RELATED:** z offset for spawning hostage needs to be adjusted, otherwise dieing in "underground" may spawn hostage on floor above._
 
-- **When Hostage is spawned, he always spawns with the same rotation regardless of player orientation**
+~~- **When Hostage is spawned, he always spawns with the same rotation regardless of player orientation**~~
     
     _We need to take VIPs rotation and rotate entity_maker to match that._
 
@@ -58,7 +59,7 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
 
     _Seems to be caused because there's still an entity in the position the VIP should take the exact moment he spawns. Could probably delay another frame? This is a bigger problem when he is enclosed in tight space (vents, where he could be pushed outside the map)_
 
-- **Hostage VIP shouldn't take damage from grenades or shots**
+~~- **Hostage VIP shouldn't take damage from grenades or shots**~~
 
     _Should be fixed by using filter_damage_type (it is, I tried)_
     
@@ -66,11 +67,11 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
 
     _Se7en should be on it, need ragdoll animation for this to work. If it doesn't work, we could still instantiate a prop_ragdoll with VIPs model on that position. Purely cosmetic feature._
     
-- **When VIP is downed, there should be a way to keep track on his HP on HUD.**
+~~- **When VIP is downed, there should be a way to keep track on his HP on HUD.**~~
     
     _So people can see when he's about to die_
     
-- **When VIP dies to World (fall damage, trigger hurt, etc...), he receives damage, but that won't kill the VIP hostage**
+~~- **When VIP dies to World (fall damage, trigger hurt, etc...), he receives damage, but that won't kill the VIP hostage**~~
     
     _Undesirable scenario: VIP jumps off building, the hostage is spawned at an unreachable position._
 
@@ -93,3 +94,16 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
     _In all these cases only the first VIP to spawn gets the VIP skin._
     
     _When checking if VIP died, of all units that died in the same tick, only the last one will be considered to determine whether or not the VIP died. If the VIP dies last of **X** people to the same shot, **X** hostages will spawn, if he is in the middle or is first, no hostage will be spawned because the last person to die was not VIP._
+    
+~~- **It is possible for VIP to use primary.**~~
+
+    _How to replicate: Be VIP, buy m4, hold pistol. Drop pistol and m4 automaticly comes out and you can use it, as long as you don't swap back to knife or pistol._
+
+- **When using multiple Rescue Zone the VIP filter seems to be ignored**
+
+    _Probably due to prefixing, need to make sure we consider prefix when we filter VIP somehow._
+    
+    
+- **If someone tries to rescue VIP hostage but time runs out during the action they get stuck**
+
+    _Should issue "Command" "-use" to unstuck right before they finish action._

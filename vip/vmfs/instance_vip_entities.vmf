@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "8075"
-	"mapversion" "35"
+	"mapversion" "50"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,12 +20,78 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "35"
+	"mapversion" "50"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
 	"maxpropscreenwidth" "-1"
 	"skyname" "sky_dust"
+}
+entity
+{
+	"id" "646"
+	"classname" "logic_eventlistener"
+	"EventName" "player_connect"
+	"FetchEventData" "1"
+	"IsEnabled" "1"
+	"targetname" "player_connect_listener"
+	"TeamNum" "-1"
+	connections
+	{
+		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_CONNECT)0-1"
+	}
+	"origin" "184 -8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 1500]"
+	}
+}
+entity
+{
+	"id" "658"
+	"classname" "logic_eventlistener"
+	"EventName" "player_team"
+	"FetchEventData" "1"
+	"IsEnabled" "1"
+	"targetname" "player_team_listener"
+	"TeamNum" "-1"
+	connections
+	{
+		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_TEAM)0-1"
+	}
+	"origin" "184 8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 1500]"
+	}
+}
+entity
+{
+	"id" "607"
+	"classname" "logic_eventlistener"
+	"EventName" "hostage_stops_following"
+	"FetchEventData" "1"
+	"IsEnabled" "1"
+	"targetname" "hostage_stops_following_listener"
+	"TeamNum" "-1"
+	connections
+	{
+		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(HOSTAGE_STOPS_FOLLOWING)0-1"
+	}
+	"origin" "96 -8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 1500]"
+	}
 }
 entity
 {
@@ -76,7 +142,7 @@ entity
 	{
 		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(HOSTAGE_FOLLOWS)0-1"
 	}
-	"origin" "120 8 8"
+	"origin" "96 8 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -108,10 +174,6 @@ entity
 	"angles" "0 270 0"
 	"HostageSpawnRandomFactor" "1"
 	"targetname" "vip_hostage"
-	connections
-	{
-		"OnFirstPickedUp" "!selfRunScriptCode::gamemode_vip.OnVIPPickedUp()0-1"
-	}
 	"origin" "160 0 0"
 	editor
 	{

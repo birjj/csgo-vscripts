@@ -32,6 +32,8 @@
 ::INSPECT_WEAPON <- "inspect_weapon";
 ::ROUND_END <- "round_end";
 ::HOSTAGE_FOLLOWS <- "hostage_follows";
+::HOSTAGE_STOPS_FOLLOWING <- "hostage_stops_following";
+::PLAYER_CONNECT <- "player_connect";
 
 
 DoIncludeScript("vip/lib/debug.nut",null);
