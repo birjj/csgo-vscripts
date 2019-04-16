@@ -800,11 +800,11 @@ if (!("gamemode_vip" in getroottable())) {
         local ent = Entities.First();
         while (ent != null) {
             if (ent.entindex() == data.entity) {
-                log(""+user+" pressed use on "+ent);
-                log("("+(ent == ::gamemode_vip.vip)+"|"+(Players.FindIsBot(ent))+"|"+::gamemode_vip.vipCanTransfer+")");
-                if (ent == ::gamemode_vip.vip && Players.FindIsBot(ent) == true && ::gamemode_vip.vipCanTransfer == true) {
+                log("[VIP] "+user+" pressed space on "+ent+" (isbot? "+Players.FindIsBot(ent)+", canTransfer? "+::gamemode_vip.vipCanTransfer+")");
+                if (ent == ::gamemode_vip.vip
+                        && Players.FindIsBot(ent) == true
+                        && ::gamemode_vip.vipCanTransfer == true) {
                     ::gamemode_vip.TransferVIP(user);
-                    
                 }
                 break;
             }
@@ -852,7 +852,6 @@ if (!("gamemode_vip" in getroottable())) {
        log("[VIP] SOMEONE TOOK THE HOSTAGE");
 
         ::gamemode_vip.OnVIPPickedUp(data);
-
     });
 
     ::AddEventListener("hostage_stops_following", function(data) {
