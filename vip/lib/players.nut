@@ -217,7 +217,7 @@ if (!("Players" in getroottable())) {
     });
     ::AddEventListener("player_team", function(data) {
         if ("isbot" in data) {
-            ::_players_bot_updater(data.userid, true);
+            ::_players_bot_updater(data.userid, data.isbot);
         }
         if ("name" in data) {
             ::_players_name_updater(data.userid, data.name);
