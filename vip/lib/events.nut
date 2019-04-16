@@ -33,7 +33,6 @@
 ::HOSTAGE_FOLLOWS <- "hostage_follows";
 ::HOSTAGE_STOPS_FOLLOWING <- "hostage_stops_following";
 
-
 DoIncludeScript("vip/lib/debug.nut",null);
 
 if (!("_eventsScope" in getroottable())) {
@@ -42,7 +41,7 @@ if (!("_eventsScope" in getroottable())) {
     ::_eventsScope.listeners <- {};
 
     ::AddEventListener <- function(name, cb) {
-        printl("[Events] Adding event listener for " + name);
+        log("[Events] Adding event listener for " + name);
         if (!(name in ::_eventsScope.listeners)) {
             ::_eventsScope.listeners[name] <- [];
         }
@@ -57,7 +56,7 @@ if (!("_eventsScope" in getroottable())) {
         }
     };
     ::TriggerEvent <- function(name, data=null) {
-        // printl("[Events] Triggering event for " + name);
+        log("[Events] Triggering event for " + name);
         local listener = Entities.FindByName(null, name+"_listener");
         local event_data = data;
         if (event_data == null && listener != null) {
@@ -65,7 +64,6 @@ if (!("_eventsScope" in getroottable())) {
                 event_data = listener.GetScriptScope().event_data;
             }
         }
-        // ::printtable(event_data);
         if (name in ::_eventsScope.listeners) {
             foreach (listener in ::_eventsScope.listeners[name]) {
                 listener(event_data);
@@ -74,5 +72,5 @@ if (!("_eventsScope" in getroottable())) {
     }
 
 
-    printl("[Events] Initialized");
+    log("[Events] Initialized");
 }

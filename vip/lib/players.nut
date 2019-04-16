@@ -14,6 +14,7 @@
 ::TEAM_CT <- 3;
 
 DoIncludeScript("vip/lib/events.nut",null);
+DoIncludeScript("vip/lib/debug.nut",null);
 
 // represents a single player, bound to a player entity
 class Player {
@@ -114,7 +115,7 @@ class PlayerManager {
     function FindIsBot(ent) {
         local instance = FindInstanceByEntity(ent);
         if (instance == null) {
-            printl("[Players] Couldn't find entity while checking bot " + ent);
+            log("[Players] Couldn't find entity while checking bot " + ent);
             return false;
         }
         return instance.IsBot();
@@ -166,16 +167,16 @@ class PlayerManager {
             if (ent.GetClassname() == "player" && ent.IsValid() && ent.ValidateScriptScope()) {
                 local scope = ent.GetScriptScope();
                 if (!("userid" in scope) && !("generating_userid" in scope)) {
-                    // printl("[Players] Found new player "+ent+" - getting his userid");
+                    // log("[Players] Found new player "+ent+" - getting his userid");
                     scope.generating_userid <- true;
                     eventProxy_boundPlayer = ent;
                     EntFireByHandle(eventProxy, "GenerateGameEvent", "", 0.0, ent, null);
                     return; // can only bind one per think because we need the output to fire first
                 } else {
                     if ("userid" in scope) {
-                        // printl("[Players] Already know userid of player "+ent+": "+scope.userid);
+                        // log("[Players] Already know userid of player "+ent+": "+scope.userid);
                     } else {
-                        // printl("[Players] Awaiting userid of player "+ent);
+                        // log("[Players] Awaiting userid of player "+ent);
                     }
                 }
             }
@@ -185,14 +186,14 @@ class PlayerManager {
 }
 
 if (!("Players" in getroottable())) {
-    printl("[Players] Binding");
+    log("[Players] Binding");
     ::_players_instances <- [];
     ::_players_userid_to_name <- {};
     ::_players_userid_to_bot <- {};
 
     // listen for name changes, or whether a player is a bot
     ::_players_name_updater <- function(userid, name) {
-        printl("[Players] Setting name of "+userid+" to "+name);
+        log("[Players] Setting name of "+userid+" to "+name);
         ::_players_userid_to_name[userid] <- name;
         local instance = ::Players.FindInstanceByEntity(::Players.FindByUserid(userid));
         if (instance != null) {
@@ -200,7 +201,7 @@ if (!("Players" in getroottable())) {
         }
     };
     ::_players_bot_updater <- function(userid, isbot) {
-        printl("[Players] Setting bot of "+userid+" to "+isbot);
+        log("[Players] Setting bot of "+userid+" to "+isbot);
         ::_players_userid_to_bot[userid] <- isbot;
         local instance = ::Players.FindInstanceByEntity(::Players.FindByUserid(userid));
         if (instance != null) {
@@ -228,7 +229,7 @@ if (!("Players" in getroottable())) {
         // if this is caused by our fake event
         if (::Players.eventProxy_boundPlayer != null && data.entity == 0) {
             local ply = ::Players.eventProxy_boundPlayer;
-            printl("[Players] Got player "+ply+" for userid "+data.userid);
+            log("[Players] Got player "+ply+" for userid "+data.userid);
             local scope = ply.GetScriptScope();
             if ("generating_userid" in scope) {
                 scope.userid <- data.userid;
@@ -252,6 +253,6 @@ if (!("Players" in getroottable())) {
 
     ::Players <- PlayerManager();
 } else {
-    printl("[Players] Already has global instance - not rebinding");
+    log("[Players] Already has global instance - not rebinding");
     ::Players.GenerateEventProxy();
 }

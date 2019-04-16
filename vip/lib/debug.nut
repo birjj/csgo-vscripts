@@ -1,9 +1,9 @@
-::printtable <- function(tbl, indent="") {
+::printtable <- function(tbl, indent="", printfunc=::log) {
     if (tbl == null) {
-        printl("null");
+        printfunc("null");
         return;
     }
-    printl(indent + "table {");
+    printfunc(indent + "table {");
     foreach (key,val in tbl) {
         local v = val;
         if (val == null) {
@@ -11,7 +11,13 @@
         } else {
             v = val.tostring();
         }
-        printl(indent + "  "+key+": "+v);
+        printfunc(indent + "  "+key+": "+v);
     }
-    printl(indent + "}");
+    printfunc(indent + "}");
+}
+
+::log <- function(msg) {
+    if (GetDeveloperLevel() > 0) {
+        printl(msg);
+    }
 }

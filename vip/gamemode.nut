@@ -113,7 +113,7 @@ class GameModeVIP {
     function Think() {
         // VIP entity could go invalid for a multitude of reasons (disconnect, etc.)
         if (vip != null && !vip.IsValid()) {
-            printl("[VIP] === VIP INVALID!");
+            log("[VIP] === VIP INVALID!");
             OnVIPDeath(null);
         }
 
@@ -130,7 +130,7 @@ class GameModeVIP {
             local ts = Players.GetPlayers(function(ply){
                 return ply.GetTeam() == TEAM_T && ply.GetHealth() > 0;
             });
-            // printl("[VIP] We have "+cts.len()+" CTs, "+ts.len()+" Ts alive ("+shouldEndOnTeamWipe+")");
+            // log("[VIP] We have "+cts.len()+" CTs, "+ts.len()+" Ts alive ("+shouldEndOnTeamWipe+")");
 
             local ended = false;
             if (!ended && shouldEndOnTeamWipe && ts.len() == 0) {
@@ -225,7 +225,7 @@ class GameModeVIP {
             // for some reason "*vip_rescue" matches some non-matching entities
             local entName = ent.GetName();
             if (entName != null && entName.find("vip_rescue") == entName.len() - "vip_rescue".len()) {
-                printl("[VIP] Enabling rescue trigger "+ent);
+                log("[VIP] Enabling rescue trigger "+ent);
                 if (isLive) {
                     EntFireByHandle(ent, "Enable", "", 0.0, null, null);
                 } else {
@@ -247,7 +247,7 @@ class GameModeVIP {
         local textColor = "#54B948"; //the finest green everyone knows
         if (Time() < vipBotGraceTime && vip.GetHealth() == ::VIP_MAXHEALTH){
             
-            //printl("[VIP] Can steal VIP status from BOTs in the next " + graceTime + " seconds VIP HP: "+vip.GetHealth());
+            //log("[VIP] Can steal VIP status from BOTs in the next " + graceTime + " seconds VIP HP: "+vip.GetHealth());
             ::ShowMessageSome("<font color='"+textColor+"'>Bot "+Players.FindDisplayName(vip)+"</font> was selected to be <font color='"+textColor+"'>VIP</font>\nClaim it by clicking <font color='"+textColor+"'>[E]</font> on him within the next <font color='"+textColor+"'>"+format("%.1f", graceTime)+" seconds</font>.", function(ply) {
                 if (ply.GetTeam() == TEAM_CT) {
                     return true;
@@ -255,7 +255,7 @@ class GameModeVIP {
                 return false;
             });
         } else if (vip.GetHealth() != ::VIP_MAXHEALTH){
-            printl("[VIP] Grace time is over - VIP took damage");
+            log("[VIP] Grace time is over - VIP took damage");
             ::ShowMessageSome("<font color='"+textColor+"'>Bot "+Players.FindDisplayName(vip)+"</font> took damage\nClaiming time window closed.", function(ply) {
                 if (ply.GetTeam() == TEAM_CT) {
                     return true;
@@ -268,7 +268,7 @@ class GameModeVIP {
         }
 
         else if (Time() >= vipBotGraceTime){
-            printl("[VIP] Grace time is over");
+            log("[VIP] Grace time is over");
             ::ShowMessageSome("<font color='"+textColor+"'>Bot "+Players.FindDisplayName(vip)+"</font> was selected to be <font color='"+textColor+"'>VIP</font>\nClaiming time window expired.", function(ply) {
                 if (ply.GetTeam() == TEAM_CT) {
                     return true;
@@ -294,12 +294,12 @@ class GameModeVIP {
     function SelectRandomCT(){
         local cts = Players.GetCTs();
         if (cts.len() != 0) {
-            printl("[VIP] Picking from "+cts.len()+" CTs.");
+            log("[VIP] Picking from "+cts.len()+" CTs.");
             local vipPly = null;
             local tries = 0;
             while (vipPly == null || !vipPly.IsValid() || vipPly.GetHealth() == 0) {
                 if (++tries > cts.len()) {
-                    printl("[VIP] Couldn't find a random CT");
+                    log("[VIP] Couldn't find a random CT");
                     return null;
                 }
                 vipPly = cts[RandomInt(0, cts.len() - 1)];
@@ -311,7 +311,7 @@ class GameModeVIP {
 
     // removes the current VIP, resetting all state
     function ResetVIP() {
-        printl("[VIP] Resetting VIP");
+        log("[VIP] Resetting VIP");
         
         vip = null;
         vipCarrier = null;
@@ -352,7 +352,7 @@ class GameModeVIP {
 
     // sets a player to be VIP
     function SetVIP(player) {
-        printl("[VIP] Setting VIP to "+player);
+        log("[VIP] Setting VIP to "+player);
         ResetVIP();
 
         SetEntityToVIP(player);
@@ -387,13 +387,13 @@ class GameModeVIP {
             ambient.SetOrigin(player.EyePosition());
             EntFireByHandle(ambient, "PlaySound", "", 0.5, player, player);
         } else {
-            printl("[VIP] Couldn't find VIP sound");
+            log("[VIP] Couldn't find VIP sound");
         }
     }
 
     // sets a player to be substitute VIP if the current VIP becomes invalid for some reason (e.g. disconnect)
     function SubstituteVIP(player){
-        printl("[VIP] Setting substitute VIP to "+player);
+        log("[VIP] Setting substitute VIP to "+player);
 
         // make sure we grab last health before overwriting stuff
         local lastHealth = lastHealthVIP;
@@ -417,7 +417,7 @@ class GameModeVIP {
     function TransferVIP(newVip){
         local textColor = "#54B948";
         
-        printl("[VIP] Transfered VIP from Bot "+Players.FindDisplayName(newVip)+" to "+Players.FindDisplayName(newVip));
+        log("[VIP] Transfered VIP from Bot "+Players.FindDisplayName(newVip)+" to "+Players.FindDisplayName(newVip));
         ::ShowMessageSome("<font color='"+textColor+"'>Player "+Players.FindDisplayName(newVip)+"</font> claimed <font color='"+textColor+"'>VIP</font> from <font color='"+textColor+"'>Bot "+Players.FindDisplayName(newVip)+"</font>!", function(ply) {
             if (ply.GetTeam() == TEAM_CT) {
                 return true;
@@ -446,7 +446,7 @@ class GameModeVIP {
     }
     
     function OnVIPDowned(){
-        printl("[VIP] VIP has been downed!");
+        log("[VIP] VIP has been downed!");
 
         if (isLive){
             //This starts draining VIPs HP
@@ -461,7 +461,7 @@ class GameModeVIP {
             if (ambientVipDown) {
                 EntFireByHandle(ambientVipDown, "PlaySound", "", 0.5, null, null);
             } else {
-                printl("[VIP] Couldn't find VIP DOWN sound");
+                log("[VIP] Couldn't find VIP DOWN sound");
             }
             
             local hMaker = Entities.FindByName(null, "vip_entity_maker");
@@ -510,7 +510,7 @@ class GameModeVIP {
                 return ply.GetTeam() == TEAM_CT;
             });
         
-            printl("[VIP] VIP HP = " +health );
+            log("[VIP] VIP HP = " +health );
         } 
 
         if (vipBleedOutHP<=0){
@@ -521,9 +521,9 @@ class GameModeVIP {
     function FaintVIP(){
 
         //This makes the hostage VIP collapse into its death.
-        printl("[VIP] GAME IS OVER - VIP DIED");
-        printl("[VIP] GAME IS OVER - VIP DIED");
-        printl("[VIP] GAME IS OVER - VIP DIED");
+        log("[VIP] GAME IS OVER - VIP DIED");
+        log("[VIP] GAME IS OVER - VIP DIED");
+        log("[VIP] GAME IS OVER - VIP DIED");
 
         EntFireByHandle(vipHostage, "BecomeRagdoll", "",0.5,null,null);
         EntFireByHandle(vipHostage,"kill","",0.51,null,null);
@@ -537,18 +537,18 @@ class GameModeVIP {
     
     
     function OnVIPPickedUp(data){
-        printl("[VIP] VIP has been picked up!");
+        log("[VIP] VIP has been picked up!");
         //local vip_vip_carrier = Entities.FindByName(null,"vip_carrier");
         local vip_hostage_carriable_prop = Entities.FindByClassname(null,"hostage_carriable_prop");
         local vip_hostage_viewmodel = Entities.FindByModel(null,"models/hostage/v_hostage_arm.mdl");
         
         if (vip_hostage_viewmodel!=null){
             vip_hostage_viewmodel.SetModel("models/hostage/v_vip_arm.mdl");
-        } else printl("[VIP] There's no model called vip_hostage_viewmodel in the map");
+        } else log("[VIP] There's no model called vip_hostage_viewmodel in the map");
         
         if (vip_hostage_carriable_prop!=null){
             vip_hostage_carriable_prop.SetModel("models/hostage/vip_carry.mdl");
-        } else printl("[VIP] There's no entity called hostage_carriable_prop in the map");
+        } else log("[VIP] There's no entity called hostage_carriable_prop in the map");
         
         local vip_prop_pos = vip_hostage_carriable_prop.GetOrigin();
         //local vip_carrier = Entities.FindByClassnameNearest("player",vip_prop_pos,256.0);
@@ -568,7 +568,7 @@ class GameModeVIP {
 
     // fired when round starts
     function OnRoundStart() {
-        printl("[VIP] Starting " + ::VIP_VERSION + " on " + _version_);
+        log("[VIP] Starting " + ::VIP_VERSION + " on " + _version_);
         eClientCommand = Entities.CreateByClassname("point_clientcommand");
         eGameRoundEnd = Entities.CreateByClassname("game_round_end");
         eServerCommand = Entities.CreateByClassname("point_servercommand");
@@ -592,7 +592,7 @@ class GameModeVIP {
     function OnFreezeEnd() {
         if (vip && vip.IsValid() && !ScriptIsWarmupPeriod()) {
             setLive(true);
-            printl("[VIP] Round freeze ended");
+            log("[VIP] Round freeze ended");
             EntFireByHandle(eServerCommand, "Command", "mp_ignore_round_win_conditions 1", 0.0, null, null);
 
             // check to make sure we have enough players to play
@@ -612,7 +612,7 @@ class GameModeVIP {
         }
 
         if (timeLimit != null && timeLimit > 0) {
-            printl("[VIP] Updating round end time: "+timeLimit);
+            log("[VIP] Updating round end time: "+timeLimit);
             roundEndTime = Time() + timeLimit; // timeLimit has been updated before this is called
         }
         vipRunGraceTime = true;
@@ -621,7 +621,7 @@ class GameModeVIP {
     // fired when VIP switches weapons
     // switches/drops away from illegal weapons
     function OnVIPWeapon(data) {
-        printl("[VIP] Got VIP weapon switch");
+        log("[VIP] Got VIP weapon switch");
         ::printtable(data);
 
         local isLegal = false;
@@ -633,7 +633,7 @@ class GameModeVIP {
         }
         if (!isLegal) {
             local timeDelta = Time() - lastIllegalTime;
-            printl("[VIP] That man, officer! " + lastIllegalWeapon + " - " + timeDelta);
+            log("[VIP] That man, officer! " + lastIllegalWeapon + " - " + timeDelta);
             local command = "drop";
             local message = "Only pistols are allowed when you're the VIP";
             if (lastIllegalWeapon != data.item || timeDelta > 5 || timeDelta == 0) {
@@ -655,9 +655,9 @@ class GameModeVIP {
     function OnVIPDroppedByCarrier(data){
         local killedUnit = ::Players.FindByUserid(data.userid);
         if (killedUnit != null && killedUnit == vipCarrier){
-            printl("[VIP] VIP WAS DROPPED, GAME OVER.");
-            printl("[VIP] VIP WAS DROPPED, GAME OVER.");
-            printl("[VIP] VIP WAS DROPPED, GAME OVER.");
+            log("[VIP] VIP WAS DROPPED, GAME OVER.");
+            log("[VIP] VIP WAS DROPPED, GAME OVER.");
+            log("[VIP] VIP WAS DROPPED, GAME OVER.");
 
             //GAME_TEXT
             SendGameText("VIP "+ Players.FindDisplayName(vip) +" was assassinated!", "1", "10");
@@ -676,7 +676,7 @@ class GameModeVIP {
 
     // called when the VIP is RIP
     function OnVIPDeath(data) {
-        printl("[VIP] VIP dieded :(");
+        log("[VIP] VIP dieded :(");
 
         // if it is warmup, pick a random CT player to be the new VIP
         local newVIP = SelectRandomCT();
@@ -715,13 +715,13 @@ class GameModeVIP {
 
     function OnVIPHurt(data) {
         local health = data.health;
-        printl("[VIP] VIP hurt! "+health);
+        log("[VIP] VIP hurt! "+health);
         
         lastHealthVIP = data.health;
 
         local damage = data.dmg_health;
         if (damage > 600){
-            printl("[VIP] VIP was killed by Trigger_Hurt");
+            log("[VIP] VIP was killed by Trigger_Hurt");
             secondChance = false;
             vipDiedToWorld = true;
         }
@@ -750,7 +750,7 @@ class GameModeVIP {
 
     // called when the VIP is rescued - must be called by the map
     function OnVIPRescued() {
-        printl("[VIP] VIP rescued!");
+        log("[VIP] VIP rescued!");
         EntFireByHandle(eClientCommand, "Command", "cheer", 0.0, vip, null);
         
         //GAME_TEXT
@@ -773,12 +773,12 @@ class GameModeVIP {
     // called when a player spawns
     // used to pick a new VIP during warmup or freezetime
     function OnPlayerSpawn(data) {
-        printl("[VIP] Player spawned " + ::Players.FindByUserid(data.userid));
+        log("[VIP] Player spawned " + ::Players.FindByUserid(data.userid));
         local player = ::Players.FindByUserid(data.userid);
         if (player.GetTeam() == TEAM_CT) {
             // if we don't have a VIP, and we aren't live (warmup or freezetime), pick this new guy as VIP
             if (!isLive && vip == null) {
-                printl("[VIP] Setting respawned player to VIP during warmup/freezetime");
+                log("[VIP] Setting respawned player to VIP during warmup/freezetime");
                 SetVIP(player);
             }
         }
@@ -800,8 +800,8 @@ if (!("gamemode_vip" in getroottable())) {
         local ent = Entities.First();
         while (ent != null) {
             if (ent.entindex() == data.entity) {
-                printl(""+user+" pressed use on "+ent);
-                printl("("+(ent == ::gamemode_vip.vip)+"|"+(Players.FindIsBot(ent))+"|"+::gamemode_vip.vipCanTransfer+")");
+                log(""+user+" pressed use on "+ent);
+                log("("+(ent == ::gamemode_vip.vip)+"|"+(Players.FindIsBot(ent))+"|"+::gamemode_vip.vipCanTransfer+")");
                 if (ent == ::gamemode_vip.vip && Players.FindIsBot(ent) == true && ::gamemode_vip.vipCanTransfer == true) {
                     ::gamemode_vip.TransferVIP(user);
                     
@@ -847,18 +847,18 @@ if (!("gamemode_vip" in getroottable())) {
     });
     
     ::AddEventListener("hostage_follows", function(data) {
-       printl("[VIP] SOMEONE TOOK THE HOSTAGE");
-       printl("[VIP] SOMEONE TOOK THE HOSTAGE");
-       printl("[VIP] SOMEONE TOOK THE HOSTAGE");
+       log("[VIP] SOMEONE TOOK THE HOSTAGE");
+       log("[VIP] SOMEONE TOOK THE HOSTAGE");
+       log("[VIP] SOMEONE TOOK THE HOSTAGE");
 
         ::gamemode_vip.OnVIPPickedUp(data);
 
     });
 
     ::AddEventListener("hostage_stops_following", function(data) {
-       printl("[VIP] HOSTAGE FELL!!!");
-       printl("[VIP] HOSTAGE FELL!!!");
-       printl("[VIP] HOSTAGE FELL!!!");
+       log("[VIP] HOSTAGE FELL!!!");
+       log("[VIP] HOSTAGE FELL!!!");
+       log("[VIP] HOSTAGE FELL!!!");
 
        //local vipCarrier = Players.FindByUserid(data.userid);
         //if (vipCarrier != null) {
@@ -876,7 +876,7 @@ if (!("gamemode_vip" in getroottable())) {
         local botguy = ::Players.FindByUserid(data.botid);
         if (botguy == ::gamemode_vip.vip){
             ::gamemode_vip.SubstituteVIP(player);
-            printl("[VIP] Human took over bot VIP");
+            log("[VIP] Human took over bot VIP");
         }
     });
     
@@ -888,6 +888,6 @@ if (!("gamemode_vip" in getroottable())) {
         local playerUserID = data.userid;
         local playerName = data.name;
         //local playerOldName = data.oldname;
-        printl("[VIP] UserID "+playerUserID+"s nickname is: "+playerName);
+        log("[VIP] UserID "+playerUserID+"s nickname is: "+playerName);
     });
 }

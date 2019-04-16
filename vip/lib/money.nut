@@ -9,11 +9,12 @@
 
 DoIncludeScript("vip/lib/chat.nut", null);
 DoIncludeScript("vip/lib/players.nut", null);
+DoIncludeScript("vip/lib/debug.nut", null);
 
 if (!("_LOADED_MODULE_MONEY" in getroottable())) {
     ::_LOADED_MODULE_MONEY <- true;
     ::GiveMoney <- function(amount, player, delay=0.0) {
-        printl("[Money] Giving "+amount+" to "+player);
+        log("[Money] Giving "+amount+" to "+player);
 
         local eMoney = Entities.CreateByClassname("game_money");
         eMoney.__KeyValueFromString("AwardText", "" /* msg does not work currently :( */);
@@ -34,7 +35,7 @@ if (!("_LOADED_MODULE_MONEY" in getroottable())) {
     }
 
     ::GiveMoneyCT <- function(amount, msg) {
-        printl("[Money] Giving "+amount+" to CTs");
+        log("[Money] Giving "+amount+" to CTs");
         local ent = Entities.First();
         while (ent != null) {
             if (ent.GetClassname() == "player") {
@@ -49,7 +50,7 @@ if (!("_LOADED_MODULE_MONEY" in getroottable())) {
         ::ChatMessageCT(" "+dollarAmount + ::COLORS.white + ": "+msg);
     }
     ::GiveMoneyT <- function(amount, msg, delay=0.0) {
-        printl("[Money] Giving "+amount+" to Ts");
+        log("[Money] Giving "+amount+" to Ts");
         local ent = Entities.First();
         while (ent != null) {
             if (ent.GetClassname() == "player") {
