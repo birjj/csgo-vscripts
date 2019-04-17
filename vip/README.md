@@ -28,7 +28,7 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
 
     _This is caused by the delay between server and client. If client switches to another weapon before it receives the `drop` command from the server, then said weapon will be dropped instead. Fix would be to send a `slot1` (or whatever slot the illegal weapon is in) before sending the `drop`._
 
-- **Fix economy**
+~~- **Fix economy**~~
 
     _Add propper economy balance_
 
@@ -41,7 +41,7 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
     _This is noticeable by people outside the helicopter who are looking inside._
     _Consider: Only ResetingVIP on very very round end OR at the begining of every round before anything else._
     
-- **Gamemode shouldn't work until warmup is over**
+~~- **Gamemode shouldn't work until warmup is over**~~
 
     _Can be solved with event_listener for warmup detection_
 
@@ -99,11 +99,21 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
 
     _How to replicate: Be VIP, buy m4, hold pistol. Drop pistol and m4 automaticly comes out and you can use it, as long as you don't swap back to knife or pistol._
 
-- **When using multiple Rescue Zone the VIP filter seems to be ignored**
+~~- **When using multiple Rescue Zone the VIP filter seems to be ignored**~~
 
     _Probably due to prefixing, need to make sure we consider prefix when we filter VIP somehow._
     
     
-- **If someone tries to rescue VIP hostage but time runs out during the action they get stuck**
+~~- **If someone tries to rescue VIP hostage but time runs out during the action they get stuck**~~
 
     _Should issue "Command" "-use" to unstuck right before they finish action._
+    
+    
+- **If player VIP dies and takes control of a bot, he still can't use primary as he is still recognized as VIP.**
+
+    _Need to ensure that when VIP dies and takes control of bot that he is no longer VIP, but make sure that his name is saved to show later on on round end._
+    
+    
+- **If VIP dies on displacement area, he may be burried on the ground sometimes.**
+
+    _INVESTIGATING THIS._
