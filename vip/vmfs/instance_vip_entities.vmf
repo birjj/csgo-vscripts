@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "8075"
-	"mapversion" "52"
+	"mapversion" "66"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -15,17 +15,109 @@ viewsettings
 	"bShowGrid" "1"
 	"bShowLogicalGrid" "0"
 	"nGridSpacing" "8"
-	"bShow3DGrid" "0"
+	"bShow3DGrid" "1"
 }
 world
 {
 	"id" "1"
-	"mapversion" "52"
+	"mapversion" "66"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
 	"maxpropscreenwidth" "-1"
 	"skyname" "sky_dust"
+}
+entity
+{
+	"id" "747"
+	"classname" "filter_activator_name"
+	"filtername" "vip_vip"
+	"Negated" "1"
+	"targetname" "@vip_filter_notvip"
+	"origin" "-40 8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 9000]"
+	}
+}
+entity
+{
+	"id" "749"
+	"classname" "filter_activator_name"
+	"filtername" "vip_vip"
+	"Negated" "Allow entities that match criteria"
+	"targetname" "@vip_filter_onlyvip"
+	"origin" "-40 -8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 -11268]"
+	}
+}
+entity
+{
+	"id" "882"
+	"classname" "filter_activator_team"
+	"filterteam" "2"
+	"Negated" "Allow entities that match criteria"
+	"targetname" "@vip_filter_onlyts"
+	"origin" "-40 -24 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 6000]"
+	}
+}
+entity
+{
+	"id" "908"
+	"classname" "logic_eventlistener"
+	"EventName" "player_connect_full"
+	"FetchEventData" "1"
+	"IsEnabled" "1"
+	"targetname" "player_connect_full_listener"
+	"TeamNum" "-1"
+	connections
+	{
+		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_CONNECT_FULL)0-1"
+	}
+	"origin" "256 -8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 1500]"
+	}
+}
+entity
+{
+	"id" "918"
+	"classname" "logic_eventlistener"
+	"EventName" "player_connect_client"
+	"FetchEventData" "1"
+	"IsEnabled" "1"
+	"targetname" "player_connect_client_listener"
+	"TeamNum" "-1"
+	connections
+	{
+		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_CONNECT_CLIENT)0-1"
+	}
+	"origin" "256 8 8"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 1500]"
+	}
 }
 entity
 {
@@ -129,26 +221,6 @@ entity
 		"visgroupshown" "1"
 		"visgroupautoshown" "1"
 		"logicalpos" "[0 500]"
-	}
-}
-entity
-{
-	"id" "510"
-	"classname" "ambient_generic"
-	"health" "10"
-	"message" "player/vo/seal/commanderdown01.wav"
-	"pitch" "100"
-	"pitchstart" "100"
-	"radius" "1250"
-	"spawnflags" "49"
-	"targetname" "vip_down_snd"
-	"origin" "-24 24 8"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 1500]"
 	}
 }
 entity
@@ -644,7 +716,7 @@ entity
 	"id" "22"
 	"classname" "ambient_generic"
 	"health" "10"
-	"message" "vip.wav"
+	"message" "vip/vip.wav"
 	"pitch" "100"
 	"pitchstart" "100"
 	"radius" "1024"
@@ -657,38 +729,6 @@ entity
 		"visgroupshown" "1"
 		"visgroupautoshown" "1"
 		"logicalpos" "[0 5500]"
-	}
-}
-entity
-{
-	"id" "58"
-	"classname" "filter_activator_name"
-	"filtername" "vip_vip"
-	"Negated" "Allow entities that match criteria"
-	"targetname" "vip_filter_onlyvip"
-	"origin" "-40 -8 8"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 -11268]"
-	}
-}
-entity
-{
-	"id" "60"
-	"classname" "filter_activator_name"
-	"filtername" "vip_vip"
-	"Negated" "1"
-	"targetname" "vip_filter_notvip"
-	"origin" "-40 8 8"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 9000]"
 	}
 }
 cameras
