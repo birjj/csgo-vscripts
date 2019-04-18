@@ -20,6 +20,8 @@
 ::PLAYER_USE <- "player_use";
 ::PLAYER_DEATH <- "player_death";
 ::PLAYER_CONNECT <- "player_connect";
+::PLAYER_CONNECT_FULL <- "player_connect_full";
+::PLAYER_CONNECT_CLIENT <- "player_connect_client";
 ::PLAYER_DISCONNECT <- "player_disconnect";
 ::PLAYER_CHANGENAME <- "player_changename";
 ::PLAYER_TEAM <- "player_team";

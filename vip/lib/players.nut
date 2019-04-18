@@ -125,7 +125,7 @@ class PlayerManager {
         local outp = [];
         local ent = Entities.First();
         while (ent != null) {
-            if (filter == null || filter(ent)) {
+            if (ent.GetClassname() == "player" && (filter == null || filter(ent))) {
                 outp.push(ent);
             }
             ent = Entities.Next(ent);
@@ -216,6 +216,7 @@ if (!("Players" in getroottable())) {
         ::_players_name_updater(data.userid, data.newname);
     });
     ::AddEventListener("player_team", function(data) {
+        //printtable(data, "", printl);
         if ("isbot" in data) {
             ::_players_bot_updater(data.userid, data.isbot);
         }

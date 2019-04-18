@@ -13,6 +13,7 @@ if (!("_LOADED_MODULE_UI" in getroottable())) {
         local hudhint = Entities.CreateByClassname("env_hudhint");
         hudhint.__KeyValueFromString("message", "<font "+style+">"+msg+"</font>");
         EntFireByHandle(hudhint, "ShowHudHint", "", delay, player, null);
+        EntFireByHandle(hudhint, "Kill", "", 0.5, null, null);
     }
 
     ::ShowMessageSome <- function(msg, filter, style="") {

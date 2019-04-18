@@ -20,6 +20,7 @@ if (!("_LOADED_MODULE_MONEY" in getroottable())) {
         eMoney.__KeyValueFromString("AwardText", "" /* msg does not work currently :( */);
         eMoney.__KeyValueFromInt("Money", amount);
         EntFireByHandle(eMoney, "AddMoneyPlayer", "", delay, player, player);
+        EntFireByHandle(eMoney, "Kill","", 0.5,null,null);
     }
 
     ::GiveMoneySome <- function(msg, filter, delay=0.0) {
