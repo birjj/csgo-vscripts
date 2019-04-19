@@ -117,3 +117,7 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
 - **If VIP dies on displacement area, he may be burried on the ground sometimes.**
 
     _INVESTIGATING THIS._
+    
+- **When a player swaps from T to CT, and happens to replace the bot that was suposedly VIP some shit happens.**
+
+    _The replaced bot still spawns for the first frame aparently, and if he happens to have been select to be VIP, the player spawns, the VIP is dead in that same position inside the hostage entity._
