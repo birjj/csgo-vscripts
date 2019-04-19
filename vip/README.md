@@ -81,7 +81,7 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
     
         - Only ever spawn an hostage entity if the VIP dies to a Player (aka not World), this could prevent intentional suicide transfering of VIP status too.
     
-- **When the VIP dies to a multikill (f.e. AWP shot) some issues occur.**
+~~- **When the VIP dies to a multikill (f.e. AWP shot) some issues occur.**~~
 
     _Sometimes an Hostage VIP won't spawn, or 2 might spawn depending on who the shot hits first._
     
@@ -109,7 +109,7 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
     _Should issue "Command" "-use" to unstuck right before they finish action._
     
     
-- **If player VIP dies and takes control of a bot, he still can't use primary as he is still recognized as VIP.**
+~~- **If player VIP dies and takes control of a bot, he still can't use primary as he is still recognized as VIP.**~~
 
     _Need to ensure that when VIP dies and takes control of bot that he is no longer VIP, but make sure that his name is saved to show later on on round end._
     
