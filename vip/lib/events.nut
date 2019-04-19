@@ -10,6 +10,11 @@
 // It should also have the following output:
 //   - OnEventFired name_of_your_logic_script RunScriptCode ::TriggerEvent(THE_EVENT_YOU_WANT_TO_LISTEN_TO)
 //
+// SPECIAL CASE: If an event is triggered twice in the same frame, the data will be that of the last trigger
+//               Notably this happens on multikills (killing two players with one bullet) and player_death event.
+//               For that case, create a trigger_brush in your map with the name "game_playerdie"
+//               This will trigger the event "game_playerdie" with the victim ent as the only parameter
+//
 // Exposes:
 //   ::AddEventListener("event-name", function(){})
 //   ::RemoveEventListener("event-name", function(){})
@@ -73,6 +78,18 @@ if (!("_eventsScope" in getroottable())) {
         }
     }
 
-
     log("[Events] Initialized");
+}
+
+// bind game_playerdie (see special case)
+local ent = null;
+while ((ent = Entities.FindByName(ent, "game_playerdie")) != null) {
+    log("[Events] Found game_playerdie "+ent+", binding");
+    if (ent.ValidateScriptScope()) {
+        local scope = ent.GetScriptScope();
+        scope.OnPlayerDie <- function() {
+            ::TriggerEvent("game_playerdie", activator);
+        };
+        ent.ConnectOutput("OnUse", "OnPlayerDie");
+    }
 }

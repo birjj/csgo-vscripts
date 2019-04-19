@@ -721,9 +721,8 @@ class GameModeVIP {
         }
     }
 
-    function OnVIPDroppedByCarrier(data){
-        local killedUnit = ::Players.FindByUserid(data.userid);
-        if (killedUnit != null && killedUnit == vipCarrier){
+    function OnVIPDroppedByCarrier(carrier){
+        if (carrier != null && carrier == vipCarrier){
             log("[VIP] VIP WAS DROPPED, GAME OVER.");
             log("[VIP] VIP WAS DROPPED, GAME OVER.");
             log("[VIP] VIP WAS DROPPED, GAME OVER.");
@@ -744,7 +743,7 @@ class GameModeVIP {
     }
 
     // called when the VIP is RIP
-    function OnVIPDeath(data) {
+    function OnVIPDeath(data=null) {
         log("[VIP] VIP dieded :(");
 
         // if it is warmup, pick a random CT player to be the new VIP
@@ -887,23 +886,25 @@ if (!("gamemode_vip" in getroottable())) {
         }
     });
 
-    ::AddEventListener("player_death", function(data) {
+    ::AddEventListener("game_playerdie", function(victim) { // use game_playerdie to check if VIP died - see events.nut for why
+        if (ScriptIsWarmupPeriod()) { return; }
+
+        if (victim != null && victim == ::gamemode_vip.vip) {
+            ::gamemode_vip.OnVIPDeath();
+        }
+        if (victim != null && victim == ::gamemode_vip.vipCarrier) {
+            ::gamemode_vip.OnVIPDroppedByCarrier(victim);
+        }
+    });
+    ::AddEventListener("player_death", function(data) { // use player_death for giving money for killing the VIP, because we can't get attacker in game_playerdie
        if (ScriptIsWarmupPeriod()) { return; }
-       printl("/// PLAYER_DEATH ///");
-       printtable(data, "", printl);
 
-
-        
         local player = ::Players.FindByUserid(data.userid);
         if (player != null && player == ::gamemode_vip.vip) {
             local attacker = ::Players.FindByUserid(data.attacker);
-            ::gamemode_vip.OnVIPDeath(data);
             if (attacker != null) {
                 ::GiveMoney(ECONOMY.VIP_KILLER, attacker);
             }
-        }
-        if (player != null && player == ::gamemode_vip.vipCarrier){
-            ::gamemode_vip.OnVIPDroppedByCarrier(data);
         }
     });
     ::AddEventListener("player_spawn", function(data) {
@@ -915,7 +916,7 @@ if (!("gamemode_vip" in getroottable())) {
         }
     });
     ::AddEventListener("player_hurt", function(data) {
-       if (ScriptIsWarmupPeriod()) { return; }
+        if (ScriptIsWarmupPeriod()) { return; }
         
         local player = ::Players.FindByUserid(data.userid);
         if (player != null && player == ::gamemode_vip.vip) {
