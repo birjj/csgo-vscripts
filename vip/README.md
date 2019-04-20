@@ -36,7 +36,7 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
 
     _That or only when BotTakeOver occurs, the player taking over doesn't get money, needs to be verified_
 
-- **When VIP is Rescued, ResetVIP() resets his skin to default**
+~~- **When VIP is Rescued, ResetVIP() resets his skin to default**~~
 
     _This is noticeable by people outside the helicopter who are looking inside._
     _Consider: Only ResetingVIP on very very round end OR at the begining of every round before anything else._
