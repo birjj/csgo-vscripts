@@ -56,7 +56,7 @@ function Precache(){
     "smokegrenade"
 ];
 ::VIP_MAXHEALTH <- 150;
-::VIP_DEATHTIMER <- 15;
+::VIP_DEATHTIMER <- 30;
 ::VIP_BOTGRACETIME <- 10;
 ::ECONOMY <- {
     ELIMINATION_CT = 2000, // reward for CTs when they kill all Ts
@@ -88,6 +88,7 @@ class GameModeVIP {
     sndCanPlayAny = true;
     sndCanPlayRoundEnd = true;
     sndCanPlayRoundEndFlatline = false;
+    sndLastPlayed = null;
 
     vipIsGraceTime = false; // used to start counting grace time
     vipSetGraceTime = true; // used to save at which time grace time should end
@@ -191,7 +192,7 @@ class GameModeVIP {
             GraceTimeThink();
         }
 
-        if (vipDowned) {
+        if (vipDowned && isLive) {
             BleedThink();
         }
     }
@@ -208,7 +209,7 @@ class GameModeVIP {
         EntFireByHandle(vip_text_round_end, "Display", "",0.0,null,null); // displays game_text
     }
     
-    function PlaySound(soundName) {
+    function PlayRandomSound(soundName) {
         local soundName = "vip_snd_"+soundName+"*";
         local soundEnts = [];
         local ent = null;
@@ -220,10 +221,28 @@ class GameModeVIP {
         log("[VIP] Playing sound '"+soundName+"' from "+soundEnts[randomIndex]);
         EntFireByHandle(soundEnts[randomIndex], "PlaySound", "", 0.0, null, null);
     }
+    
+    function PlaySound(soundName) {
+        local soundName = "vip_snd_"+soundName;
+        local ent = Entities.FindByName(null, soundName);
+        if (ent != null) {
+            // stop previous sound
+            EntFireByHandle(sndLastPlayed, "StopSound", "", 0.0, null, null);
+            // play new sound
+            EntFireByHandle(ent, "PlaySound", "", 0.0, null, null);
+            sndLastPlayed = ent;
+        }
+    }
+    function StopPreviousSound() { 
+        // stop previous sound
+        EntFireByHandle(sndLastPlayed, "StopSound", "", 0.0, null, null);
+    }
+
+
 
     // handles playing round end sounds
     function SoundThink() {
-        if (!sndCanPlayAny) { return; }
+        if (!sndCanPlayAny || !isLive) { return; }
 
         // play round end sound 10 seconds before it ends
         if (Time() >= (roundEndTime-10.0) && sndCanPlayRoundEnd == true) {
@@ -444,10 +463,12 @@ class GameModeVIP {
         EntFireByHandle(eClientCommand, "Command", "slot2", 0.0, vip, null);
         
         // If original VIP had less HP than new VIP - replace with original VIP HP
-        local healthSubVIP = vip.GetHealth();
+        /*local healthSubVIP = vip.GetHealth();
         if (healthSubVIP > lastHealth){ 
             vip.SetHealth(lastHealth);
-        }
+        }*/
+
+        vip.SetHealth(lastHealth);
         
         ::ShowMessage("You're the VIP. Don't fuck it up now", vip, "color='#F00'");
     }
@@ -572,6 +593,7 @@ class GameModeVIP {
     
     function OnVIPPickedUp(data){
         log("[VIP] VIP has been picked up!");
+        StopPreviousSound();
 
         // Stop VIP Death sound if it's being played
         //StopSound("vip/fx_roundend_12seconds_flatline.wav");
@@ -592,7 +614,8 @@ class GameModeVIP {
         vipDowned = false;
         vipCanBeDowned = false;
         vipCarrier = ::Players.FindByUserid(data.userid);
-        EntFireByHandle(vipCarrier, "AddOutput", "targetname vip_vip", 0.0, null, null); 
+        EntFireByHandle(vipCarrier, "AddOutput", "targetname vip_vip", 0.0, null, null);
+
     }
     
     
