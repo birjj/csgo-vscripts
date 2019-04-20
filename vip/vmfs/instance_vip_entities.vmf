@@ -2,7 +2,7 @@ versioninfo
 {
 	"editorversion" "400"
 	"editorbuild" "8075"
-	"mapversion" "70"
+	"mapversion" "94"
 	"formatversion" "100"
 	"prefab" "0"
 }
@@ -20,12 +20,292 @@ viewsettings
 world
 {
 	"id" "1"
-	"mapversion" "70"
+	"mapversion" "94"
 	"classname" "worldspawn"
 	"detailmaterial" "detail/detailsprites"
 	"detailvbsp" "detail.vbsp"
 	"maxpropscreenwidth" "-1"
 	"skyname" "sky_dust"
+}
+entity
+{
+	"id" "1988"
+	"classname" "ambient_generic"
+	"health" "10"
+	"message" "vip/fx_roundend_12seconds_flatline.wav"
+	"pitch" "100"
+	"pitchstart" "100"
+	"radius" "1024"
+	"spawnflags" "17"
+	"targetname" "vip_snd_fx_bleedout"
+	"origin" "120 -8 8.21867"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 5500]"
+	}
+}
+entity
+{
+	"id" "1991"
+	"classname" "ambient_generic"
+	"health" "10"
+	"message" "vip/fx_vipdown.wav"
+	"pitch" "100"
+	"pitchstart" "100"
+	"radius" "1024"
+	"spawnflags" "17"
+	"targetname" "vip_snd_fx_downed"
+	"origin" "120 -24 8.21867"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 5500]"
+	}
+}
+entity
+{
+	"id" "1705"
+	"classname" "ambient_generic"
+	"health" "10"
+	"message" "vip/fx_vipdown.wav"
+	"pitch" "100"
+	"pitchstart" "100"
+	"radius" "1024"
+	"spawnflags" "16"
+	"targetname" "vip_snd_protect_2"
+	"origin" "-120 -8 8.21867"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 5500]"
+	}
+}
+entity
+{
+	"id" "1708"
+	"classname" "ambient_generic"
+	"health" "10"
+	"message" "vip/fx_roundend_12seconds.wav"
+	"pitch" "100"
+	"pitchstart" "100"
+	"radius" "1024"
+	"spawnflags" "16"
+	"targetname" "vip_snd_protect_3"
+	"origin" "-120 -24 8.21867"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 5500]"
+	}
+}
+entity
+{
+	"id" "1796"
+	"classname" "ambient_generic"
+	"health" "10"
+	"message" "vip/fx_vipdown.wav"
+	"pitch" "100"
+	"pitchstart" "100"
+	"radius" "1024"
+	"spawnflags" "17"
+	"targetname" "vip_snd_downed_1"
+	"origin" "-72 8 8.21867"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 5500]"
+	}
+}
+entity
+{
+	"id" "1805"
+	"classname" "ambient_generic"
+	"health" "10"
+	"message" "vip/vip.wav"
+	"pitch" "100"
+	"pitchstart" "100"
+	"radius" "1024"
+	"spawnflags" "17"
+	"targetname" "vip_snd_killed_1"
+	"origin" "-24 8 8.21867"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 5500]"
+	}
+}
+entity
+{
+	"id" "1817"
+	"classname" "ambient_generic"
+	"health" "10"
+	"message" "vip/vip.wav"
+	"pitch" "100"
+	"pitchstart" "100"
+	"radius" "1024"
+	"spawnflags" "17"
+	"targetname" "vip_snd_escaped_1"
+	"origin" "24 8 8.21867"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 5500]"
+	}
+}
+entity
+{
+	"id" "1826"
+	"classname" "ambient_generic"
+	"health" "10"
+	"message" "vip/vip.wav"
+	"pitch" "100"
+	"pitchstart" "100"
+	"radius" "1024"
+	"spawnflags" "17"
+	"targetname" "vip_snd_late_1"
+	"origin" "72 8 8.21867"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 5500]"
+	}
+}
+entity
+{
+	"id" "1835"
+	"classname" "ambient_generic"
+	"health" "10"
+	"message" "vip/fx_roundend_12seconds.wav"
+	"pitch" "100"
+	"pitchstart" "100"
+	"radius" "1024"
+	"spawnflags" "17"
+	"targetname" "vip_snd_fx_timeout"
+	"origin" "120 8 8.21867"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 5500]"
+	}
+}
+entity
+{
+	"id" "1904"
+	"classname" "ambient_generic"
+	"health" "10"
+	"message" "vip/vip.wav"
+	"pitch" "100"
+	"pitchstart" "100"
+	"radius" "1024"
+	"spawnflags" "17"
+	"targetname" "vip_snd_downed_2"
+	"origin" "-72 -8 8.21867"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 5500]"
+	}
+}
+entity
+{
+	"id" "1907"
+	"classname" "ambient_generic"
+	"health" "10"
+	"message" "vip/fx_roundend_12seconds_flatline.wav"
+	"pitch" "100"
+	"pitchstart" "100"
+	"radius" "1024"
+	"spawnflags" "17"
+	"targetname" "vip_snd_downed_3"
+	"origin" "-72 -24 8.21867"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 5500]"
+	}
+}
+entity
+{
+	"id" "994"
+	"classname" "point_worldtext"
+	"angles" "75 90 0"
+	"color" "255 255 255"
+	"message" "Sound Entities"
+	"rendermode" "10"
+	"spawnflags" "1"
+	"targetname" "text"
+	"textsize" "32"
+	"origin" "-128 32 16"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 0]"
+	}
+}
+entity
+{
+	"id" "1022"
+	"classname" "point_worldtext"
+	"angles" "60 90 0"
+	"color" "255 255 255"
+	"message" "Event Listeners"
+	"rendermode" "10"
+	"spawnflags" "1"
+	"targetname" "text"
+	"textsize" "32"
+	"origin" "-128 224 16"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 0]"
+	}
+}
+entity
+{
+	"id" "1032"
+	"classname" "point_worldtext"
+	"angles" "75 90 0"
+	"color" "255 255 255"
+	"message" "Logic Entities"
+	"rendermode" "10"
+	"spawnflags" "1"
+	"targetname" "text"
+	"textsize" "32"
+	"origin" "-128 128 16"
+	editor
+	{
+		"color" "220 30 220"
+		"visgroupshown" "1"
+		"visgroupautoshown" "1"
+		"logicalpos" "[0 0]"
+	}
 }
 entity
 {
@@ -39,9 +319,9 @@ entity
 		side
 		{
 			"id" "1"
-			"plane" "(64 0 16) (80 0 16) (80 -16 16)"
+			"plane" "(88 192 16) (88 208 16) (104 208 16)"
 			"material" "TOOLS/TOOLSTRIGGER"
-			"uaxis" "[1 0 0 0] 0.25"
+			"uaxis" "[1 0 0 -32] 0.25"
 			"vaxis" "[0 -1 0 0] 0.25"
 			"rotation" "0"
 			"lightmapscale" "16"
@@ -50,9 +330,9 @@ entity
 		side
 		{
 			"id" "2"
-			"plane" "(64 -16 0) (80 -16 0) (80 0 0)"
+			"plane" "(88 208 0) (88 192 0) (104 192 0)"
 			"material" "TOOLS/TOOLSTRIGGER"
-			"uaxis" "[1 0 0 0] 0.25"
+			"uaxis" "[1 0 0 -32] 0.25"
 			"vaxis" "[0 -1 0 0] 0.25"
 			"rotation" "0"
 			"lightmapscale" "16"
@@ -61,7 +341,7 @@ entity
 		side
 		{
 			"id" "3"
-			"plane" "(64 0 16) (64 -16 16) (64 -16 0)"
+			"plane" "(88 192 0) (88 208 0) (88 208 16)"
 			"material" "TOOLS/TOOLSTRIGGER"
 			"uaxis" "[0 1 0 0] 0.25"
 			"vaxis" "[0 0 -1 0] 0.25"
@@ -72,7 +352,7 @@ entity
 		side
 		{
 			"id" "4"
-			"plane" "(80 0 0) (80 -16 0) (80 -16 16)"
+			"plane" "(104 208 0) (104 192 0) (104 192 16)"
 			"material" "TOOLS/TOOLSTRIGGER"
 			"uaxis" "[0 1 0 0] 0.25"
 			"vaxis" "[0 0 -1 0] 0.25"
@@ -83,9 +363,9 @@ entity
 		side
 		{
 			"id" "5"
-			"plane" "(80 0 16) (64 0 16) (64 0 0)"
+			"plane" "(88 208 0) (104 208 0) (104 208 16)"
 			"material" "TOOLS/TOOLSTRIGGER"
-			"uaxis" "[1 0 0 0] 0.25"
+			"uaxis" "[1 0 0 -32] 0.25"
 			"vaxis" "[0 0 -1 0] 0.25"
 			"rotation" "0"
 			"lightmapscale" "16"
@@ -94,9 +374,9 @@ entity
 		side
 		{
 			"id" "6"
-			"plane" "(80 -16 0) (64 -16 0) (64 -16 16)"
+			"plane" "(104 192 0) (88 192 0) (88 192 16)"
 			"material" "TOOLS/TOOLSTRIGGER"
-			"uaxis" "[1 0 0 0] 0.25"
+			"uaxis" "[1 0 0 -32] 0.25"
 			"vaxis" "[0 0 -1 0] 0.25"
 			"rotation" "0"
 			"lightmapscale" "16"
@@ -104,7 +384,7 @@ entity
 		}
 		editor
 		{
-			"color" "220 30 220"
+			"color" "220 220 220"
 			"visgroupshown" "1"
 			"visgroupautoshown" "1"
 		}
@@ -124,7 +404,7 @@ entity
 	"filtername" "vip_vip"
 	"Negated" "1"
 	"targetname" "@vip_filter_notvip"
-	"origin" "-40 8 8"
+	"origin" "-48 80 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -140,7 +420,7 @@ entity
 	"filtername" "vip_vip"
 	"Negated" "Allow entities that match criteria"
 	"targetname" "@vip_filter_onlyvip"
-	"origin" "-40 -8 8"
+	"origin" "-24 80 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -156,7 +436,7 @@ entity
 	"filterteam" "2"
 	"Negated" "Allow entities that match criteria"
 	"targetname" "@vip_filter_onlyts"
-	"origin" "-40 -24 8"
+	"origin" "-96 80 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -178,7 +458,7 @@ entity
 	{
 		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_CONNECT_FULL)0-1"
 	}
-	"origin" "256 -8 8"
+	"origin" "72 176 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -200,7 +480,7 @@ entity
 	{
 		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_CONNECT_CLIENT)0-1"
 	}
-	"origin" "256 8 8"
+	"origin" "72 200 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -222,7 +502,7 @@ entity
 	{
 		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_CONNECT)0-1"
 	}
-	"origin" "200 8 8"
+	"origin" "48 176 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -244,7 +524,7 @@ entity
 	{
 		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_CHANGENAME)0-1"
 	}
-	"origin" "184 -8 8"
+	"origin" "24 176 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -266,7 +546,7 @@ entity
 	{
 		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_TEAM)0-1"
 	}
-	"origin" "184 8 8"
+	"origin" "48 200 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -288,7 +568,7 @@ entity
 	{
 		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(HOSTAGE_STOPS_FOLLOWING)0-1"
 	}
-	"origin" "96 -8 8"
+	"origin" "0 176 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -304,7 +584,7 @@ entity
 	"damagetype" "512"
 	"Negated" "Allow entities that match criteria"
 	"targetname" "vip_filter_damage"
-	"origin" "-56 8 8"
+	"origin" "-120 80 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -326,7 +606,7 @@ entity
 	{
 		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(HOSTAGE_FOLLOWS)0-1"
 	}
-	"origin" "96 8 8"
+	"origin" "24 200 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -342,7 +622,7 @@ entity
 	"damagetype" "2"
 	"Negated" "1"
 	"targetname" "vip_hostage_damage_filter"
-	"origin" "120 -8 8"
+	"origin" "-72 80 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -358,12 +638,13 @@ entity
 	"angles" "0 270 0"
 	"HostageSpawnRandomFactor" "1"
 	"targetname" "vip_hostage"
-	"origin" "160 0 0"
+	"origin" "112 96 0"
 	editor
 	{
 		"color" "220 30 220"
 		"visgroupshown" "1"
 		"visgroupautoshown" "1"
+		"comments" "This is Alfred. Alfred is a nice guy."
 		"logicalpos" "[0 500]"
 	}
 }
@@ -377,7 +658,7 @@ entity
 	"PostSpawnDirectionVariance" "0.15"
 	"spawnflags" "0"
 	"targetname" "vip_entity_maker"
-	"origin" "136 8 8"
+	"origin" "72 104 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -393,7 +674,7 @@ entity
 	"spawnflags" "2"
 	"targetname" "vip_template"
 	"Template01" "vip_hostage"
-	"origin" "136 -8 8"
+	"origin" "72 80 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -419,7 +700,7 @@ entity
 	"targetname" "vip_text_notification"
 	"x" "-1"
 	"y" "0.4"
-	"origin" "40 24 8"
+	"origin" "-24 104 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -445,7 +726,7 @@ entity
 	"targetname" "vip_text_round_end"
 	"x" "-1"
 	"y" "0.3"
-	"origin" "24 24 8"
+	"origin" "-48 104 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -470,7 +751,7 @@ entity
 	"targetname" "vip_text_backup"
 	"x" "-1"
 	"y" "0.3"
-	"origin" "-8 24 8"
+	"origin" "-72 104 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -492,77 +773,13 @@ entity
 	{
 		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(ROUND_END)0-1"
 	}
-	"origin" "72 8 8"
+	"origin" "0 200 8"
 	editor
 	{
 		"color" "220 30 220"
 		"visgroupshown" "1"
 		"visgroupautoshown" "1"
 		"logicalpos" "[0 0]"
-	}
-}
-entity
-{
-	"id" "168"
-	"classname" "game_money"
-	"AwardText" "Award for escaping"
-	"Money" "2500"
-	"targetname" "vip_money_vip_escaped"
-	"origin" "32 -48 8"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 1500]"
-	}
-}
-entity
-{
-	"id" "170"
-	"classname" "game_money"
-	"AwardText" "Team award for escorting VIP"
-	"Money" "3500"
-	"targetname" "vip_team_ct_money_vip_escaped"
-	"origin" "56 -48 8"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 1500]"
-	}
-}
-entity
-{
-	"id" "174"
-	"classname" "game_money"
-	"AwardText" "Team award for assassinating the VIP"
-	"Money" "2000"
-	"targetname" "vip_team_t_money_vip_killed"
-	"origin" "-16 -48 8"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 1500]"
-	}
-}
-entity
-{
-	"id" "176"
-	"classname" "game_money"
-	"AwardText" "Award for assassinating VIP"
-	"Money" "2620"
-	"targetname" "vip_money_vip_killed"
-	"origin" "-40 -48 8"
-	editor
-	{
-		"color" "220 30 220"
-		"visgroupshown" "1"
-		"visgroupautoshown" "1"
-		"logicalpos" "[0 1500]"
 	}
 }
 entity
@@ -578,7 +795,7 @@ entity
 	{
 		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(INSPECT_WEAPON)0-1"
 	}
-	"origin" "56 8 8"
+	"origin" "-24 200 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -600,7 +817,7 @@ entity
 	{
 		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(BOT_TAKEOVER)0-1"
 	}
-	"origin" "56 -8 8"
+	"origin" "-24 176 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -622,7 +839,7 @@ entity
 	{
 		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_DISCONNECT)0-1"
 	}
-	"origin" "40 -8 8"
+	"origin" "-48 176 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -644,7 +861,7 @@ entity
 	{
 		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(ROUND_START)0-1"
 	}
-	"origin" "40 8 8"
+	"origin" "-48 200 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -666,7 +883,7 @@ entity
 	{
 		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_SPAWN)0-1"
 	}
-	"origin" "24 -8 8"
+	"origin" "-72 176 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -688,7 +905,7 @@ entity
 	{
 		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_HURT)0-1"
 	}
-	"origin" "24 8 8"
+	"origin" "-72 200 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -710,7 +927,7 @@ entity
 	{
 		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_USE)0-1"
 	}
-	"origin" "8 -8 8"
+	"origin" "-96 176 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -732,7 +949,7 @@ entity
 	{
 		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(PLAYER_DEATH)0-1"
 	}
-	"origin" "8 8 8"
+	"origin" "-96 200 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -754,7 +971,7 @@ entity
 	{
 		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(ITEM_EQUIP)0-1"
 	}
-	"origin" "-8 -8 8"
+	"origin" "-120 176 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -776,7 +993,7 @@ entity
 	{
 		"OnEventFired" "vip_scriptRunScriptCodeTriggerEvent(ROUND_FREEZE_END)0-1"
 	}
-	"origin" "-8 8 8"
+	"origin" "-120 200 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -792,7 +1009,7 @@ entity
 	"targetname" "vip_script"
 	"thinkfunction" "Think"
 	"vscripts" "vip/gamemode.nut"
-	"origin" "-24 -8 8"
+	"origin" "-120 104 8"
 	editor
 	{
 		"color" "220 30 220"
@@ -811,8 +1028,8 @@ entity
 	"pitchstart" "100"
 	"radius" "1024"
 	"spawnflags" "16"
-	"targetname" "vip_snd"
-	"origin" "-24 8 8.21867"
+	"targetname" "vip_snd_protect_1"
+	"origin" "-120 8 8.21867"
 	editor
 	{
 		"color" "220 30 220"
