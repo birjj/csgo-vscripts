@@ -1,4 +1,8 @@
-::printtable <- function(tbl, indent="", printfunc=::log) {
+::IsDebug <- function() {
+    return GetDeveloperLevel() > 0;
+}
+
+::PrintTable <- function(tbl, indent="", printfunc=::log) {
     if (tbl == null) {
         printfunc("null");
         return;
@@ -16,8 +20,8 @@
     printfunc(indent + "}");
 }
 
-::log <- function(msg) {
-    if (GetDeveloperLevel() > 0) {
+::Log <- function(msg) {
+    if (IsDebug()) {
         printl(msg);
     }
 }

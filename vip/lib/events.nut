@@ -48,7 +48,7 @@ if (!("_eventsScope" in getroottable())) {
     ::_eventsScope.listeners <- {};
 
     ::AddEventListener <- function(name, cb) {
-        log("[Events] Adding event listener for " + name);
+        Log("[Events] Adding event listener for " + name);
         if (!(name in ::_eventsScope.listeners)) {
             ::_eventsScope.listeners[name] <- [];
         }
@@ -63,7 +63,7 @@ if (!("_eventsScope" in getroottable())) {
         }
     };
     ::TriggerEvent <- function(name, data=null) {
-        log("[Events] Triggering event for " + name);
+        Log("[Events] Triggering event for " + name);
         local listener = Entities.FindByName(null, name+"_listener");
         local event_data = data;
         if (event_data == null && listener != null) {
@@ -78,13 +78,13 @@ if (!("_eventsScope" in getroottable())) {
         }
     }
 
-    log("[Events] Initialized");
+    Log("[Events] Initialized");
 }
 
 // bind game_playerdie (see special case)
 local ent = null;
 while ((ent = Entities.FindByName(ent, "game_playerdie")) != null) {
-    log("[Events] Found game_playerdie "+ent+", binding");
+    Log("[Events] Found game_playerdie "+ent+", binding");
     if (ent.ValidateScriptScope()) {
         local scope = ent.GetScriptScope();
         scope.OnPlayerDie <- function() {
