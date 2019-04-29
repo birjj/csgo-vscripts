@@ -10,6 +10,7 @@ DoIncludeScript("vip/lib/players.nut", null);
 DoIncludeScript("vip/lib/ui.nut", null);
 DoIncludeScript("vip/lib/money.nut", null);
 DoIncludeScript("vip/lib/chat.nut", null);
+DoIncludeScript("vip/lib/math.nut", null);
 
 function Think() {
     local root = getroottable();
@@ -106,6 +107,7 @@ class GameModeVIP {
     lastSeenPositionVIP = null; // used for taking over bots
     lastSeenAnglesVIP = null; // used for adjusting hostage rotation on spawn
     hasHostageJustBeenSpawned = false;
+    hostageSpawnOrigin = null;
 
     eGameRoundEnd = null;
     eServerCommand = null;
@@ -182,7 +184,7 @@ class GameModeVIP {
                 vipHostage.SetModel("models/hostage/vip_ground.mdl");
                 EntFireByHandle(vipHostage, "SetDamageFilter", "vip_filter_damage", 0.0, null, null);
                 vipHostage.SetAngles(lastSeenAnglesVIP.x, lastSeenAnglesVIP.y, lastSeenAnglesVIP.z);
-                vipHostage.SetOrigin(lastSeenPositionVIP);
+                vipHostage.SetOrigin(hostageSpawnOrigin);
 
                 hasHostageJustBeenSpawned = false;
             }
@@ -504,6 +506,34 @@ class GameModeVIP {
         }
         ent.SetModel("models/player/custom_player/legacy/ctm_heavy2.mdl");
     }
+
+    // finds the ground position relative to an origin, by tracing downwards from 4 corners + center and taking the highest one
+    // this makes it more likely that we can stand on a ledge get the appropriate ground position
+    function FindGroundPosition(origin, ignore=null) {
+        local down = Vector(0, 0, -1);
+        local offsets = [
+            Vector(0, 0, 0), // center
+            Vector(-16, -16, 0), // bottom left
+            Vector(16, -16, 0), // bottom right
+            Vector(-16, 16, 0), // top left
+            Vector(16, 16, 0), // top right
+        ];
+        if (IsDebug()) { DrawBox(origin, Vector(8, 8, 8), Vector(255, 0, 0), 15); }
+        local maxZ = null;
+        foreach (offset in offsets) {
+            local traced = TraceInDirection(origin + offset, down, ignore);
+            if (IsDebug()) {
+                DrawLine(origin, traced, Vector(0, 255, 0), 15);
+                DrawBox(traced, Vector(8, 8, 8), Vector(0, 255, 0), 15);
+            }
+            if (maxZ == null || traced.z > maxZ) {
+                maxZ = traced.z;
+            }
+        }
+        local output = Vector(origin.x, origin.y, maxZ);
+        if (IsDebug()) { DrawBox(output, Vector(8, 8, 8), Vector(0, 0, 255), 15); }
+        return output;
+    }
     
     // called when VIP is downed
     function OnVIPDowned() {
@@ -517,10 +547,12 @@ class GameModeVIP {
 
         PlaySound("fx_downed");
         
+        local groundPosition = FindGroundPosition(lastSeenPositionVIP, vip);
         local hMaker = Entities.FindByName(null, "vip_entity_maker");
-        hMaker.SetOrigin(Vector(lastSeenPositionVIP.x, lastSeenPositionVIP.y, lastSeenPositionVIP.z + 16.0));
+        hMaker.SetOrigin(groundPosition);
+        hostageSpawnOrigin = groundPosition;
         EntFireByHandle(hMaker, "ForceSpawn", "", 0.0, null, null);
-        DispatchParticleEffect("blood_pool", lastSeenPositionVIP, lastSeenAnglesVIP);
+        DispatchParticleEffect("blood_pool", groundPosition, lastSeenAnglesVIP);
         
         local vipRagdoll = Entities.FindByClassnameNearest("cs_ragdoll", lastSeenPositionVIP, 256.0);
         if (vipRagdoll != null) {

@@ -2,7 +2,13 @@
     return GetDeveloperLevel() > 0;
 }
 
-::PrintTable <- function(tbl, indent="", printfunc=::log) {
+::Log <- function(msg) {
+    if (IsDebug()) {
+        printl(msg);
+    }
+}
+
+::PrintTable <- function(tbl, indent="", printfunc=::Log) {
     if (tbl == null) {
         printfunc("null");
         return;
@@ -20,8 +26,27 @@
     printfunc(indent + "}");
 }
 
-::Log <- function(msg) {
-    if (IsDebug()) {
-        printl(msg);
-    }
+::DrawBox <- function(origin, size=Vector(16,16,16), color=Vector(255,0,0), duration=5) {
+    DebugDrawBox(
+        origin,
+        size * -0.5,
+        size * 0.5,
+        color.x,
+        color.y,
+        color.z,
+        0,
+        duration
+    );
+}
+
+::DrawLine <- function(start, end, color=Vector(255,0,0), duration=5) {
+    DebugDrawLine(
+        start,
+        end,
+        color.x,
+        color.y,
+        color.z,
+        true,
+        duration
+    );
 }
