@@ -2,10 +2,10 @@
 // == Money
 // Handles giving money to players
 // Exposes:
-//   ::GiveMoney(amount, player, delay=0.0)
-//   ::GiveMoneySome(amount, filter, delay=0.0)
-//   ::GiveMoneyCT(amount, msg, delay=0.0)
-//   ::GiveMoneyT(amount, msg, delay=0.0)
+//   ::GiveMoney(amount, player)
+//   ::GiveMoneySome(amount, filter)
+//   ::GiveMoneyCT(amount, msg)
+//   ::GiveMoneyT(amount, msg)
 
 DoIncludeScript("vip/lib/chat.nut", null);
 DoIncludeScript("vip/lib/players.nut", null);
@@ -13,17 +13,21 @@ DoIncludeScript("vip/lib/debug.nut", null);
 
 if (!("_LOADED_MODULE_MONEY" in getroottable())) {
     ::_LOADED_MODULE_MONEY <- true;
-    ::GiveMoney <- function(amount, player, delay=0.0) {
+    ::_money_fire <- function(amount, target, msg="", output="AddMoneyPlayer") {
+        local eMoney = Entities.CreateByClassname("game_money");
+        eMoney.__KeyValueFromString("AwardText", msg);
+        eMoney.__KeyValueFromInt("Money", amount);
+        EntFireByHandle(eMoney, output, "", 0.0, target, target);
+        EntFireByHandle(eMoney, "Kill", "", 0.5, null, null);
+    };
+
+    ::GiveMoney <- function(amount, player) {
         Log("[Money] Giving "+amount+" to "+player);
 
-        local eMoney = Entities.CreateByClassname("game_money");
-        eMoney.__KeyValueFromString("AwardText", "" /* msg does not work currently :( */);
-        eMoney.__KeyValueFromInt("Money", amount);
-        EntFireByHandle(eMoney, "AddMoneyPlayer", "", delay, player, player);
-        EntFireByHandle(eMoney, "Kill","", 0.5,null,null);
+        ::_money_fire(amount, player);
     }
 
-    ::GiveMoneySome <- function(msg, filter, delay=0.0) {
+    ::GiveMoneySome <- function(msg, filter) {
         local ent = Entities.First();
         while (ent != null) {
             if (ent.GetClassname() == "player") {
@@ -37,32 +41,10 @@ if (!("_LOADED_MODULE_MONEY" in getroottable())) {
 
     ::GiveMoneyCT <- function(amount, msg) {
         Log("[Money] Giving "+amount+" to CTs");
-        local ent = Entities.First();
-        while (ent != null) {
-            if (ent.GetClassname() == "player") {
-                if (ent.GetTeam() == TEAM_CT) {
-                    ::GiveMoney(amount, ent);
-                }
-            }
-            ent = Entities.Next(ent);
-        }
-
-        local dollarAmount = ::COLORS.lime_green + "+$" + amount;
-        ::ChatMessageCT(" "+dollarAmount + ::COLORS.white + ": "+msg);
+        ::_money_fire(amount, null, msg, "AddTeamMoneyCT");
     }
     ::GiveMoneyT <- function(amount, msg, delay=0.0) {
         Log("[Money] Giving "+amount+" to Ts");
-        local ent = Entities.First();
-        while (ent != null) {
-            if (ent.GetClassname() == "player") {
-                if (ent.GetTeam() == TEAM_T) {
-                    ::GiveMoney(amount, ent);
-                }
-            }
-            ent = Entities.Next(ent);
-        }
-        
-        local dollarAmount = ::COLORS.lime_green + "+$" + amount;
-        ::ChatMessageT(" "+dollarAmount + ::COLORS.white + ": "+msg);
+        ::_money_fire(amount, null, msg, "AddTeamMoneyTerrorist");
     }
 }
