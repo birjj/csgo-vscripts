@@ -32,7 +32,7 @@ Then insert another `func_instance` pointing to `vmfs/instance_vip_rescue.vmf`. 
 
     _Add propper economy balance_
 
-- **Dead people don't get Money rewards**
+- ~~**Dead people don't get Money rewards**~~
 
     _That or only when BotTakeOver occurs, the player taking over doesn't get money, needs to be verified_
 
