@@ -13,6 +13,8 @@ DoIncludeScript("autochess/cursors.nut", null);
     Vector(0, 0, 0)
 ];
 ::BOARD_SQUARE_SIZE <- 64;
+::BOARD_BENCH_OFFSET <- Vector(0, -128, 0);
+::BOARD_SHOP_OFFSET <- Vector(0, -256, 0);
 
 /**
  * Gets the board that is bound to a particular player entity
@@ -70,11 +72,18 @@ class Board {
 
     highlightedSquare = null;
     origin = Vector(0, 0, 0);
+    lowerLeft = Vector(0, 0, 0);
+    benchLowerLeft = Vector(0, 0, 0);
+    shopLowerLeft = Vector(0, 0, 0);
 
     constructor(player, orig) {
         this.ePlayer = player;
-        this.origin = orig;
         this.cursor = ::FindCursorOfPlayer(this.ePlayer);
+
+        this.origin = orig;
+        this.lowerLeft = this.origin - Vector(4 * BOARD_SQUARE_SIZE, 4 * BOARD_SQUARE_SIZE, 0);
+        this.benchLowerLeft = this.lowerLeft + BOARD_BENCH_OFFSET;
+        this.shopLowerLeft = this.lowerLeft + BOARD_SHOP_OFFSET;
     }
 
     function Think() {
@@ -89,6 +98,7 @@ class Board {
 
         // higlight the square the user is aiming at
         if (this.highlightedSquare != null) {
+            Log("[Board] Highlighting "+this.highlightedSquare);
             local position = this.GetPositionOfSquare(this.highlightedSquare);
             local size = Vector(BOARD_SQUARE_SIZE, BOARD_SQUARE_SIZE, 16);
             DebugDrawBox(
@@ -104,31 +114,75 @@ class Board {
         }
     }
 
-    /**
-     * Returns the square that a particular position resides in
-     * Returned square is an [x,y] array, or null if outside of board
-     */
-    function GetSquareOfPosition(position) {
-        local mouseX = position.x - (origin.x - 4 * BOARD_SQUARE_SIZE);
-        local mouseY = position.y - (origin.y - 4 * BOARD_SQUARE_SIZE);
+    /** Returns the square that a particular position is on, if it is on the board */
+    function GetBoardSquareOfPosition(position) {
+        // board squares range from [0,8] in both x and y
+        local dX = position.x - this.lowerLeft.x;
+        local dY = position.y - this.lowerLeft.y;
+        if (dX < 0 || dY < 0) { return null; }
 
-        if (mouseX < 0 || mouseY < 0) { return null; }
-
-        local x = (mouseX / BOARD_SQUARE_SIZE).tointeger();
-        local y = (mouseY / BOARD_SQUARE_SIZE).tointeger();
+        local x = (dX / BOARD_SQUARE_SIZE).tointeger();
+        local y = (dY / BOARD_SQUARE_SIZE).tointeger();
 
         if (x >= 8 || y >= 8) { return null; }
-        return [x, y];
+        return Vector(x, y, 0);
+    }
+
+    /** Returns the square that a particular position is on, if it is on the bench */
+    function GetBenchSquareOfPosition(position) {
+        // bench squares range from [0,8] in x, but are -1 in y
+        local dX = position.x - this.benchLowerLeft.x;
+        local dY = position.y - this.benchLowerLeft.y;
+        if (dX < 0 || dY < 0) { return null; }
+
+        local x = (dX / BOARD_SQUARE_SIZE).tointeger();
+        local y = (dY / BOARD_SQUARE_SIZE).tointeger();
+
+        if (x >= 8 || y >= 1) { return null; }
+        return Vector(x, y - 1, 0);
+    }
+
+    /** Returns the square that a particular position is on, if it is in the shop */
+    function GetShopSquareOfPosition(position) {
+        // shop squares range from [0,5] in x, but are -2 in y
+        local dX = position.x - this.shopLowerLeft.x;
+        local dY = position.y - this.shopLowerLeft.y;
+        if (dX < 0 || dY < 0) { return null; }
+
+        local x = (dX / BOARD_SQUARE_SIZE).tointeger();
+        local y = (dY / BOARD_SQUARE_SIZE).tointeger();
+
+        if (x >= 5 || y >= 1) { return null; }
+        return Vector(x, y - 2, 0);
     }
 
     /**
-     * Returns the center of a square. Square is an [x,y] array
+     * Returns the square that a particular position resides in
+     * Returned square is a vector, or null if outside of board
+     */
+    function GetSquareOfPosition(position) {
+        local square = this.GetBoardSquareOfPosition(position);
+        if (square != null) { return square; }
+        square = this.GetBenchSquareOfPosition(position);
+        if (square != null) { return square; }
+        square = this.GetShopSquareOfPosition(position);
+        return square;
+    }
+
+    /**
+     * Returns the center of a square. Square is a vector
      */
     function GetPositionOfSquare(square) {
-        local x = (origin.x - 4 * BOARD_SQUARE_SIZE) + (square[0] + 0.5) * BOARD_SQUARE_SIZE;
-        local y = (origin.y - 4 * BOARD_SQUARE_SIZE) + (square[1] + 0.5) * BOARD_SQUARE_SIZE;
+        local offset = Vector((square.x + 0.5) * BOARD_SQUARE_SIZE, (square.y + 0.5) * BOARD_SQUARE_SIZE, 0);
+        // handle board squares
+        if (square.y >= 0) { return this.lowerLeft + offset; }
+        // handle bench squares
+        if (square.y == -1) { return this.benchLowerLeft + Vector(0, BOARD_SQUARE_SIZE, 0) + offset; }
+        // handle shop squares
+        if (square.y == -2) { return this.shopLowerLeft + Vector(0, BOARD_SQUARE_SIZE * 2, 0) + offset; }
 
-        return Vector(x, y, this.origin.z);
+        Log("[Board] Attempted to get position of invalid square "+square);
+        return null;
     }
 }
 
