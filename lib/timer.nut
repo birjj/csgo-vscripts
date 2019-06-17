@@ -1,4 +1,4 @@
-DoIncludeScript("autochess/lib/debug.nut",null);
+DoIncludeScript("lib/debug.nut",null);
 
 if (!("_LOADED_MODULE_TIMER" in getroottable())) {
     ::_LOADED_MODULE_TIMER <- true;

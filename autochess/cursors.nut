@@ -1,8 +1,8 @@
-DoIncludeScript("autochess/lib/debug.nut", null);
-DoIncludeScript("autochess/lib/events.nut", null);
-DoIncludeScript("autochess/lib/math.nut", null);
-DoIncludeScript("autochess/lib/players.nut", null);
-DoIncludeScript("autochess/lib/timer.nut", null);
+DoIncludeScript("lib/debug.nut", null);
+DoIncludeScript("lib/events.nut", null);
+DoIncludeScript("lib/math.nut", null);
+DoIncludeScript("lib/players.nut", null);
+DoIncludeScript("lib/timer.nut", null);
 
 ::_test <- null;
 

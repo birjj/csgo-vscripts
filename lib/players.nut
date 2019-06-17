@@ -14,8 +14,8 @@
 ::TEAM_T <- 2;
 ::TEAM_CT <- 3;
 
-DoIncludeScript("autochess/lib/events.nut",null);
-DoIncludeScript("autochess/lib/debug.nut",null);
+DoIncludeScript("lib/events.nut",null);
+DoIncludeScript("lib/debug.nut",null);
 
 // represents a single player, bound to a player entity
 class Player {

@@ -40,7 +40,7 @@
 ::HOSTAGE_FOLLOWS <- "hostage_follows";
 ::HOSTAGE_STOPS_FOLLOWING <- "hostage_stops_following";
 
-DoIncludeScript("vip/lib/debug.nut",null);
+DoIncludeScript("lib/debug.nut",null);
 
 if (!("_eventsScope" in getroottable())) {
     // each event is an array of listeners
