@@ -1,10 +1,31 @@
+/**
+ * Dynamically adds logic_measure_movements to map to track what each player is looking at
+ * Exposes:
+ *   - FindCursorOfPlayer(player)
+ * Each cursor instance exposes:
+ *   - GetAngles()
+ *   - GetLookingAt()
+ */
+
 DoIncludeScript("lib/debug.nut", null);
 DoIncludeScript("lib/events.nut", null);
 DoIncludeScript("lib/math.nut", null);
 DoIncludeScript("lib/players.nut", null);
 DoIncludeScript("lib/timer.nut", null);
 
-::_test <- null;
+/**
+ * Gets the cursor that is bound to a particular player entity
+ * If no cursor is bound, returns null
+ */
+::FindCursorOfPlayer <- function(player) {
+    if (player == null) { return null; }
+    if (!player.ValidateScriptScope()) { return null; }
+    local scope = player.GetScriptScope();
+    if ("cursor" in scope) {
+        return scope.cursor;
+    }
+    return null;
+};
 
 class PlayerCursor {
     eMeasureMovement = null;
@@ -95,13 +116,11 @@ class PlayerCursor {
 function OnAttack1() {
     printl("[Cursor] Attack1 was pressed " + activator);
 
-    if (!activator.ValidateScriptScope()) { return; }
-    local scope = activator.GetScriptScope();
-    if (!("cursor" in scope)) { return; }
-    printl("[Cursor] Has angles: " + scope.cursor.GetAngles());
+    local cursor = ::FindCursorOfPlayer(activator);
+    if (cursor == null) { return; }
 
-    ::DrawLine(activator.EyePosition(), activator.EyePosition() + scope.cursor.GetAngles() * 100);
-    ::DrawBox(scope.cursor.GetLookingAt());
+    ::DrawLine(activator.EyePosition(), activator.EyePosition() + cursor.GetAngles() * 100);
+    ::DrawBox(cursor.GetLookingAt());
 }
 
 if (!("_LOADED_MODULE_CURSORS" in getroottable())) {
@@ -110,13 +129,12 @@ if (!("_LOADED_MODULE_CURSORS" in getroottable())) {
     ::_cursors_Think <- function() {
         local players = ::Players.GetPlayers();
         foreach (ply in players) {
-            if (!ply.ValidateScriptScope()) { continue; }
-            local scope = ply.GetScriptScope();
-            if ("cursor" in scope && scope.cursor.isAwaitingBind) {
-                scope.cursor.BindEntities();
+            local cursor = ::FindCursorOfPlayer(ply);
+            if (cursor != null && cursor.isAwaitingBind) {
+                cursor.BindEntities();
             }
         }
-    }
+    };
     
     ::AddEventListener("player_spawn", function(data) {
         local ply = ::Players.FindByUserid(data.userid);
