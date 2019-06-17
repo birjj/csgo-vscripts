@@ -22,12 +22,12 @@ function Think() {
 }
 
 function OnAttack1() {
-    printl("[AutoChess] Attack1 was pressed " + activator);
-
     local cursor = ::FindCursorOfPlayer(activator);
     if (cursor == null) { return; }
+    local board = ::FindBoardOfPlayer(activator);
+    if (board == null) { return; }
 
-    ::DrawBox(cursor.GetLookingAt());
+    board.OnClicked(cursor.GetLookingAt());
 }
 
 class GameModeAutoChess {

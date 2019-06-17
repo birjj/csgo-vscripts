@@ -15,6 +15,7 @@ DoIncludeScript("autochess/cursors.nut", null);
 ::BOARD_SQUARE_SIZE <- 64;
 ::BOARD_BENCH_OFFSET <- Vector(0, -128, 0);
 ::BOARD_SHOP_OFFSET <- Vector(0, -256, 0);
+::BOARD_PLAYER_OFFSET <- Vector(0, 0, 704);
 
 /**
  * Gets the board that is bound to a particular player entity
@@ -70,11 +71,13 @@ class Board {
     ePlayer = null;
     cursor = null;
 
-    highlightedSquare = null;
     origin = Vector(0, 0, 0);
     lowerLeft = Vector(0, 0, 0);
     benchLowerLeft = Vector(0, 0, 0);
     shopLowerLeft = Vector(0, 0, 0);
+
+    highlightedSquare = null;
+    selectedSquare = null;
 
     constructor(player, orig) {
         this.ePlayer = player;
@@ -84,6 +87,8 @@ class Board {
         this.lowerLeft = this.origin - Vector(4 * BOARD_SQUARE_SIZE, 4 * BOARD_SQUARE_SIZE, 0);
         this.benchLowerLeft = this.lowerLeft + BOARD_BENCH_OFFSET;
         this.shopLowerLeft = this.lowerLeft + BOARD_SHOP_OFFSET;
+
+        this.PlacePlayer();
     }
 
     function Think() {
@@ -91,14 +96,29 @@ class Board {
         if (this.cursor == null) { this.cursor = ::FindCursorOfPlayer(this.ePlayer); }
         if (this.cursor != null) {
             local lookingAt = this.cursor.GetLookingAt();
+            this.HighlightSquare(this.GetSquareOfPosition(lookingAt));
             this.highlightedSquare = this.GetSquareOfPosition(lookingAt);
         } else {
             Log("[Board] Couldn't find cursor of player "+player);
         }
 
-        // higlight the square the user is aiming at
+        // higlight the square the user is aiming at, or has selected
+        // TODO: replace with model-based highlighting
+        if (this.selectedSquare != null) {
+            local position = this.GetPositionOfSquare(this.selectedSquare);
+            local size = Vector(BOARD_SQUARE_SIZE, BOARD_SQUARE_SIZE, 16);
+            DebugDrawBox(
+                position + Vector(0, 0, 9),
+                size * -0.5,
+                size * 0.5,
+                0,
+                0,
+                255,
+                255,
+                0.15
+            );
+        }
         if (this.highlightedSquare != null) {
-            Log("[Board] Highlighting "+this.highlightedSquare);
             local position = this.GetPositionOfSquare(this.highlightedSquare);
             local size = Vector(BOARD_SQUARE_SIZE, BOARD_SQUARE_SIZE, 16);
             DebugDrawBox(
@@ -112,6 +132,60 @@ class Board {
                 0.15
             );
         }
+    }
+
+    /** Sets the square that we are highlighting */
+    function HighlightSquare(square) {
+        this.highlightedSquare = square;
+    }
+
+    /** Sets the square that we have selected */
+    function SelectSquare(square) {
+        Log("[Board] "+this.ePlayer+" selected "+square);
+        this.selectedSquare = square;
+    }
+
+    /** Deselects the currently active square */
+    function DeselectSquare() {
+        this.selectedSquare = null;
+    }
+
+    /** Handles the player clicking. Decides if we should select a square, move a unit, etc. */
+    function OnClicked(position) {
+        local clickedSquare = GetSquareOfPosition(position);
+        // if we clicked outside of the board, deselect the current selection
+        if (clickedSquare == null) {
+            if (this.selectedSquare != null) {
+                Log("[Board] " + this.ePlayer + " deselected by clicking outside of board");
+                this.DeselectSquare();
+            }
+            return;
+        }
+
+        // if we clicked on a square, we have to make a decision
+
+        // if we don't have a selected square, we make the clicked square the selected on
+        if (this.selectedSquare == null) {
+            // TODO: check if square has a unit on it first - can't select empty squares
+            this.SelectSquare(clickedSquare);
+            return;
+        }
+
+        // if we clicked the selected square, we want to deselect it
+        if (clickedSquare.x == this.selectedSquare.x && clickedSquare.y == this.selectedSquare.y) {
+            Log("[Board] "+this.ePlayer+" deselected by clicking same square ("+clickedSquare+","+this.selectedSquare+")");
+            this.DeselectSquare();
+            return;
+        }
+
+        // otherwise we clicked a square while having a square selected - do something
+        Log("[Board] Moving units not yet implemented");
+    }
+
+    /** Sets our player to the position we want him to start in */
+    function PlacePlayer() {
+        Log("[Board] Moving "+this.ePlayer+" to board");
+        this.ePlayer.SetOrigin(this.origin + BOARD_PLAYER_OFFSET);
     }
 
     /** Returns the square that a particular position is on, if it is on the board */
@@ -196,8 +270,12 @@ if (!("_LOADED_MODULE_BOARD" in getroottable())) {
     }
 
     ::_board_Think <- function() {
-        foreach(board in ::ASSIGNED_BOARDS) {
+        foreach (board in ::ASSIGNED_BOARDS) {
             board.Think();
         }
+    }
+} else {
+    foreach (board in ::ASSIGNED_BOARDS) {
+        board.PlacePlayer();
     }
 }
