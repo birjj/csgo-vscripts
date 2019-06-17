@@ -113,16 +113,6 @@ class PlayerCursor {
     }
 }
 
-function OnAttack1() {
-    printl("[Cursor] Attack1 was pressed " + activator);
-
-    local cursor = ::FindCursorOfPlayer(activator);
-    if (cursor == null) { return; }
-
-    ::DrawLine(activator.EyePosition(), activator.EyePosition() + cursor.GetAngles() * 100);
-    ::DrawBox(cursor.GetLookingAt());
-}
-
 if (!("_LOADED_MODULE_CURSORS" in getroottable())) {
     ::_LOADED_MODULE_CURSORS <- true;
 

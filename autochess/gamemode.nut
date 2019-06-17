@@ -1,4 +1,6 @@
+DoIncludeScript("lib/debug.nut", null);
 DoIncludeScript("autochess/cursors.nut", null);
+DoIncludeScript("autochess/board.nut", null);
 
 function Think() {
     local root = getroottable();
@@ -11,9 +13,21 @@ function Think() {
     if ("_LOADED_MODULE_CURSORS" in root) {
         ::_cursors_Think();
     }
+    if ("_LOADED_MODULE_BOARD" in root) {
+        ::_board_Think();
+    }
     if ("gamemode_autochess" in root) {
         ::gamemode_autochess.Think();
     }	
+}
+
+function OnAttack1() {
+    printl("[AutoChess] Attack1 was pressed " + activator);
+
+    local cursor = ::FindCursorOfPlayer(activator);
+    if (cursor == null) { return; }
+
+    ::DrawBox(cursor.GetLookingAt());
 }
 
 class GameModeAutoChess {
@@ -24,4 +38,11 @@ class GameModeAutoChess {
 
 if (!("gamemode_vip" in getroottable())) {
     ::gamemode_vip <- GameModeAutoChess();
+
+    ::AddEventListener("player_spawn", function(data) {
+        local player = ::Players.FindByUserid(data.userid);
+        if (player == null) { return; }
+        local board = ::AssignBoardToPlayer(player);
+        Log("[AutoChess] Assigned board "+board+" to "+player);
+    });
 }
