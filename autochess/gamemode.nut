@@ -2,6 +2,10 @@ DoIncludeScript("lib/debug.nut", null);
 DoIncludeScript("autochess/cursors.nut", null);
 DoIncludeScript("autochess/board.nut", null);
 
+function Precache() {
+    self.PrecacheModel("models/player/ctm_fbi.mdl");
+}
+
 function Think() {
     local root = getroottable();
     if ("Players" in root) {
