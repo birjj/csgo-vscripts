@@ -24,7 +24,22 @@ DoIncludeScript("lib/timer.nut", null);
     if ("cursor" in scope) {
         return scope.cursor;
     }
-    return null;
+    return ::AssignCursorToPlayer(player);
+};
+
+/**
+ * Assigns a cursor to a player - automatically done when it's spawned or when a cursor is requested for a player
+ */
+::AssignCursorToPlayer <- function(ply) {
+    if (ply == null) { return; }
+    if (!ply.ValidateScriptScope()) { return; }
+    local scope = ply.GetScriptScope();
+    if ("cursor" in scope) {
+        scope.cursor.Regenerate();
+        return;
+    }
+
+    scope.cursor <- PlayerCursor(ply);
 };
 
 class PlayerCursor {
@@ -128,14 +143,6 @@ if (!("_LOADED_MODULE_CURSORS" in getroottable())) {
     
     ::AddEventListener("player_spawn", function(data) {
         local ply = ::Players.FindByUserid(data.userid);
-        if (ply == null) { return; }
-        if (!ply.ValidateScriptScope()) { return; }
-        local scope = ply.GetScriptScope();
-        if ("cursor" in scope) {
-            scope.cursor.Regenerate();
-            return;
-        }
-
-        scope.cursor <- PlayerCursor(ply);
+        ::AssignCursorToPlayer(ply);
     });
 }
