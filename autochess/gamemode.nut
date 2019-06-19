@@ -7,7 +7,7 @@ DoIncludeScript("autochess/cursors.nut", null);
 DoIncludeScript("autochess/board-ui.nut", null);
 
 ::BOARD_POSITIONS <- [ // update this to match the position of the boards in your map
-    Vector(0, 0, 0)
+    Vector(0, 0, 16)
 ];
 
 function Precache() {

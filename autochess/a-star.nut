@@ -67,9 +67,7 @@
 ::_astar_estimator <- function(start, end) {
     local dX = start.x - end.x;
     local dY = start.y - end.y;
-    if (dX < 0) { dX = -dX; }
-    if (dY < 0) { dY = -dY; }
-    return dX + dY;
+    return abs(dX) + abs(dY);
 };
 
 class _astar_node {

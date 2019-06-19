@@ -65,7 +65,7 @@ class Board {
     /** Finds the closest unit of the opposite alliance to a square */
     function FindEnemyClosestTo(square, friendly) {
         local lookingFor = !friendly;
-        for (local dist = 1; dist < 8; dist++) {
+        for (local dist = 1; dist <= 8; dist++) {
             local seenUnits = this.FindUnitsAtDistance(square, dist);
             local enemies = [];
             foreach (unit in seenUnits) {
@@ -117,6 +117,14 @@ class Board {
         return output;
     }
 
+    /** Gets the distance between two squares */
+    function GetDistance(from, to) {
+        local dX = abs(to.x - from.x);
+        local dY = abs(to.y - from.y);
+        if (dX < dY) { return dY; }
+        return dX;
+    }
+
     /** Get the unit that occupies a square, or null if none */
     function GetUnitAtSquare(square) {
         if (square.y == -2) { return this.shop[square.x]; }
@@ -126,7 +134,6 @@ class Board {
 
     /** Sets the unit that is at a square - be careful, overwrites whatever is there already */
     function SetUnitAtSquare(square, unit) {
-        Log("[Board] Setting unit at "+square+" to "+unit);
         if (square.y == -2) {
             this.shop[square.x] = unit;
             return;
@@ -139,7 +146,7 @@ class Board {
     }
 
     /** Moves a unit to a square, swapping with whatever is on there */
-    function MoveUnitToSquare(unit, square) {
+    function MoveUnitToSquare(unit, square, noAnim=false) {
         if (unit == null) {
             Log("[BoardUI] -- Attempted to move null piece!");
             return;
@@ -148,9 +155,9 @@ class Board {
         local unitAtTarget = this.GetUnitAtSquare(square);
         this.SetUnitAtSquare(fromSquare, unitAtTarget);
         this.SetUnitAtSquare(square, unit);
-        unit.MoveToSquare(square);
+        unit.MoveToSquare(square, noAnim);
         if (unitAtTarget != null) {
-            unitAtTarget.MoveToSquare(fromSquare);
+            unitAtTarget.MoveToSquare(fromSquare, noAnim);
         }
     }
 }

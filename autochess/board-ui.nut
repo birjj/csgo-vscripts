@@ -11,9 +11,9 @@ DoIncludeScript("autochess/cursors.nut", null);
 DoIncludeScript("autochess/board.nut", null);
 
 ::BOARD_SQUARE_SIZE <- 64;
-::BOARD_BENCH_OFFSET <- Vector(0, -128, 0);
+::BOARD_BENCH_OFFSET <- Vector(0, -128, -12);
 ::BOARD_SHOP_OFFSET <- Vector(0, -256, 0);
-::BOARD_PLAYER_OFFSET <- Vector(0, 0, 704);
+::BOARD_PLAYER_OFFSET <- Vector(0, -448, 368);
 
 class BoardUI {
     board = null;
@@ -158,7 +158,7 @@ class BoardUI {
         // we can't move to top half of board, or to shop
         if (clickedSquare.y >= 4 || clickedSquare.y == -2) { return; }
         local unit = this.board.GetUnitAtSquare(this.selectedSquare);
-        this.board.MoveUnitToSquare(unit, clickedSquare);
+        this.board.MoveUnitToSquare(unit, clickedSquare, true);
         this.DeselectSquare();
     }
 
