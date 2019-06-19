@@ -1,5 +1,6 @@
 DoIncludeScript("lib/debug.nut", null);
 DoIncludeScript("lib/timers.nut", null);
+DoIncludeScript("lib/math.nut", null);
 DoIncludeScript("autochess/a-star.nut", null);
 
 class BaseUnit {
@@ -42,12 +43,16 @@ class BaseUnit {
                 this.moveTime = Time() + 1;
                 local targetSquare = this.GetMove();
                 if (targetSquare == null) { return; }
+                local ourPos = this.board.parentUI.GetPositionOfSquare(this.position);
+                local theirPos = this.board.parentUI.GetPositionOfSquare(this.target.position);
                 ::DrawLine(
-                    this.board.parentUI.GetPositionOfSquare(this.position) + Vector(0, 0, 12),
-                    this.board.parentUI.GetPositionOfSquare(this.target.position) + Vector(0, 0, 12),
+                    ourPos + Vector(0, 0, 12),
+                    theirPos + Vector(0, 0, 12),
                     Vector(255, 0, 0),
                     1
                 );
+                local angles = AngleBetweenPoints(ourPos, theirPos);
+                this.eModel.SetAngles(angles.x, angles.y, angles.z);
                 this.board.MoveUnitToSquare(this, targetSquare);
             }
         }
