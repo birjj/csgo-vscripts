@@ -23,3 +23,14 @@
     arr.remove(idx);
     return elm;
 };
+
+/**
+ * Returns a copy of an array with only the elements that match a specific filter
+ */
+::filter_array <- function(arr, filter) {
+    local outp = [];
+    foreach (elm in arr) {
+        if (filter(elm)) { outp.push(elm); }
+    }
+    return outp;
+}

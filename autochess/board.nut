@@ -3,12 +3,13 @@
  * Deals with keeping track of units and delegating thinks to them
  */
 DoIncludeScript("lib/debug.nut", null);
+DoIncludeScript("lib/polyfills.nut", null);
 DoIncludeScript("autochess/units/base.nut", null);
 
 class Board {
     parentUI = null;
-    isLive = false;
 
+    isLive = false;
     startTime = null;
 
     board = null;
@@ -25,7 +26,6 @@ class Board {
             this.startTime = null;
         }
 
-        // don't do any other logic if we aren't live
         if (!this.isLive) { return; }
 
         foreach (col in this.board) {
@@ -53,9 +53,68 @@ class Board {
 
         // TODO: don't generate fake units
         this.bench[0] = BaseUnit(this, true);
-        this.bench[0].MoveToSquare(Vector(0, -1, 0));
+        this.bench[0].MoveToSquare(Vector(0, -1, 0), true);
 
+        this.board[7][7] = BaseUnit(this, false);
+        this.board[7][7].MoveToSquare(Vector(7, 7, 0), true);
+
+        this.isLive = false;
         this.startTime = Time() + 10;
+    }
+
+    /** Finds the closest unit of the opposite alliance to a square */
+    function FindEnemyClosestTo(square, friendly) {
+        local lookingFor = !friendly;
+        for (local dist = 1; dist < 8; dist++) {
+            local seenUnits = this.FindUnitsAtDistance(square, dist);
+            local enemies = [];
+            foreach (unit in seenUnits) {
+                if (unit.friendly == lookingFor) { enemies.push(unit); }
+            }
+            if (enemies.len() > 0) {
+                return enemies[RandomInt(0, enemies.len() - 1)];
+            }
+        }
+    }
+
+    /** Returns an array of all units that are a specific distance from a square */
+    function FindUnitsAtDistance(startSquare, distance) {
+        local output = [];
+        local lowerLeft = startSquare - Vector(distance, distance, 0);
+        local upperRight = startSquare + Vector(distance, distance, 0);
+        // check horizontally
+        for (local x = lowerLeft.x; x < upperRight.x; x++) {
+            if (x < 0 || x >= 8) { continue; }
+            local square = null;
+            local unit = null;
+            if (lowerLeft.y >= 0) {
+                local square = Vector(x, lowerLeft.y, 0);
+                local unit = this.GetUnitAtSquare(square);
+                if (unit != null) { output.push(unit); }
+            }
+            if (upperRight.y < 8) {
+                local square = Vector(x, upperRight.y, 0);
+                local unit = this.GetUnitAtSquare(square);
+                if (unit != null) { output.push(unit); }
+            }
+        }
+        // check vertically
+        for (local y = lowerLeft.y + 1; y < upperRight.y - 1; y++) {
+            if (y < 0 || y >= 8) { continue; }
+            local square = null;
+            local unit = null;
+            if (lowerLeft.x >= 0) {
+                local square = Vector(lowerLeft.x, y, 0);
+                local unit = this.GetUnitAtSquare(square);
+                if (unit != null) { output.push(unit); }
+            }
+            if (upperRight.x < 8) {
+                local square = Vector(upperRight.x, y, 0);
+                local unit = this.GetUnitAtSquare(square);
+                if (unit != null) { output.push(unit); }
+            }
+        }
+        return output;
     }
 
     /** Get the unit that occupies a square, or null if none */
