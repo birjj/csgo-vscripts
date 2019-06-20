@@ -12,6 +12,12 @@ DoIncludeScript("autochess/board-ui.nut", null);
 
 function Precache() {
     self.PrecacheModel("models/player/ctm_fbi.mdl");
+    self.PrecacheModel("models/weapons/w_knife.mdl");
+    self.PrecacheModel("models/weapons/w_snip_awp.mdl");
+    self.PrecacheSoundScript("weapons/awp/awp_01.wav");
+    self.PrecacheSoundScript("AutoChess.Clock");
+    self.PrecacheSoundScript("AutoChess.SwapUnits");
+    self.PrecacheSoundScript("AutoChess.Knife");
 }
 
 function Think() {

@@ -160,6 +160,7 @@ class BoardUI {
         local unit = this.board.GetUnitAtSquare(this.selectedSquare);
         this.board.MoveUnitToSquare(unit, clickedSquare, true);
         this.DeselectSquare();
+        this.ePlayer.EmitSound("AutoChess.SwapUnits");
     }
 
     /** Sets our player to the position we want him to start in */

@@ -11,6 +11,7 @@ class Board {
 
     isLive = false;
     startTime = null;
+    clockTime = null;
 
     board = null;
     bench = null;
@@ -24,6 +25,11 @@ class Board {
         if (this.startTime != null && Time() > this.startTime) {
             this.isLive = true;
             this.startTime = null;
+            this.clockTime = null;
+        }
+        if (this.clockTime != null && Time() > this.clockTime) {
+            // this.parentUI.ePlayer.EmitSound("AutoChess.Clock");
+            this.clockTime = this.clockTime + 1;
         }
 
         if (!this.isLive) { return; }
@@ -60,6 +66,7 @@ class Board {
 
         this.isLive = false;
         this.startTime = Time() + 10;
+        this.clockTime = this.startTime - 5;
     }
 
     /** Finds the closest unit of the opposite alliance to a square */

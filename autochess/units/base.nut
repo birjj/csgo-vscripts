@@ -5,6 +5,7 @@ DoIncludeScript("autochess/a-star.nut", null);
 
 class BaseUnit {
     eModel = null;
+    eWeapon = null;
     position = Vector(0, 0, 0);
     board = null;
 
@@ -21,7 +22,7 @@ class BaseUnit {
     hp = 0;
 
     MODEL_NAME = "models/player/ctm_fbi.mdl";
-    MOVE_DURATION = 1; // time it takes to move from one space to another
+    MOVE_DURATION = 0.75; // time it takes to move from one space to another
     MAX_HP = 100;
     ATTACK_RANGE = 1; // distance at which we can attack
     ATTACK_DELAY = 0.5; // seconds between each attack
@@ -30,14 +31,23 @@ class BaseUnit {
     constructor(brd, isFriend) {
         this.board = brd;
         this.friendly = isFriend;
-        this.hp = MAX_HP;
+        this.hp = this.MAX_HP;
 
-        this.eModel = CreateProp("prop_dynamic", Vector(0, 0, 0), this.MODEL_NAME, 0);
+        this.GenerateModel();
         if (this.friendly) {
             this.eModel.SetAngles(0, 90, 0);
         } else {
             this.eModel.SetAngles(0, -90, 0);
         }
+    }
+
+    function GenerateModel() {
+        local modelName = UniqueString();
+        this.eModel = CreateProp("prop_dynamic", Vector(0, 0, 0), this.MODEL_NAME, 0);
+        EntFireByHandle(this.eModel, "AddOutput", "targetname "+modelName, 0.0, null, null);
+        this.eWeapon = CreateProp("prop_dynamic", Vector(0, 0, 64), "models/weapons/w_snip_awp.mdl", 0);
+        EntFireByHandle(this.eWeapon, "SetParent", modelName, 0.1, null, null);
+        EntFireByHandle(this.eWeapon, "SetParentAttachment", "weapon_hand_R", 0.2, null, null);
     }
 
     /** Called when we are live and should do something - gets targets, attacks and moves */
@@ -79,8 +89,9 @@ class BaseUnit {
             1
         );*/
         local angles = AngleBetweenPoints(ourPos, theirPos);
-        this.eModel.SetAngles(angles.x, angles.y + 8, angles.z);
-        EntFireByHandle(this.eModel, "SetAnimation", "testWalkN", 0.0, null, null);
+        this.eModel.SetAngles(angles.x, angles.y, angles.z + 8);
+        EntFireByHandle(this.eModel, "SetPlaybackRate", ""+(1 / this.MOVE_DURATION), 0.0, null, null);
+        EntFireByHandle(this.eModel, "SetAnimation", "Hop", 0.0, null, null);
         this.board.MoveUnitToSquare(this, targetSquare);
     }
 
@@ -92,7 +103,10 @@ class BaseUnit {
         local theirPos = this.board.parentUI.GetPositionOfSquare(this.target.position);
         local angles = AngleBetweenPoints(ourPos, theirPos);
         this.eModel.SetAngles(angles.x, angles.y + 90, angles.z);
-        EntFireByHandle(this.eModel, "SetAnimation", "Run_Shoot_KNIFE_LIGHT_L_BS", 0.0, null, null);
+        this.eModel.SetOrigin(this.board.parentUI.GetPositionOfSquare(this.position) + Vector(0, 0, 8));
+        this.eModel.EmitSound("AutoChess.Knife");
+        EntFireByHandle(this.eModel, "SetPlaybackRate", "1.0", 0.0, null, null);
+        EntFireByHandle(this.eModel, "SetAnimation", "Reload_AWP", 0.0, null, null);
     }
 
     /** Performs the animation and logic for dying */
@@ -112,8 +126,7 @@ class BaseUnit {
                 pos = this.moveTo;
             } else {
                 local delta = (this.moveFrom - this.moveTo) * (1 - progress);
-                pos = this.moveTo + delta;
-                pos = this.moveFrom;
+                pos = this.moveTo + delta + Vector(0, 0, 8);
             }
             this.eModel.SetOrigin(pos);
         }

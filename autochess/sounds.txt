@@ -1,0 +1,20 @@
+AutoChess.Clock {
+    wave autochess/clock_low.wav
+}
+
+AutoChess.ShopOpen {
+    wave autochess/shop_available.wav
+}
+
+AutoChess.ShopClosed {
+    wave autochess/shop_unavailable.wav
+}
+
+AutoChess.SwapUnits {
+    wave autochess/swap_unit_01.wav
+}
+
+AutoChess.Knife {
+    volume 0.1
+    wave weapons/knife/knife_hit1.wav
+}
