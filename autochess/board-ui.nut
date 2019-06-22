@@ -77,7 +77,7 @@ class BoardUI {
         if (this.cursor != null) {
             local lookingAt = this.cursor.GetLookingAt();
             local lookingAtSquare = this.GetSquareOfPosition(lookingAt);
-            if (lookingAtSquare != null && lookingAtSquare.y < 4) {
+            if (lookingAtSquare != null && this.ShouldHighlightSquare(lookingAtSquare)) {
                 this.HighlightSquare(lookingAtSquare);
             } else {
                 this.HighlightSquare(null);
@@ -116,6 +116,12 @@ class BoardUI {
                 0.15
             );
         }
+    }
+
+    function ShouldHighlightSquare(square) {
+        if (square.y >= 4) { return false; }
+        if (this.selectedSquare != null) { return true; }
+        return this.board.GetUnitAtSquare(square) != null;
     }
 
     /** Sets the square that we are highlighting */
