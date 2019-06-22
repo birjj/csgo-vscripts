@@ -83,7 +83,7 @@ class Board {
         local lowerLeft = startSquare - Vector(distance, distance, 0);
         local upperRight = startSquare + Vector(distance, distance, 0);
         // check horizontally
-        for (local x = lowerLeft.x; x < upperRight.x; x++) {
+        for (local x = lowerLeft.x; x <= upperRight.x; x++) {
             if (x < 0 || x >= 8) { continue; }
             local square = null;
             local unit = null;
@@ -99,7 +99,7 @@ class Board {
             }
         }
         // check vertically
-        for (local y = lowerLeft.y + 1; y < upperRight.y - 1; y++) {
+        for (local y = lowerLeft.y + 1; y <= upperRight.y - 1; y++) {
             if (y < 0 || y >= 8) { continue; }
             local square = null;
             local unit = null;

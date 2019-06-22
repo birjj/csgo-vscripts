@@ -159,7 +159,10 @@ class BaseUnit {
     function AcquireTarget() {
         // Log("[BaseUnit] Finding target for "+this);
         this.target = this.board.FindEnemyClosestTo(this.position, this.friendly);
-        if (this.target == null) { return; }
+        if (this.target == null) {
+            Log("[BaseUnit] Unable to find target for "+this);
+            return;
+        }
         /*::DrawLine(
             this.board.parentUI.GetPositionOfSquare(this.position) + Vector(0, 0, 8),
             this.board.parentUI.GetPositionOfSquare(this.target.position) + Vector(0, 0, 8),
