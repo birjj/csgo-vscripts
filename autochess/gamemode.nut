@@ -31,96 +31,127 @@ function Think() {
     if ("_LOADED_MODULE_CURSORS" in root) {
         ::_cursors_Think();
     }
-    if ("_board_Think" in root) {
-        ::_board_Think();
+    if ("gamemode_autochess" in root) {
+        ::gamemode_autochess.Think();
     }
-}
-
-/**
- * Gets the board that is bound to a particular player entity
- * If no board is bound, returns null
- */
-::FindBoardOfPlayer <- function(player) {
-    if (player == null) { return null; }
-    if (!player.ValidateScriptScope()) { return null; }
-    local scope = player.GetScriptScope();
-    if (!("userid" in scope)) {
-        Log("[AutoChess] Tried to find board of player "+player+" that has no userid");
-        return null;
-    }
-    local userid = scope.userid;
-    if (!(userid in ::ASSIGNED_BOARDS)) {
-        Log("[AutoChess] Tried to find board of player "+player+" that has no board");
-        return null;
-    }
-    return ::ASSIGNED_BOARDS[userid];
-};
-
-/**
- * Assigns a free board to a player and returns it
- * If no free board is available, returns null
- * If player already has a board, it is returned without assigning a new one
- */
-::AssignBoardToUserid <- function(userid) {
-    if (::FREE_BOARD_POSITIONS.len() == 0) { return null; }
-    Log("[AutoChess] Assigning board to "+userid);
-    if (userid in ::ASSIGNED_BOARDS) {
-        Log("[AutoChess] Player already has a board");
-        return ::ASSIGNED_BOARDS[userid];
-    }
-
-    local boardPosition = ::FREE_BOARD_POSITIONS.pop();
-    ::ASSIGNED_BOARDS[userid] <- BoardUI(userid, boardPosition);
-    return ::ASSIGNED_BOARDS[userid];
-}
-
-/**
- * Removes a board from a player, returning it to the pool of free boards
- * If player doesn't have a board, nothing is done
- */
-::RemoveBoardFromUserid <- function(userid) {
-    Log("[AutoChess] Removing board from "+userid);
-    if (!(userid in ::ASSIGNED_BOARDS)) {
-        Log("[AutoChess] Player "+userid+" has no board");
-        return;
-    }
-    local board = ::ASSIGNED_BOARDS[userid];
-    ::FREE_BOARD_POSITIONS.push(board.origin);
-    delete ::ASSIGNED_BOARDS[userid];
 }
 
 function OnAttack1() {
     local cursor = ::FindCursorOfPlayer(activator);
     if (cursor == null) { return; }
-    local board = ::FindBoardOfPlayer(activator);
+    local board = ::gamemode_autochess.FindBoardOfPlayer(activator);
     if (board == null) { return; }
 
     board.OnClicked(cursor.GetLookingAt());
 }
 
+class GamemodeAutoChess {
+    assigned_boards = null;
+    free_board_positions = null;
+
+    startTime = null;
+    roundTime = null;
+    isLive = false;
+
+    constructor() {
+        this.assigned_boards = {};
+        this.free_board_positions = [];
+        foreach (position in ::BOARD_POSITIONS) {
+            this.free_board_positions.push(position);
+        }
+
+        this.OnRoundStart();
+    }
+
+    /** Get the time of the current round, negative if in preparation and positive if is live */
+    function GetRoundTime() {
+        return Time() - this.roundTime;
+    }
+
+    function OnRoundStart() {
+        this.startTime = Time();
+        this.roundTime = this.startTime + 10;
+        this.isLive = false;
+
+        foreach (board in this.assigned_boards) {
+            board.OnRoundStart();
+        }
+    }
+
+    function Think() {
+        if (!this.isLive && this.GetRoundTime() >= 0) {
+            this.isLive = true;
+        }
+
+        foreach (board in this.assigned_boards) {
+            board.Think();
+        }
+    }
+
+    /**
+     * Gets the board that is bound to a particular player entity
+     * If no board is bound, returns null
+     */
+    function FindBoardOfPlayer(player) {
+        if (player == null) { return null; }
+        if (!player.ValidateScriptScope()) { return null; }
+        local scope = player.GetScriptScope();
+        if (!("userid" in scope)) {
+            Log("[AutoChess] Tried to find board of player "+player+" that has no userid");
+            return null;
+        }
+        local userid = scope.userid;
+        if (!(userid in this.assigned_boards)) {
+            Log("[AutoChess] Tried to find board of player "+player+" that has no board");
+            return null;
+        }
+        return this.assigned_boards[userid];
+    };
+
+    /**
+     * Assigns a free board to a player and returns it
+     * If no free board is available, returns null
+     * If player already has a board, it is returned without assigning a new one
+     */
+    function AssignBoardToUserid(userid) {
+        if (this.free_board_positions.len() == 0) { return null; }
+        Log("[AutoChess] Assigning board to "+userid);
+        if (userid in this.assigned_boards) {
+            Log("[AutoChess] Player already has a board");
+            return this.assigned_boards[userid];
+        }
+
+        local boardPosition = this.free_board_positions.pop();
+        this.assigned_boards[userid] <- BoardUI(userid, boardPosition);
+        return this.assigned_boards[userid];
+    }
+
+    /**
+     * Removes a board from a player, returning it to the pool of free boards
+     * If player doesn't have a board, nothing is done
+     */
+    function RemoveBoardFromUserid(userid) {
+        Log("[AutoChess] Removing board from "+userid);
+        if (!(userid in this.assigned_boards)) {
+            Log("[AutoChess] Player "+userid+" has no board");
+            return;
+        }
+        local board = this.assigned_boards[userid];
+        this.free_board_positions.push(board.origin);
+        delete this.assigned_boards[userid];
+    }
+}
+
 if (!("_LOADED_GAMEMODE_AUTOCHESS" in getroottable())) {
     ::_LOADED_GAMEMODE_AUTOCHESS <- true;
+    ::gamemode_autochess <- GamemodeAutoChess();
 
     ::AddEventListener("player_spawn", function(data) {
         local player = ::Players.FindByUserid(data.userid);
         if (player == null) { return; }
-        local board = ::AssignBoardToUserid(data.userid);
+        local board = ::gamemode_autochess.AssignBoardToUserid(data.userid);
         Log("[AutoChess] Assigned board "+board+" to "+player+" ("+data.userid+")");
     });
-
-    ::ASSIGNED_BOARDS <- {};
-    ::FREE_BOARD_POSITIONS <- [];
-    foreach (position in ::BOARD_POSITIONS) {
-        ::FREE_BOARD_POSITIONS.push(position);
-    }
-
-    ::_board_Think <- function() {
-        foreach (board in ::ASSIGNED_BOARDS) {
-            board.Think();
-        }
-    }
 } else {
-    foreach (board in ::ASSIGNED_BOARDS) {
-        board.OnRoundStart();
-    }
+    ::gamemode_autochess.OnRoundStart();
 }

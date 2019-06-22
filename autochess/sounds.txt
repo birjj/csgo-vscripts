@@ -10,6 +10,10 @@ AutoChess.ShopClosed {
     wave autochess/shop_unavailable.wav
 }
 
+AutoChess.SelectUnit {
+    wave autochess/select_unit_01.wav
+}
+
 AutoChess.SwapUnits {
     wave autochess/swap_unit_01.wav
 }

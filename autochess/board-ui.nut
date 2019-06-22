@@ -29,6 +29,8 @@ class BoardUI {
     highlightedSquare = null;
     selectedSquare = null;
 
+    nextClockTime = -5;
+
     constructor(usrid, orig) {
         Log("[BoardUI] My origin is "+orig);
         this.board = Board(this);
@@ -46,6 +48,7 @@ class BoardUI {
         this.ePlayer = ::Players.FindByUserid(this.userid);
         Log("[BoardUI] Finding player for our userid "+this.userid+", got "+this.ePlayer);
         if (this.ePlayer == null) { return; } // we'll be called again in a bit by our Think
+        this.nextClockTime = -5;
         this.board.OnRoundStart();
         this.cursor = ::FindCursorOfPlayer(this.ePlayer);
         this.PlacePlayer();
@@ -57,6 +60,14 @@ class BoardUI {
             this.OnRoundStart();
             return;
         }
+
+        // we play the clock sound from our player entity
+        local roundTime = ::gamemode_autochess.GetRoundTime();
+        if (roundTime < 0 && roundTime > this.nextClockTime) {
+            this.ePlayer.EmitSound("AutoChess.Clock");
+            this.nextClockTime = this.nextClockTime + 1;
+        }
+
 
         this.board.Think();
         if (this.board.isLive) { return; } // user shouldn't be able to interact while we're fighting
@@ -115,6 +126,9 @@ class BoardUI {
     /** Sets the square that we have selected */
     function SelectSquare(square) {
         Log("[BoardUI] "+this.ePlayer+" selected "+square);
+        if (square != null) {
+            this.ePlayer.EmitSound("AutoChess.SelectUnit");
+        }
         this.selectedSquare = square;
     }
 
