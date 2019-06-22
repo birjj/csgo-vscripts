@@ -11,6 +11,7 @@ AutoChess.ShopClosed {
 }
 
 AutoChess.SelectUnit {
+    volume 0.5
     wave autochess/select_unit_01.wav
 }
 

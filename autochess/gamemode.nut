@@ -16,6 +16,7 @@ function Precache() {
     self.PrecacheModel("models/weapons/w_snip_awp.mdl");
     self.PrecacheSoundScript("weapons/awp/awp_01.wav");
     self.PrecacheSoundScript("AutoChess.Clock");
+    self.PrecacheSoundScript("AutoChess.SelectUnit");
     self.PrecacheSoundScript("AutoChess.SwapUnits");
     self.PrecacheSoundScript("AutoChess.Knife");
 }
