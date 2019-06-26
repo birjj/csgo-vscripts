@@ -1,7 +1,12 @@
 DoIncludeScript("lib/debug.nut", null);
 DoIncludeScript("lib/timers.nut", null);
 DoIncludeScript("lib/math.nut", null);
+DoIncludeScript("lib/precache.nut", null);
 DoIncludeScript("autochess/a-star.nut", null);
+
+RegisterPrecacheModel("models/player/ctm_fbi.mdl");
+RegisterPrecacheModel("models/weapons/w_snip_awp.mdl");
+RegisterPrecacheSound("AutoChess.Knife");
 
 class BaseUnit {
     eModel = null;

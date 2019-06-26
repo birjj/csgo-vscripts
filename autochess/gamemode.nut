@@ -3,6 +3,7 @@
  * Handles assigning boards to users, handling inputs and precaching/delegating think functions
  */
 DoIncludeScript("lib/debug.nut", null);
+DoIncludeScript("lib/precache.nut", null);
 DoIncludeScript("autochess/cursors.nut", null);
 DoIncludeScript("autochess/board-ui.nut", null);
 
@@ -10,15 +11,12 @@ DoIncludeScript("autochess/board-ui.nut", null);
     Vector(0, 0, 16)
 ];
 
+RegisterPrecacheSound("Autochess.Clock");
+RegisterPrecacheSound("AutoChess.SelectUnit");
+RegisterPrecacheSound("AutoChess.SwapUnits");
+
 function Precache() {
-    self.PrecacheModel("models/player/ctm_fbi.mdl");
-    self.PrecacheModel("models/weapons/w_knife.mdl");
-    self.PrecacheModel("models/weapons/w_snip_awp.mdl");
-    self.PrecacheSoundScript("weapons/awp/awp_01.wav");
-    self.PrecacheSoundScript("AutoChess.Clock");
-    self.PrecacheSoundScript("AutoChess.SelectUnit");
-    self.PrecacheSoundScript("AutoChess.SwapUnits");
-    self.PrecacheSoundScript("AutoChess.Knife");
+    PerformPrecache(self);
 }
 
 function Think() {
