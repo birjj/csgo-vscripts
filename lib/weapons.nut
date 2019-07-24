@@ -6,6 +6,7 @@
  * Exposes:
  *   - GetActiveWeapon(player)
  *   - GetWeapons(player)
+ *   - StripWeapons(player)
  */
 
  DoIncludeScript("lib/players.nut", null);
@@ -29,6 +30,26 @@
         ent = ent.NextMovePeer();
     }
     return weapons;
+}
+
+/** Strips all weapons from a player */
+::StripWeapons <- function(player) {
+    local weaponstrip = Entities.FindByClassname(null, "player_weaponstrip");
+    if (weaponstrip == null) {
+        weaponstrip = Entities.CreateByClassname("player_weaponstrip");
+    }
+    EntFireByHandle(weaponstrip, "Strip", "", 0.0, player, player);
+}
+
+/** Gives weapons to a player - expects weapons to be an array of classnames */
+::GiveWeapons <- function(player, weapons) {
+    local equipper = Entities.CreateByClassname("game_player_equip");
+    foreach(weapon in weapons) {
+        equipper.__KeyValueFromInt(weapon, 1); // couldn't get count to work - please make PR if you can
+    }
+    
+    EntFireByHandle(equipper, "Use", "", 0.0, player, player);
+    EntFireByHandle(equipper, "Kill", "", 2.0, null, null);
 }
 
 if (!("_LOADED_MODULE_WEAPONS" in getroottable())) {
