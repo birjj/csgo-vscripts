@@ -197,7 +197,6 @@ class PlayerCursor {
         ::remove_elm_from_array(this.attack1Listeners, cb);
     }
     function OnAttack1() {
-        Log("[Cursors] Attack1 was pressed");
         foreach(cb in this.attack1Listeners) {
             cb();
         }
@@ -210,7 +209,6 @@ class PlayerCursor {
         ::remove_elm_from_array(this.attack2Listeners, cb);
     }
     function OnAttack2() {
-        Log("[Cursors] Attack2 was pressed");
         foreach(cb in this.attack2Listeners) {
             cb();
         }

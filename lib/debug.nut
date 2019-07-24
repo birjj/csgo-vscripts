@@ -9,6 +9,10 @@
     }
 }
 
+::Warn <- function(msg) {
+    Log("[warn] "+msg);
+}
+
 ::PrintTable <- function(tbl, indent="", printfunc=::Log) {
     if (tbl == null) {
         printfunc("null");
@@ -50,4 +54,10 @@
         true,
         duration
     );
+}
+
+::DrawCursor <- function(pos, duration=0.1) {
+    DrawLine(pos, pos + Vector(0, 0, 16), Vector(0, 0, 255), duration);
+    DrawLine(pos, pos + Vector(0, 16, 0), Vector(0, 255, 0), duration);
+    DrawLine(pos, pos + Vector(16, 0, 0), Vector(255, 0, 0), duration);
 }
