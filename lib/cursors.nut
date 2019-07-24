@@ -46,10 +46,11 @@ DoIncludeScript("lib/polyfills.nut", null);
     local scope = ply.GetScriptScope();
     if ("cursor" in scope) {
         scope.cursor.Regenerate();
-        return;
+        return scope.cursor;
     }
 
     scope.cursor <- PlayerCursor(ply);
+    return scope.cursor;
 };
 
 class PlayerCursor {
