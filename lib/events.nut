@@ -1,25 +1,26 @@
-// https://github.com/birjolaxew/csgo-vscripts
-// == Event listener
-// Listen for in-game events
-// The callback functions are called directly with the event data
-// In order for this to work, you must manually add logic_eventlistener to your world
-// This logic_eventlistener should have the following keyvalues:
-//   - targetname the_event_you_want_to_listen_to_listener
-//   - EventName the_event_you_want_to_listen_to
-//   - FetchEventData 1
-// It should also have the following output:
-//   - OnEventFired name_of_your_logic_script RunScriptCode ::TriggerEvent(THE_EVENT_YOU_WANT_TO_LISTEN_TO)
-//
-// SPECIAL CASE: If an event is triggered twice in the same frame, the data will be that of the last trigger
-//               Notably this happens on multikills (killing two players with one bullet) and player_death event.
-//               For that case, create a trigger_brush in your map with the name "game_playerdie"
-//               This will trigger the event "game_playerdie" with the victim ent as the only parameter
-//
-// Exposes:
-//   ::AddEventListener("event-name", function(){})
-//   ::RemoveEventListener("event-name", function(){})
-//   ::TriggerEvent("event-name")
-// ==
+/**
+ * https://github.com/birjolaxew/csgo-vscripts
+ * == Event listener
+ * Listen for in-game events
+ * The callback functions are called directly with the event data
+ * In order for this to work, you must manually add logic_eventlistener to your world
+ * This logic_eventlistener should have the following keyvalues:
+ *   - EventName the_event_you_want_to_listen_to
+ *   - FetchEventData 1
+ * It should also have the following output:
+ *   - OnEventFired name_of_your_logic_eventlistener RunScriptCode ::TriggerEvent(THE_EVENT_YOU_WANT_TO_LISTEN_TO, event_data)
+ * Note that !self does *not* work for name_of_your_logic_eventlistener.
+ *
+ * SPECIAL CASE: If an event is triggered twice in the same frame, the data will be that of the last trigger
+ *               Notably this happens on multikills (killing two players with one bullet) and player_death event.
+ *               For that case, create a trigger_brush in your map with the name "game_playerdie"
+ *               This will trigger the event "game_playerdie" with the victim ent as the only parameter
+ *
+ * Exposes:
+ *   ::AddEventListener("event-name", function(){})
+ *   ::RemoveEventListener("event-name", function(){})
+ *   ::TriggerEvent("event-name")
+ */
 
 ::ITEM_EQUIP <- "item_equip";
 ::PLAYER_USE <- "player_use";
