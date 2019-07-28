@@ -3,6 +3,7 @@
  * Entrypoint for the Globalwatch gamemode
  */
 DoIncludeScript("lib/debug.nut", null);
+DoIncludeScript("lib/events.nut", null);
 DoIncludeScript("lib/precache.nut", null);
 DoIncludeScript("globalwatch/gamemode.nut", null);
 
@@ -29,6 +30,11 @@ function Think() {
 if (!("_LOADED_GAMEMODE_GLOBALWATCH" in getroottable())) {
     ::_LOADED_GAMEMODE_GLOBALWATCH <- true;
     ::gamemode_globalwatch <- GamemodeGlobalwatch();
+
+    ::AddEventListener("player_death", function(data){
+        Log("=== DEATH");
+        PrintTable(data);
+    });
 } else {
     ::gamemode_globalwatch.OnRoundStart();
 }

@@ -3,6 +3,7 @@ DoIncludeScript("lib/polyfills.nut", null);
 DoIncludeScript("lib/cursors.nut", null);
 DoIncludeScript("lib/weapons.nut", null);
 DoIncludeScript("lib/math.nut", null);
+DoIncludeScript("lib/templates.nut", null);
 
 enum WidowmakerState {
     IDLE,
@@ -23,6 +24,8 @@ class HeroWidowmaker {
     hookTarget = null;
     hookStartTime = null;
     hookIsLedge = false;
+    eRopeStart = null;
+    eRopeEnd = null;
 
     constructor(player) {
         Log("Created new Widowmaker for "+player);
@@ -53,8 +56,16 @@ class HeroWidowmaker {
             local distance = direction.Norm();
             if (distance < 32 || Time() - this.hookStartTime > 3) {
                 this.state = WidowmakerState.IDLE;
+                this.eRopeStart.Destroy();
+                this.eRopeStart = null;
+                this.eRopeEnd.Destroy();
+                this.eRopeEnd = null;
             } else {
                 this.ePlayer.SetVelocity(direction * 512);
+
+                this.eRopeEnd.SetOrigin(this.ePlayer.EyePosition() - Vector(0, 0, 16));
+                EntFireByHandle(this.eRopeStart, "TurnOn", "", 0.0, null, null);
+                Log("Updating laser "+this.eRopeStart+" | "+this.eRopeEnd);
             }
         }
 
@@ -114,6 +125,11 @@ class HeroWidowmaker {
         this.hookTarget = finalPos;
         this.hookStartTime = Time();
 
+        ::SpawnTemplate(
+            Entities.FindByName(null, "template_rope"),
+            this.OnRopeSpawned.bindenv(this)
+        );
+
         // player has to be free of ground for him to move close to horizontal - move him just off the ground if we can
         local spaceAboveHead = abs(
             this.ePlayer.EyePosition().z
@@ -131,5 +147,13 @@ class HeroWidowmaker {
             DrawLine(ledgeTestPos, ledgePos, Vector(0,255,0), 5);
             DrawBox(finalPos, Vector(6,6,6), Vector(255,0,0), 5);
         }
+    }
+
+    function OnRopeSpawned(ents) {
+        this.eRopeStart = ents.rope_start;
+        this.eRopeEnd = ents.rope_end;
+
+        this.eRopeEnd.SetOrigin(this.ePlayer.EyePosition() - Vector(0, 0, 16));
+        this.eRopeStart.SetOrigin(this.hookTarget);
     }
 }
