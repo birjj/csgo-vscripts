@@ -11,7 +11,7 @@ DoIncludeScript("lib/debug.nut", null);
 DoIncludeScript("lib/events.nut", null);
 DoIncludeScript("lib/math.nut", null);
 DoIncludeScript("lib/players.nut", null);
-DoIncludeScript("lib/timer.nut", null);
+DoIncludeScript("lib/timers.nut", null);
 
 /**
  * Gets the cursor that is bound to a particular player entity
