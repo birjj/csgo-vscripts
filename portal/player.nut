@@ -59,7 +59,7 @@ class PortalPlayer {
                     this.ePortalTester = ent;
                     local target = this.portalTarget;
                     ent.SetOrigin(target);
-                    TimerHandler(0, (function(){
+                    TimerHandler(0.1, (function(){
                         if (!this.ePortalTester) {
                             Warn("Unknown portal tester!");
                             return;
