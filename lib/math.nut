@@ -68,3 +68,49 @@ const NORMAL_OFFSET_DIST = 0.5; // prolly should be <= 0.5, but higher = better 
 
     return normal;
 }
+
+/** Gets the reflection of a (normalized) vector, given the normal of the surface */
+::GetReflection <- function(vec, normal) {
+    return (
+        (normal * (2 * normal.Dot(vec))) - vec
+    ) * -1; // TODO: figure out why we gotta * -1. I do not have the smahts :(
+};
+
+/** Turns direction vectors into a relative vector that can then be applied to another vector later */
+::GetRelativeVector <- function(baseVec, otherVec) {
+    // first we generate the two axis' needed to define the other vec in relative spherical coordinates
+    local tmpVec = Vector(0, 0, 1);
+    if (baseVec.x == 0 && baseVec.y == 0) {
+        tmpVec = Vector(1, 0, 0);
+    }
+    local xVec = baseVec.Cross(tmpVec);
+    local yVec = baseVec.Cross(xVec);
+    local zVec = Vector(baseVec.x, baseVec.y, baseVec.z);
+    xVec.Norm();
+    yVec.Norm();
+    zVec.Norm();
+
+    // then calculate the x/y/height components
+    local x = otherVec.Dot(xVec);
+    local y = otherVec.Dot(yVec);
+    local z = otherVec.Dot(zVec);
+    return Vector(x, y, z);
+};
+
+/** Applies a relative vector (from ::CreateRelativeVector) to another vector */
+::ApplyRelativeVector <- function(baseVec, relativeVec) {
+    // first we generate the two axis' needed to define the other vec in relative cylindrical coordinates
+    local tmpVec = Vector(0, 0, 1);
+    if (baseVec.x == 0 && baseVec.y == 0) {
+        tmpVec = Vector(1, 0, 0);
+    }
+    local xVec = baseVec.Cross(tmpVec);
+    local yVec = baseVec.Cross(xVec);
+    local hVec = Vector(baseVec.x, baseVec.y, baseVec.z);
+    xVec.Norm();
+    yVec.Norm();
+    hVec.Norm();
+
+    // then apply the x/y/height components
+    return Vector(0,0,0) + (xVec * relativeVec.x) + (yVec * relativeVec.y) + (hVec * relativeVec.z);
+}
