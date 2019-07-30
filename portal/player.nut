@@ -8,19 +8,30 @@ DoIncludeScript("lib/cursors.nut", null);
 DoIncludeScript("lib/math.nut", null);
 DoIncludeScript("lib/templates.nut", null);
 DoIncludeScript("lib/timers.nut", null);
+DoIncludeScript("portal/portal.nut", null);
 
 ::ePortalTesterTmpl <- Entities.FindByName(null, "portal_portalcheckertemplate");
-Log("=== PORTAL TESTER "+::ePortalTesterTmpl);
+::ePortalTmpl <- Entities.FindByName(null, "portal_portaltemplate");
 
+enum PORTAL_TYPES {
+    FIRST,
+    SECOND
+}
+
+const PORTAL_FIRE_DELAY = 0.3;
 class PortalPlayer {
     ePlayer = null;
     cursor = null;
+    colors = ["255 0 0", "0 0 255"];
+    portals = [null, null];
 
     cbAttack1 = null;
     cbAttack2 = null;
 
+    lastPortalTime = 0;
     portalTarget = null;
     portalSurfaceNormal = null;
+    portalType = null;
     ePortalTester = null;
 
     constructor(player) {
@@ -35,11 +46,10 @@ class PortalPlayer {
     function Destroy() { this.cursor.Destroy(); }
     function Bind() { this.cursor = ::FindCursorOfPlayer(this.ePlayer); }
 
-    function SpawnPortal(point) {
-        Log("=== SPAWNING PORTAL");
-    }
-
-    function OnAttack1() {
+    /** Fires a portal at where our player is looking */
+    function FirePortal(type) {
+        if (lastPortalTime && Time() - lastPortalTime < PORTAL_FIRE_DELAY) { return; }
+        lastPortalTime = Time();
         local lookingAt = this.cursor.GetLookingAt();
         local delta = lookingAt - this.ePlayer.EyePosition();
         delta.Norm();
@@ -51,7 +61,8 @@ class PortalPlayer {
         }
         this.portalTarget = lookingAt;
         this.portalSurfaceNormal = normal;
-        // checking if it's within a portal is... messy
+        this.portalType = type;
+        // checking if it's possible to place a portal is... messy
         // we spawn a tester, move it to our target, wait a frame, then test if a trigger has renamed it
         ::SpawnTemplate(::ePortalTesterTmpl, (function(ents) {
             foreach(ent in ents) {
@@ -65,7 +76,7 @@ class PortalPlayer {
                             return;
                         }
                         if (this.ePortalTester.GetName() != "portal_portalchecker") {
-                            this.SpawnPortal(this.portalTarget);
+                            this.SpawnPortal();
                         }
                         this.ePortalTester.Destroy();
                         this.ePortalTester = null;
@@ -74,5 +85,42 @@ class PortalPlayer {
             }
         }).bindenv(this));
     }
-    function OnAttack2() {}
+
+    /** Spawns a portal (type previously set) at our portal location */
+    function SpawnPortal() {
+        ::SpawnTemplate(::ePortalTmpl, (function(ents) {
+            if (this.portals[this.portalType]) {
+                this.portals[this.portalType].Destroy();
+            }
+            EntFireByHandle(ents["portal_portal"], "Color", this.colors[this.portalType], 0.0, null, null);
+            local portal = Portal(ents, this, this.portalSurfaceNormal, this.portalTarget);
+            local otherPortal = this.portals[1 - this.portalType];
+            if (otherPortal) {
+                otherPortal.RegisterPartner(portal);
+                portal.RegisterPartner(otherPortal);
+            }
+            this.portals[this.portalType] = portal;
+        }).bindenv(this));
+    }
+
+    function OnAttack1() {
+        this.FirePortal(PORTAL_TYPES.FIRST);
+    }
+    function OnAttack2() {
+        local lookingAt = this.cursor.GetLookingAt();
+        local delta = lookingAt - this.ePlayer.EyePosition();
+        delta.Norm();
+        local traceFrom = lookingAt - delta * 1;
+        local normal = ::NormalOfSurface(traceFrom);
+        local reflected = ::GetReflection(delta, normal * -1);
+        local relative = ::GetRelativeVector(normal, delta);
+
+        ::DrawLine(lookingAt, lookingAt + normal * 16, Vector(255,0,0));
+        ::DrawLine(lookingAt, lookingAt + delta * 16, Vector(0,255,0));
+        ::DrawLine(lookingAt, lookingAt + reflected * 16, Vector(0,0,255));
+        ::DrawLine(lookingAt, lookingAt + (normal * -1) * 16, Vector(0,255,255));
+        ::DrawLine(lookingAt, lookingAt + ::ApplyRelativeVector(normal, relative) * 16, Vector(255,0,255));
+
+        this.FirePortal(PORTAL_TYPES.SECOND);
+    }
 }
