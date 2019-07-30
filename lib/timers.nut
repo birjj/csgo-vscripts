@@ -34,6 +34,7 @@ class TimerHandler {
             this.eTimer.Destroy();
         }
         this.cb = null;
+        delete ::_timer_handler_map[this.uid];
     }
 }
 
