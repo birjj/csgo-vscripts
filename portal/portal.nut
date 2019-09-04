@@ -60,7 +60,7 @@ class Portal {
         if ((this.uid in scope) && Time() - scope[this.uid] < 0.5) { return; }
 
         local vel = player.GetVelocity();
-        local relativeVel = ::GetRelativeVector(this.normal, vel);
+        local relativeVel = ::GetRelativeVector(this.normal, vel, this.origin);
         if (this.partner && this.partner.IsValid()) {
             this.partner.Emit(player, relativeVel);
         }
@@ -73,9 +73,9 @@ class Portal {
         scope[this.uid] <- Time();
 
         Log("Emitting "+player+" from "+this.uid);
-        local vel = ::ApplyRelativeVector(this.normal, relativeVel);
-        player.SetOrigin(this.origin + this.normal * 32);
-        player.SetVelocity(vel);
+        local vel = ::ApplyRelativeVector(this.normal, relativeVel, this.origin);
+        player.SetOrigin(this.origin + this.normal * 64);
+        player.SetVelocity(vel * -1);
     }
 
     function IsValid() {

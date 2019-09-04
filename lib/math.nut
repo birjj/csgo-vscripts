@@ -77,7 +77,7 @@ const NORMAL_OFFSET_DIST = 0.5; // prolly should be <= 0.5, but higher = better 
 };
 
 /** Turns direction vectors into a relative vector that can then be applied to another vector later */
-::GetRelativeVector <- function(baseVec, otherVec) {
+::GetRelativeVector <- function(baseVec, otherVec, debugPos=null) {
     // first we generate the two axis' needed to define the other vec in relative spherical coordinates
     local tmpVec = Vector(0, 0, 1);
     if (baseVec.x == 0 && baseVec.y == 0) {
@@ -90,15 +90,27 @@ const NORMAL_OFFSET_DIST = 0.5; // prolly should be <= 0.5, but higher = better 
     yVec.Norm();
     zVec.Norm();
 
+    if (debugPos) {
+        DrawLine(debugPos, debugPos + xVec * 16, Vector(255, 0, 0), 5.0);
+        DrawLine(debugPos, debugPos + yVec * 16, Vector(0, 255, 0), 5.0);
+        DrawLine(debugPos, debugPos + zVec * 16, Vector(0, 0, 255), 5.0);
+    }
+
     // then calculate the x/y/height components
     local x = otherVec.Dot(xVec);
     local y = otherVec.Dot(yVec);
     local z = otherVec.Dot(zVec);
+
+    if (debugPos) {
+        DrawLine(debugPos, debugPos + otherVec * 16, Vector(255, 0, 255), 5.0);
+        DrawLine(debugPos, debugPos + Vector(x, y, z) * 16, Vector(255, 255, 0), 5.0);
+    }
+
     return Vector(x, y, z);
 };
 
 /** Applies a relative vector (from ::CreateRelativeVector) to another vector */
-::ApplyRelativeVector <- function(baseVec, relativeVec) {
+::ApplyRelativeVector <- function(baseVec, relativeVec, debugPos=null) {
     // first we generate the two axis' needed to define the other vec in relative cylindrical coordinates
     local tmpVec = Vector(0, 0, 1);
     if (baseVec.x == 0 && baseVec.y == 0) {
@@ -106,11 +118,23 @@ const NORMAL_OFFSET_DIST = 0.5; // prolly should be <= 0.5, but higher = better 
     }
     local xVec = baseVec.Cross(tmpVec);
     local yVec = baseVec.Cross(xVec);
-    local hVec = Vector(baseVec.x, baseVec.y, baseVec.z);
+    local zVec = Vector(baseVec.x, baseVec.y, baseVec.z);
     xVec.Norm();
     yVec.Norm();
-    hVec.Norm();
+    zVec.Norm();
+
+    if (debugPos) {
+        DrawLine(debugPos, debugPos + xVec * 16, Vector(255, 0, 0), 5.0);
+        DrawLine(debugPos, debugPos + yVec * 16, Vector(0, 255, 0), 5.0);
+        DrawLine(debugPos, debugPos + zVec * 16, Vector(0, 0, 255), 5.0);
+    }
 
     // then apply the x/y/height components
-    return Vector(0,0,0) + (xVec * relativeVec.x) + (yVec * relativeVec.y) + (hVec * relativeVec.z);
+    local outp = Vector(0,0,0) + (xVec * relativeVec.x) + (yVec * relativeVec.y) + (zVec * relativeVec.z);
+
+    if (debugPos) {
+        DrawLine(debugPos, debugPos + outp * 16, Vector(255, 255, 0), 5.0);
+    }
+
+    return outp;
 }
