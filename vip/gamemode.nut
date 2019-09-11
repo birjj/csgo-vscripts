@@ -166,7 +166,7 @@ class GameModeVIP {
 
                 ::GiveMoneyT(ECONOMY.NO_ESCAPE, "Reward for not letting VIP escape");
                 EntFireByHandle(eGameRoundEnd, "EndRound_TerroristsWin", "7", 0.0, null, null);
-                SendGameText("VIP "+ vipDisplayName +" failed to escape!", "1", "10");
+                SendGameText("VIP "+ vipDisplayName +" failed to escape!", 1, "10");
 
                 SetLive(false);
             } else if (cts.len() == 0 && ts.len() == 0) { // I'm just paranoid all my friends will leave me
@@ -200,11 +200,12 @@ class GameModeVIP {
     }
     
     function SendGameText (message, color, duration) {
-        return; // literally fuk this
+        //return; // literally fuk this
         local vip_text_round_end = Entities.FindByName(null, "vip_text_round_end");
+        local presetColor = null;
         if (color == "0") { presetColor = "255 255 255"; }
         else if (color == "1") { presetColor = "188 168 116"; }
-        else if (color == "2") { presetColor = "168 197 221"; } 
+        else if (color == "2") { presetColor = "168 197 221"; }
         EntFireByHandle(vip_text_round_end, "SetTextColor", presetColor, 0.0,null,null); // sets color 0 = WHITE || 1 = YELLOW || 2 = BLUE
         EntFireByHandle(vip_text_round_end, "SetText", message,0.0,null,null); // sets message
         EntFireByHandle(vip_text_round_end, "AddOutput", "holdtime "+ duration, 0.0,null,null); // sets duration
@@ -415,10 +416,19 @@ class GameModeVIP {
         SetEntityToVIP(player);
         vipDisplayName = Players.FindDisplayName(player);
         
+        //if VIP is "[Unknown]" might as well be blank
+        if (vipDisplayName == "[Unknown]"){
+            vipDisplayName = "";
+        }
+        
         vip.SetHealth(::VIP_MAXHEALTH);
-        ScriptPrintMessageCenterTeam(0,"TEST TEST TEST");
-        ScriptPrintMessageChatTeam(1,"TEST TEST TEST");
 
+        ::ShowMessageSome(""+vipDisplayName+" has been selected as the VIP!", function(ply) {
+            if (ply.GetTeam() == TEAM_SPEC) {
+                return true;
+            }
+            return false;
+        });
         ::ShowMessageSome("Protect "+vipDisplayName+" at all costs!", function(ply) {
             if (ply.GetTeam() == TEAM_CT) {
                 return true;
@@ -433,8 +443,11 @@ class GameModeVIP {
         });
         ::ShowMessage("You're the VIP. Don't fuck it up now", vip, "color='#F00'");
         local vip_text_notification = Entities.FindByName(null, "vip_text_notification");
+        local vip_hud_thing = Entities.FindByName(null, "vip_hud");
         EntFireByHandle(vip_text_notification, "Display", "", 0.0, player, player);
         EntFireByHandle(eClientCommand, "Command", "coverme", 0.0, vip, null);
+        
+        //EntFireByHandle(vip_hud_thing, "StartOverlays", "1", 0.0, vip, vip);
         
         local ambient = Entities.FindByName(null, "vip_snd_protect");
         if (ambient) {
@@ -462,6 +475,12 @@ class GameModeVIP {
 
         ResetVIP();
         SetEntityToVIP(player);
+        vipDisplayName = Players.FindDisplayName(player);
+        if (vipDisplayName == "[Unknown]"){
+            vipDisplayName = "";
+        }
+
+
         EntFireByHandle(eClientCommand, "Command", "slot2", 0.0, vip, null);
         
         // If original VIP had less HP than new VIP - replace with original VIP HP
@@ -531,6 +550,10 @@ class GameModeVIP {
             }
         }
         local output = Vector(origin.x, origin.y, maxZ);
+        printl((origin.z).tostring() +" - "+ (maxZ).tostring() +" = "+ ((origin.z - maxZ).tostring()) );
+        if (origin.z - maxZ > 750) {
+            return null;
+        }
         if (IsDebug()) { DrawBox(output, Vector(8, 8, 8), Vector(0, 0, 255), 15); }
         return output;
     }
@@ -542,12 +565,29 @@ class GameModeVIP {
         vipDowned = true;
         vipJustDowned = true;
         
+        local vip_baiter = null;
+        local vip_bait_name = "vip_bait";
+        while ((vip_baiter = Entities.FindByName(vip_baiter, "*"+vip_bait_name)) != null) { 
+            // for some reason wildcards match some non-matching entities
+            local entName = vip_baiter.GetName();
+            if (entName != null && entName.find(vip_bait_name) == entName.len() - vip_bait_name.len()) {
+                EntFireByHandle(vip_baiter, "Kill", "", 0.0, null, null);
+            }
+        }
+        
         //GAME_TEXT
         SendGameText("The VIP has been downed!", "1", "2");
 
         PlaySound("fx_downed");
         
+        
         local groundPosition = FindGroundPosition(lastSeenPositionVIP, vip);
+        if (groundPosition == null) {
+            vipCanBeDowned = false;
+            OnVIPDeath();
+            return;
+        }
+
         local hMaker = Entities.FindByName(null, "vip_entity_maker");
         hMaker.SetOrigin(groundPosition);
         hostageSpawnOrigin = groundPosition;
@@ -591,10 +631,18 @@ class GameModeVIP {
 
             local textColor = "#990000";
             local msg1 = "VIP down and bleeding!\n You have <font color='"+textColor+"'>"+ format("%.1f", timeLeft) + " sec" + "</font> to pick him up!";
+            local msg2 = "VIP down! <font color='"+textColor+"'>"+ format("%.1f", timeLeft) + " sec" + "</font> until he dies!";
+            local msg3 = "VIP down! <font color='"+textColor+"'>"+ format("%.1f", timeLeft) + " sec" + "</font> until he dies!";
             ::ShowMessageSome(msg1, function(ply) {
                 return ply.GetTeam() == TEAM_CT;
             });
-        
+            ::ShowMessageSome(msg2, function(ply) {
+                return ply.GetTeam() == TEAM_T;
+            });
+            ::ShowMessageSome(msg3, function(ply) {
+                return ply.GetTeam() == TEAM_SPEC;
+            });
+
             Log("[VIP] VIP HP = " +health);
         } 
 
@@ -789,6 +837,13 @@ class GameModeVIP {
         ShowMessageSome("You let the VIP die!", function(ply) {
             return ply.GetTeam() == TEAM_CT;
         });
+        ShowMessageSome("You got the VIP!", function(ply) {
+            return ply.GetTeam() == TEAM_T;
+        });
+        ShowMessageSome("The VIP died!", function(ply) {
+            return ply.GetTeam() == TEAM_SPEC;
+        });
+
         ::GiveMoneyT(ECONOMY.VIP_KILLED, "You got that motherfucker!");
     }
 
@@ -823,6 +878,9 @@ class GameModeVIP {
         }
         ::ShowMessageSome(msg, function(ply){
             return ply.GetTeam() == TEAM_CT;
+        });
+        ::ShowMessageSome(msg, function(ply){
+            return ply.GetTeam() == TEAM_SPEC;
         });
     }
 

@@ -10,6 +10,7 @@
 // Exposes:
 //   ::Players (instance of PlayerManager)
 
+::TEAM_SPEC <- 1;
 ::TEAM_T <- 2;
 ::TEAM_CT <- 3;
 
