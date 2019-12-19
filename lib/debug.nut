@@ -1,5 +1,4 @@
 ::IsDebug <- function() {
-    return true;
     return GetDeveloperLevel() > 0;
 }
 

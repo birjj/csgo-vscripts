@@ -34,3 +34,25 @@
     }
     return outp;
 }
+
+/**
+ * Converts an array into a string by inserting the joiner between each element
+ */
+::join <- function(arr, joiner=",") {
+    local outp = "";
+    foreach(i,elm in arr) {
+        if (i != 0) {
+            outp += joiner;
+        }
+        outp += elm;
+    }
+    return outp;
+}
+
+/** Rounds a number */
+::round <- function(num) {
+    if (num%1 < 0.5) {
+        return floor(num);
+    }
+    return ceil(num);
+}

@@ -36,6 +36,10 @@ class TimerHandler {
         this.cb = null;
         delete ::_timer_handler_map[this.uid];
     }
+
+    function IsValid() {
+        return this.eTimer && this.eTimer.IsValid();
+    }
 }
 
 ::_timer_handler_map <- {};

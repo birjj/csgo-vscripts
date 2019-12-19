@@ -8,7 +8,7 @@
  *   - EventName the_event_you_want_to_listen_to
  *   - FetchEventData 1
  * It should also have the following output:
- *   - OnEventFired name_of_your_logic_eventlistener RunScriptCode ::TriggerEvent(THE_EVENT_YOU_WANT_TO_LISTEN_TO, event_data)
+ *   - OnEventFired name_of_your_logic_eventlistener RunScriptCode ::TriggerEvent(THE_EVENT_YOU_WANT_TO_LISTEN_TO)
  * Note that !self does *not* work for name_of_your_logic_eventlistener.
  *
  * SPECIAL CASE: If an event is triggered twice in the same frame, the data will be that of the last trigger
@@ -24,6 +24,7 @@
 
 ::ITEM_EQUIP <- "item_equip";
 ::PLAYER_USE <- "player_use";
+::PLAYER_SAY <- "player_say";
 ::PLAYER_DEATH <- "player_death";
 ::PLAYER_CONNECT <- "player_connect";
 ::PLAYER_CONNECT_FULL <- "player_connect_full";
@@ -40,6 +41,8 @@
 ::ROUND_END <- "round_end";
 ::HOSTAGE_FOLLOWS <- "hostage_follows";
 ::HOSTAGE_STOPS_FOLLOWING <- "hostage_stops_following";
+::SERVER_CVAR <- "server_cvar";
+::WEAPON_FIRE <- "weapon_fire";
 
 DoIncludeScript("lib/debug.nut",null);
 
